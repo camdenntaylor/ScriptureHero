@@ -6,9 +6,13 @@ _teaching the world about Jesus one verse at a time_
 
 Social media style platform that provides a space for people to share their insights and experiences with their friends, family, and others across the world.
 
+**Platform Goal**
+
+Scripture Hero is a mobile-first product. The primary long-term experience will be a mobile app designed for phones, with desktop and mobile web experiences also supported. Product flows, navigation, APIs, authentication, media handling, performance, and accessibility should be designed for mobile use first and enhanced for larger screens.
+
 **Soul Questions**
 
-Each user has the option to record soul questions that become key aspects of their profile. These can be deeply theological questions, pleas for advice, or anything a user is struggling with and needs help figuring out. Backend engine (AI?) matches posts to soul questions in hopes that one's post will help them find an answer. Become someone else's "scripture hero" by contributing your insights to try and help answer soul questions.
+Each user has the option to privately record soul questions. These can be deeply theological questions, pleas for advice, or anything a user is struggling with and needs help figuring out. Soul questions are never shown on a profile or disclosed to other users. A privileged backend matching service reads them to recommend approved posts that may be helpful. Become someone else's "scripture hero" by contributing insights that help answer soul questions without learning the question, problem, or identity behind the match.
 
 Context matching shows posts of people in similar situations as you. Recommends posts by people with similar soul questions.
 

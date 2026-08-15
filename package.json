@@ -1,0 +1,14 @@
+{
+  "name": "scripture-hero",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "concurrently -n frontend,backend -c cyan,magenta \"pnpm --filter @scripture-hero/frontend dev\" \"pnpm --filter @scripture-hero/backend dev\"",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
