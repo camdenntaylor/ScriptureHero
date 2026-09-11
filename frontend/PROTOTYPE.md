@@ -16,7 +16,8 @@ Everything is test data. Interaction state is held in memory and resets on reloa
 
 - `public/images/community.webp`: original image generated with the built-in ImageGen tool for this assignment, converted to WebP for delivery (1200 × 800, about 144 KiB). It depicts fictional people and is not a testimonial from real members.
 - `public/media/quiet-moments.mp4`: MDN's flower sample, downloaded from <https://developer.mozilla.org/shared-assets/videos/flower.mp4>, used as a short silent nature clip for the fictional video post. Source example: <https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video>. The original asset is distributed in MDN's `media/cc0-videos` collection: <https://github.com/mdn/interactive-examples/tree/main/live-examples/media/cc0-videos>.
-- Fonts: DM Sans and Fraunces through Google Fonts, with system sans-serif and Georgia fallbacks. Fonts are the only external page resources; photo and video are served locally.
+- Theme: light-blue primary buttons, highlights, navigation, and impact cards, with darker blue text for readable contrast.
+- Fonts: DM Sans throughout, with system sans-serif fallbacks. Fonts are the only external page resources; photo and video are served locally.
 - Logo and interface icons: repository-native outlined SVG. The logo depicts two people reaching toward one another with a shared heart shape.
 
 ### ImageGen prompt
