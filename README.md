@@ -1,64 +1,18 @@
-# Scripture Hero
+1. Need: It is dificult to find a dedicated space for sharing spiritual experiences/insights, and normal settings can feel repetitive or forced. 
 
-Teaching the world about Jesus, one verse at a time.
+2. Persona: Religious and seeking help with something they're going through or a question. Learns from what others have to say and needs real people to share thoughts with.
 
-This repository contains the first working full-stack skeleton for Scripture Hero. The product is mobile-first: the current React web app is the first client, a dedicated mobile app is a long-term goal, and desktop web remains supported.
+3. Capability: Become a member of the world community by sharing and reading insights across the world
 
-## Stack
+4. Fundamental value: Connection. The user will be connected with their friends, family, and others from across the world through these spiritual interactions.
 
-- Current web client: React, TypeScript, and Vite
-- Future client: a dedicated mobile application sharing backend APIs and contracts with the web client
-- Backend: Fastify and TypeScript
-- Architecture: MVC-style feature boundaries with controller, service, model, repository, and view layers
-- Recommended hosted platform: Supabase (Postgres, Auth, Storage, Realtime, and Edge Functions)
+###Three Screens###
 
-The backend currently uses an in-memory repository so local development works without credentials. A Supabase repository can implement the existing `PostRepository` interface when the initial schema is agreed.
+1: Landing page. Signals the core value "learning through connection" and primary capability. Supporting content and secondary capabilities may appear only when they help that job; nothing should compete with it.
 
-## Product targets
+2: Home page. A user's feed. This page is where they can view curated insights that are relevant to their soul questions. these are posts from people all over the world, and can be text or video. The user has the option to like, comment, share, and add to soul question helplist. If the post is added to the user's soul question, then the poster gets added to the scripture hero page.
 
-- Design phone-sized experiences first, then enhance layouts for tablets and desktop.
-- Keep domain rules and API contracts independent of React DOM and browser-only APIs so a native mobile client can reuse them.
-- Treat unreliable networks, media bandwidth, touch interaction, deep links, and eventual push notifications as first-class constraints.
-- Maintain functional support for desktop web without allowing desktop assumptions to drive the core experience.
+3: Scripture Hero page. This is a page that shows people who have been impressed by your insights, with the option to send them a message. Also shows people who have helped you with your soul questions (their post was added to your soul question helplist) with the option to send a thanks message. It shows overall metrics including how many people you've helped with your insights to encourage sharing.
 
-## Run locally
-
-Node.js 22 or newer and pnpm are recommended.
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Open http://localhost:5173. The frontend dev server proxies `/api` requests to the backend at http://localhost:3000.
-
-## Commands
-
-```bash
-pnpm dev        # start frontend and backend in watch mode
-pnpm build      # build both applications
-pnpm test       # run all tests
-pnpm typecheck  # type-check both applications
-```
-
-Copy each `.env.example` to `.env` in its directory when local configuration is needed. Do not commit secrets or a Supabase secret key to the frontend.
-
-## Layout
-
-```text
-frontend/src/
-  controllers/  UI state and user-flow orchestration
-  models/       frontend domain types
-  services/     HTTP and external-service clients
-  views/        React pages, components, and styles
-
-backend/src/
-  config/       validated runtime configuration
-  controllers/  HTTP request/response adapters
-  models/       domain entities and repository contracts
-  repositories/ data access implementations
-  routes/       HTTP route registration
-  services/     application and business logic
-```
-
-See `AGENTS.md` for architecture, privacy, mobile-first design, and development rules.
+##Preferences on tone, color, and content##
+Light, cozy, comfortable space. Light warm colors. The logo needs to represent what the product does, not just something random. Logo is two souls connecting in a simple, outlined and easily understandable manner.

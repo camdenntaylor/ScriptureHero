@@ -6,6 +6,58 @@ This plan moves Scripture Hero from its current full-stack skeleton to an invite
 
 The plan assumes one-week sprints, but completion is determined by exit criteria rather than dates. A solo developer may stretch a sprint across multiple weeks without changing the order of work.
 
+## Current implementation baseline
+
+The repository currently contains the first working full-stack skeleton for Scripture Hero:
+
+- The current web client uses React, TypeScript, and Vite.
+- The backend uses Fastify and TypeScript.
+- The codebase uses MVC-style boundaries with controller, service, model, repository, and view layers while new backend work moves toward the domain-module structure described in `AGENTS.md`.
+- Supabase is the intended hosted platform for PostgreSQL, Auth, Storage, Realtime, and Edge Functions.
+- The backend currently uses an in-memory repository so local development works without credentials. Once the initial schema is agreed, a Supabase repository can implement the existing `PostRepository` interface.
+- A dedicated mobile application is a long-term client that should share backend APIs and contracts with the web client.
+
+The main source layout is:
+
+```text
+frontend/src/
+  controllers/  UI state and user-flow orchestration
+  models/       frontend domain types
+  services/     HTTP and external-service clients
+  views/        React pages, components, and styles
+
+backend/src/
+  config/       validated runtime configuration
+  controllers/  HTTP request/response adapters
+  models/       domain entities and repository contracts
+  repositories/ data access implementations
+  routes/       HTTP route registration
+  services/     application and business logic
+```
+
+For local development, use Node.js 22 or newer and the pnpm version pinned by the repository. Run `pnpm install`, then `pnpm dev`. The frontend is available at `http://localhost:5173` and proxies `/api` requests to the backend at `http://localhost:3000`.
+
+The root commands are:
+
+```bash
+pnpm dev        # start frontend and backend in watch mode
+pnpm build      # build both applications
+pnpm test       # run all tests
+pnpm typecheck  # type-check both applications
+```
+
+Copy each `.env.example` to `.env` in its directory only when local configuration is needed. Never commit `.env` files, secrets, or Supabase service credentials, and never expose a Supabase service credential to the frontend.
+
+### UX assignment prototype
+
+The frontend currently presents three connected assignment screens at `#welcome`, `#home`, and `#heroes`. The landing page emphasizes “Learn through connection.” The feed and Scripture Hero page use fictional fixtures in `frontend/src/services/prototypeData.ts`; they do not fetch application data or require a running backend.
+
+Likes, comments, helplist saves, anonymous thanks, and message feedback run in memory and reset on reload. Saving a post to one or more Soul Questions recognizes its author once on the owner's Scripture Hero page. The public sharing action copies only the insight's public content. The small composer simulates submission for moderation; new submissions never enter the approved demo feed.
+
+Named appreciation is an independent, opt-in connection concept for the assignment. It does not expose identities from private helpful confirmations. People-helped metrics are fictional anonymous aggregates, and outbound messages are simulated without network transmission. This prototype does not implement production authentication, authorization, moderation, matching, or messaging. Its comments and messaging affordances do not change the beta scope below.
+
+See `frontend/PROTOTYPE.md` for the demo walkthrough and asset provenance. `README.md` remains the user's UX assignment brief.
+
 ## Target outcome
 
 At the end of this plan:

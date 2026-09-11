@@ -2,7 +2,7 @@
 
 This is an app meant to facilitate conversations about Jesus throughout the world. It is deliberately non-denominational and open to anyone.
 
-_teaching the world about Jesus one verse at a time_
+_Teaching the world about Jesus, one verse at a time._
 
 Social media style platform that provides a space for people to share their insights and experiences with their friends, family, and others across the world.
 
