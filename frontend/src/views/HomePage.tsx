@@ -51,7 +51,7 @@ function InsightCard({ post, app }: { post: Insight; app: PrototypeController })
 export function HomePage({ app }: { app: PrototypeController }) {
   return <div className="home-columns">
     <div className="feed-column">
-      <header className="page-heading"><p className="eyebrow">YOUR DAILY DOSE OF CONNECTION</p><h1>A little wisdom. A little closer.</h1><p>Different lives, shared faith. Find something that speaks to you.</p></header>
+      <header className="page-heading"><h1>Your daily dose of connection.</h1></header>
       <button className="composer-prompt" onClick={() => app.setDialog({ type: 'compose' })}><span className="avatar avatar-gold" aria-hidden="true">AV</span><span>What’s on your heart, Avery?</span><span className="compose-icon"><Icon name="plus" /></span></button>
       {app.drafts.length > 0 && <div className="pending-note" role="status"><Icon name="leaf" size={18} /> {app.drafts.length} {app.drafts.length === 1 ? 'insight is' : 'insights are'} awaiting review in this demo.</div>}
       <div className="feed-tabs" aria-label="Choose insights"><button aria-pressed={app.filter === 'for-you'} className={app.filter === 'for-you' ? 'active' : ''} onClick={() => app.setFilter('for-you')}><Icon name="sun" size={17} /> For you</button><button aria-pressed={app.filter === 'saved'} className={app.filter === 'saved' ? 'active' : ''} onClick={() => app.setFilter('saved')}><Icon name="bookmark" size={17} /> Your helplist <span className="count-pill">{new Set(app.saved.map(item => item.postId)).size}</span></button><span className="feed-caption">{app.filter === 'for-you' ? 'Inspired by your soul questions' : 'A little wisdom to return to'}</span></div>
@@ -60,9 +60,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
       {app.visiblePosts.length > 0 && <p className="end-of-feed"><Icon name="sun" size={18} /> You’re all caught up. Take a little light with you.</p>}
     </div>
     <aside className="feed-aside" aria-label="Your private reflections">
-      <section className="questions-card"><div className="aside-heading"><Icon name="book" size={20} /><h2>Your soul questions</h2><Icon name="lock" size={14} /></div><p className="aside-description">The things you’re holding in your heart.</p><ul>{questions.map(question => <li key={question.id}><span className="question-dot" /><div><p>{question.title}</p><span>{app.saved.filter(item => item.questionId === question.id).length} saved insights</span></div></li>)}</ul><p className="privacy-note"><Icon name="lock" size={13} /> Just for you. Always private.</p></section>
-      <section className="small-hero-card"><span className="round-icon"><Icon name="heart" size={24} /></span><h2>Someone made a difference.</h2><p>A simple “thank you” can be the beginning of a beautiful connection.</p><a className="button-link" href="#heroes">Meet your Scripture Heroes <Icon name="arrow" size={17} /></a></section>
-      <p className="aside-footer">A little more understanding.<br />A little less alone.</p>
+      <section className="questions-card"><div className="aside-heading"><Icon name="book" size={20} /><h2>Your soul questions</h2><Icon name="lock" size={14} /></div><p className="aside-description">The things you’re holding in your heart.</p><ul>{questions.map(question => <li key={question.id}><span className="question-dot" /><div><p>{question.title}</p><span>{app.saved.filter(item => item.questionId === question.id).length} saved insights</span></div></li>)}</ul><p className="privacy-note"><Icon name="lock" size={13} /> Just for you. Always private.</p><a className="button-link questions-heroes-link" href="#heroes">Meet your Scripture Heroes <Icon name="arrow" size={17} /></a></section>
     </aside>
   </div>
 }
