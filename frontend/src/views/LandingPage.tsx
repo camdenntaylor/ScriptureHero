@@ -7,10 +7,10 @@ export function LandingPage() {
       <section className="landing-hero" aria-labelledby="landing-title">
         <div className="landing-copy">
           <h1 id="landing-title">
-            Learn through <em>connection.</em>
+            A dedicated platform for <em>spiritual</em> things
           </h1>
           <p className="landing-description">
-            Share your spiritual experiences. Find wisdom in someone else’s.
+            Share your spiritual experiences. Find answers to your questions.
             Grow closer to Jesus, and to each other.
           </p>
           <a className="button button-primary landing-cta" href="#home">
@@ -77,11 +77,11 @@ export function LandingPage() {
         </div>
       </section>
       <footer className="landing-footer">
-        <span>Scripture Hero</span>
+        {/* <span>Scripture Hero</span> */}
 
-        <span className="prototype-label">
+        {/* <span className="prototype-label">
           UX prototype · fictional community
-        </span>
+        </span> */}
       </footer>
     </main>
   );
