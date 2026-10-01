@@ -6,10 +6,10 @@ Read this before you design or style any screen. All tokens and component classe
 
 Peaceful, warm, and inviting, like late afternoon sun on a garden table. The design should feel like a quiet conversation with a friend, not a social feed competing for attention.
 
-- Warm paper backgrounds and deep brown ink. Never pure white or black, and never cool greys or blues.
+- Day uses warm cream paper and deep brown ink. Evening uses neutral gray surfaces and off-white text. Avoid brown-tinted dark surfaces and pure white or black page backgrounds.
 - One calm primary color, olive green, for actions and "where you are."
 - One warm secondary color, honey, for anything reflective or private: scripture, Soul Questions, privacy notes, encouragement.
-- Soft, rounded shapes. Pill controls, 18–20px cards, low warm shadows.
+- Soft, rounded shapes. Pill controls, 18–20px cards, low warm shadows by day and neutral shadows by evening.
 - Generous whitespace. One heading per page and one filled primary button per view.
 
 ## Color tokens
@@ -18,22 +18,22 @@ Always use `var(--token)`. Do not write hex values in components.
 
 | Token | Day | Evening | Use |
 | --- | --- | --- | --- |
-| `--paper` | `#FBF6EC` | `#1C1611` | Page background, dialogs, comment panels |
-| `--surface` | `#FFFDF8` | `#251D16` | Cards, header, inputs |
-| `--raised` | `#F5ECDC` | `#2D241B` | Hover fills, neutral pills, segmented tracks |
-| `--ink` | `#3B2A1E` | `#F4EADC` | Headings and primary text |
-| `--muted` | `#75604D` | `#BBA88F` | Body copy, meta text, inactive nav |
-| `--line` | `#ECE2D0` | `#3A2F24` | Borders and dividers |
+| `--paper` | `#FBF6EC` | `#1E1F1F` | Page background, dialogs, comment panels |
+| `--surface` | `#FFFDF8` | `#272828` | Cards, header, inputs |
+| `--raised` | `#F5ECDC` | `#303131` | Hover fills, neutral pills, segmented tracks |
+| `--ink` | `#3B2A1E` | `#EEEDE8` | Headings and primary text |
+| `--muted` | `#75604D` | `#B9BAB4` | Body copy, meta text, inactive nav |
+| `--line` | `#ECE2D0` | `#303131` | Borders and dividers |
 | `--accent` | `#5B6741` | `#B4BE8C` | Primary buttons, links, active icons, focus ring |
 | `--accent-strong` | `#46512F` | `#CBD3A6` | Primary hover, text on `--accent-soft` |
 | `--accent-fill` | `#DCE3C4` | `#3A3F27` | Count pills, selection, liked-heart fill |
-| `--accent-soft` | `#EFF0E2` | `#272819` | Active nav/tab, soft buttons, impact banner |
-| `--accent-line` | `#DCE0C6` | `#3A3C27` | Borders on accent-soft areas, soft hover |
-| `--on-accent` | `#FBF8EE` | `#1C1611` | Text and icons on `--accent` |
+| `--accent-soft` | `#EFF0E2` | `#303131` | Active nav/tab, soft buttons, impact banner |
+| `--accent-line` | `#DCE0C6` | `#414242` | Borders on accent-soft areas, soft hover |
+| `--on-accent` | `#FBF8EE` | `#1E1F1F` | Text and icons on `--accent` |
 | `--warm` | `#9A5C14` | `#E3AE5C` | Scripture text, private and reflective text |
 | `--warm-strong` | `#7A4610` | `#F2C67F` | Headings inside warm panels |
-| `--warm-soft` | `#FBF0DA` | `#30251A` | Scripture quotes, Soul Questions, encouragement panels |
-| `--warm-line` | `#EFDBB2` | `#4A3A27` | Dividers inside warm panels |
+| `--warm-soft` | `#FBF0DA` | `#303131` | Scripture quotes, Soul Questions, encouragement panels |
+| `--warm-line` | `#EFDBB2` | `#454643` | Dividers inside warm panels |
 
 Avatar pairs are `--av-clay`, `--av-sage`, `--av-gold` and `--av-lilac`, each with a matching `-ink` token. Use them through the `.avatar-*` classes.
 
@@ -48,7 +48,7 @@ Media uses `--media-bg` as a fallback, `--on-media` for text over photos or vide
 
 ### Evening mode
 
-Evening mode follows the OS setting by default. To force a mode, set `<html data-theme="day">` or `<html data-theme="evening">`. Because every component uses tokens, nothing else needs to change. Check new screens in both modes.
+Evening mode follows the OS setting by default. Its page, card, and border colors are neutral gray; olive and honey keep their action and reflective roles. To force a mode, set `<html data-theme="day">` or `<html data-theme="evening">`. Because every component uses tokens, nothing else needs to change. Check new screens in both modes.
 
 ## Typography
 
