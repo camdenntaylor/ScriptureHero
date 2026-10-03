@@ -36,11 +36,14 @@ describe('the prototype help loop', () => {
     }
   })
 
-  it('supports the three screen links and a safe landing fallback', () => {
+  it('supports community and account screen links with a safe landing fallback', () => {
     expect(screenFromHash('')).toBe('welcome')
     expect(screenFromHash('#welcome')).toBe('welcome')
     expect(screenFromHash('#home')).toBe('home')
     expect(screenFromHash('#heroes')).toBe('heroes')
+    expect(screenFromHash('#login')).toBe('login')
+    expect(screenFromHash('#profile')).toBe('profile')
+    expect(screenFromHash('#questions')).toBe('questions')
     expect(screenFromHash('#unknown')).toBe('welcome')
   })
 })

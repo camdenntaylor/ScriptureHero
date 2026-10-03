@@ -1,4 +1,4 @@
-export type Screen = 'welcome' | 'home' | 'heroes'
+export type Screen = 'welcome' | 'home' | 'heroes' | 'login' | 'profile' | 'questions'
 export type FeedFilter = 'for-you' | 'saved'
 export interface Person { id: string; name: string; location: string; initials: string; color: 'clay' | 'sage' | 'gold' | 'lilac' }
 export interface Insight { id: string; author: Person; title: string; body: string; scripture: string; verse: string; time: string; likes: number; comments: { name: string; body: string }[]; video?: string }
@@ -23,5 +23,5 @@ export function publicShareText(post: Insight): string {
 }
 
 export function screenFromHash(hash: string): Screen {
-  return hash === '#home' ? 'home' : hash === '#heroes' ? 'heroes' : 'welcome'
+  return hash === '#home' ? 'home' : hash === '#heroes' ? 'heroes' : hash === '#login' ? 'login' : hash === '#profile' ? 'profile' : hash === '#questions' ? 'questions' : 'welcome'
 }

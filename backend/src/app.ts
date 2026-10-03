@@ -5,6 +5,7 @@ import { PostController } from './controllers/post.controller.js'
 import { InMemoryPostRepository } from './repositories/in-memory-post.repository.js'
 import { registerPostRoutes } from './routes/post.routes.js'
 import { PostService } from './services/post.service.js'
+import { registerAccountRoutes } from './modules/profiles/routes.js'
 
 export async function buildApp(config: AppConfig) {
   const app = Fastify({ logger: true })
@@ -16,6 +17,7 @@ export async function buildApp(config: AppConfig) {
 
   app.get('/api/health', async () => ({ status: 'ok' }))
   await app.register(async (api) => registerPostRoutes(api, postController), { prefix: '/api' })
+  await app.register(async (api) => registerAccountRoutes(api, config), { prefix: '/api/v1' })
 
   return app
 }

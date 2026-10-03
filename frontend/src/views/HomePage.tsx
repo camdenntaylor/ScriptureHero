@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import type { PrototypeController } from "../controllers/usePrototypeController";
 import type { Insight } from "../models/prototype";
-import { questions } from "../services/prototypeData";
 import { Icon } from "./components/Icon";
 import { Avatar } from "./components/Avatar";
 
@@ -143,7 +142,7 @@ function InsightCard({
         </button>
         <button
           className={`post-action save-action${saved ? " is-saved" : ""}`}
-          onClick={() => app.setDialog({ type: "save", post })}
+          onClick={() => app.profile ? app.setDialog({ type: "save", post }) : window.location.hash = '#login'}
           aria-label={`${saved ? "Manage saved" : "Add"} ${post.author.name}’s insight ${saved ? "" : "to soul question helplist"}`}
         >
           <Icon name={saved ? "check" : "bookmark"} size={18} />
@@ -209,15 +208,16 @@ export function HomePage({ app }: { app: PrototypeController }) {
   return (
     <div className="home-columns">
       <div className="feed-column">
+        {!app.profile && <div className="home-login-note"><div><strong>A place for your own reflections.</strong><p>Log in to keep a private question list and edit your profile.</p></div><a className="button button-soft" href="#login">Log in <Icon name="arrow" size={17} /></a></div>}
         {/* <header className="page-heading"><h1>Your daily dose of connection.</h1></header> */}
         <button
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
         >
           <span className="avatar avatar-gold" aria-hidden="true">
-            AV
+            {app.profile?.name.slice(0, 2).toUpperCase() ?? 'AV'}
           </span>
-          <span>What’s on your heart, Avery?</span>
+          <span>What’s on your heart{app.profile ? `, ${app.profile.name.split(' ')[0]}` : ''}?</span>
           <span className="compose-icon">
             <Icon name="plus" />
           </span>
@@ -249,7 +249,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
           </button>
           <span className="feed-caption">
             {app.filter === "for-you"
-              ? "Inspired by your soul questions"
+              ? "Stories from the community"
               : "A little wisdom to return to"}
           </span>
         </div>
@@ -288,29 +288,12 @@ export function HomePage({ app }: { app: PrototypeController }) {
           <p className="aside-description">
             The things you’re holding in your heart.
           </p>
-          <ul>
-            {questions.map((question) => (
-              <li key={question.id}>
-                <span className="question-dot" />
-                <div>
-                  <p>{question.title}</p>
-                  <span>
-                    {
-                      app.saved.filter(
-                        (item) => item.questionId === question.id,
-                      ).length
-                    }{" "}
-                    saved insights
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <p className="aside-description">{app.profile ? 'Open your private space to record or revisit a question.' : 'Log in to open your private space.'}</p>
           <p className="privacy-note">
             <Icon name="lock" size={13} /> Just for you. Always private.
           </p>
-          <a className="button-link questions-heroes-link" href="#heroes">
-            Meet your Scripture Heroes <Icon name="arrow" size={17} />
+          <a className="button-link questions-heroes-link" href={app.profile ? '#questions' : '#login'}>
+            {app.profile ? 'Open your private questions' : 'Log in'} <Icon name="arrow" size={17} />
           </a>
         </section>
       </aside>

@@ -1,7 +1,16 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(24);
+select plan(27);
+
+select ok((select count(*) = 2 from information_schema.columns
+  where table_schema = 'public' and table_name = 'profiles'
+    and column_name in ('location', 'avatar_path')), 'Profile has location and avatar fields');
+select is((select public from storage.buckets where id = 'avatars'), true,
+  'Avatar bucket is public for profile images');
+select ok(exists(select 1 from pg_policies where schemaname = 'storage'
+  and tablename = 'objects' and policyname = 'Users upload avatars in their own folder'
+  and cmd = 'INSERT'), 'Avatar uploads have an owner-folder policy');
 
 insert into auth.users (id, email) values
   ('10000000-0000-4000-8000-000000000001', 'monday-saver@example.test'),
