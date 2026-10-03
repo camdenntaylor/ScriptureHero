@@ -1,4 +1,4 @@
-import { buildApp } from './app.js'
+import { buildApp } from './application.js'
 import { readConfig } from './config/env.js'
 import { existsSync } from 'node:fs'
 import { loadEnvFile } from 'node:process'
