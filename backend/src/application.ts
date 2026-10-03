@@ -9,7 +9,10 @@ import { PostService } from './services/post.service.js'
 import { registerAccountRoutes } from './modules/profiles/routes.js'
 
 export async function configureApp(app: FastifyInstance, config: AppConfig) {
-  await app.register(cors, { origin: config.FRONTEND_ORIGIN })
+  await app.register(cors, {
+    origin: config.FRONTEND_ORIGIN,
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE'],
+  })
 
   const postRepository = new InMemoryPostRepository()
   const postService = new PostService(postRepository)
