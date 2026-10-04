@@ -54,7 +54,9 @@ Errors: `{ error: { code, message, issues? } }`. Codes in use: `unauthenticated`
 
 ```text
 src/dependencies.ts              AppDependencies + createInMemoryDependencies()
-src/app.ts                       buildApp(config, dependencies) — registers /api/v1
+src/application.ts               configureApp(app, config, dependencies?) — shared by server.ts and the Vercel entry (app.ts)
+src/api-v1.ts                    registers this slice under /api/v1 (account routes in modules/profiles share the prefix)
+src/shared/request-context.ts    per-request access token so Supabase calls run as the caller (RLS applies)
 src/shared/auth.ts               Authenticator interface, requireUser hook, currentUser()
 src/shared/errors.ts             AppError, notFound(), error-envelope handler
 src/shared/pagination.ts         Cursor encode/decode, toPage(), sliceCursorPage() (in-memory keyset)
@@ -69,14 +71,18 @@ Each module's `model.ts` holds the repository interface. Repositories return up 
 
 ## Next steps
 
-1. **Run against Supabase.** Put `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` in `backend/.env` (git-ignored; `pnpm dev` loads it). Then verify the Supabase repositories with two real users: the same scenarios as `src/api-v1.test.ts`, including the denied-identity cases. Queries most worth checking: the `posts!inner(...)` embedded filters in `saved-posts` and `heroes`, and keyset cursors on microsecond timestamps.
+1. **Run against Supabase.** Put `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in `backend/.env` (git-ignored; `server.ts` loads it). No secret key is needed. Then verify the Supabase repositories with two real users: the same scenarios as `src/api-v1.test.ts`, including the denied-identity cases. Queries most worth checking: the `posts!inner(...)` embedded filters in `saved-posts` and `heroes`, and keyset cursors on microsecond timestamps.
 2. **Confirm the database schema.** The live project's latest migration was `profile_photos`, which is not in `supabase/migrations/` on `main`. Make sure `monday_prototype` is applied and that migration is committed before relying on the tables.
 3. **Frontend.** Replace the fixtures in `frontend/src/services/prototypeData.ts` with calls to these endpoints through `frontend/src/services/api.ts` (base `/api/v1`). Send the Supabase access token, and use Supabase directly only for sign-in.
 4. **Production hardening later:** moderation (posts publish immediately today), message idempotency keys, and bounding the Heroes query beyond the latest 500 saves.
 
 ## Configuration
 
-`src/config/env.ts` validates everything once. Set all three Supabase variables or none; a partial set fails at startup. With none, the server uses seeded in-memory data and a development-only sign-in, and refuses to start when `NODE_ENV=production`. The secret key bypasses RLS and must stay server-side.
+`src/config/env.ts` validates everything once. This slice needs only `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, the same two the account routes use. No secret key is used anywhere.
+
+**How database access works.** `requireUser` verifies the bearer token with Supabase Auth, then stores it in a per-request context. `RequestClientSource` builds a Supabase client from the publishable key plus that token, so every query runs as the signed-in user and Postgres row level security applies (public routes run as `anon`). The services still authorize every action; RLS is defense in depth. Do not introduce a service-role client without an explicit decision, because it would bypass RLS.
+
+**Without Supabase settings:** `pnpm dev` falls back to seeded in-memory data and a development-only sign-in (`shared/dev-mode.ts`). Deployed environments never do; without Supabase these routes reject every request.
 
 ## Run it
 

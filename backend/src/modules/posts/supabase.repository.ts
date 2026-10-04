@@ -1,6 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { PageRequest } from '../../shared/pagination.js'
-import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap } from '../../shared/supabase.js'
+import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap, type ClientSource } from '../../shared/supabase.js'
 import type { NewPost, PostRecord, PostRepository } from './model.js'
 
 export const POST_COLUMNS = 'id, title, body, scripture_reference, created_at, author:profiles(id, display_name)'
@@ -27,7 +26,11 @@ export function fromPostRow(row: PostRow): PostRecord | null {
 }
 
 export class SupabasePostRepository implements PostRepository {
-  constructor(private readonly client: SupabaseClient) {}
+  constructor(private readonly source: ClientSource) {}
+
+  private get client() {
+    return this.source.current()
+  }
 
   async listGlobal(query: PageRequest & { authorId?: string }): Promise<PostRecord[]> {
     let request = this.client
@@ -51,7 +54,6 @@ export class SupabasePostRepository implements PostRepository {
       .insert({
         author_id: authorId,
         space_id: GLOBAL_SPACE_ID,
-        status: 'published',
         title: post.title,
         body: post.body,
         scripture_reference: post.scriptureReference,

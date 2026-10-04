@@ -1,6 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { compareCursors, sliceCursorPage, type Cursor, type PageRequest } from '../../shared/pagination.js'
-import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap } from '../../shared/supabase.js'
+import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap, type ClientSource } from '../../shared/supabase.js'
 import type { PublicProfile } from '../posts/model.js'
 import type { ConversationRecord, HeroRepository, HeroSummary, MessageRecord } from './model.js'
 
@@ -39,7 +38,11 @@ const CONVERSATION_COLUMNS = 'id, origin_post_id, initiator_id, hero_id, created
 const MESSAGE_COLUMNS = 'id, conversation_id, sender_id, body, created_at'
 
 export class SupabaseHeroRepository implements HeroRepository {
-  constructor(private readonly client: SupabaseClient) {}
+  constructor(private readonly source: ClientSource) {}
+
+  private get client() {
+    return this.source.current()
+  }
 
   private async loadProfiles(ids: string[]): Promise<Map<string, PublicProfile>> {
     const unique = [...new Set(ids)]

@@ -1,26 +1,28 @@
 import { describe, expect, it } from 'vitest'
+import { buildApp } from './application.js'
 import { readConfig } from './config/env.js'
-import { hasSupabaseConfig } from './dependencies.js'
+import { createInMemoryDependencies, hasSupabaseConfig } from './dependencies.js'
+import { InMemoryDatabase } from './shared/in-memory-database.js'
+import { requestContext } from './shared/request-context.js'
 import { keysetFilter, normalizeTimestamp } from './shared/supabase.js'
 import { SupabaseAuthenticator } from './shared/supabase-authenticator.js'
 
 describe('Supabase configuration', () => {
   it('runs without Supabase when nothing is set, treating blanks as unset', () => {
-    const config = readConfig({ SUPABASE_URL: '', SUPABASE_PUBLISHABLE_KEY: '', SUPABASE_SECRET_KEY: '' })
+    const config = readConfig({ SUPABASE_URL: '', SUPABASE_PUBLISHABLE_KEY: '' })
     expect(hasSupabaseConfig(config)).toBe(false)
   })
 
-  it('accepts all three values together', () => {
+  it('enables Supabase with just the project URL and publishable key, no secret key', () => {
     const config = readConfig({
       SUPABASE_URL: 'https://example.supabase.co',
       SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_x',
-      SUPABASE_SECRET_KEY: 'sb_secret_x',
     })
     expect(hasSupabaseConfig(config)).toBe(true)
   })
 
-  it('rejects a partial configuration so a missing secret is not silently ignored', () => {
-    expect(() => readConfig({ SUPABASE_URL: 'https://example.supabase.co' })).toThrow(/together/)
+  it('stays off when only one of the two is set', () => {
+    expect(hasSupabaseConfig(readConfig({ SUPABASE_URL: 'https://example.supabase.co' }))).toBe(false)
   })
 })
 
@@ -57,5 +59,51 @@ describe('SupabaseAuthenticator', () => {
     )
     expect(await refused.verify('bad')).toBeNull()
     expect(await down.verify('any')).toBeNull()
+  })
+})
+
+describe('Per-request access token', () => {
+  it('reaches repositories on signed-in routes only, so RLS applies as that user', async () => {
+    const seen: Record<string, string | undefined> = {}
+    const base = createInMemoryDependencies(new InMemoryDatabase(), {
+      async verify(token) {
+        return token === 'good-token' ? { id: '11111111-1111-4111-8111-111111111111' } : null
+      },
+    })
+    const app = await buildApp(
+      { HOST: '127.0.0.1', PORT: 3000, FRONTEND_ORIGIN: 'http://localhost:5173' },
+      {
+        ...base,
+        posts: {
+          ...base.posts,
+          async listGlobal() {
+            seen.feed = requestContext.getStore()?.accessToken
+            return []
+          },
+          async createGlobal() {
+            seen.publish = requestContext.getStore()?.accessToken
+            return null
+          },
+        },
+      },
+    )
+
+    await app.inject({ method: 'GET', url: '/api/v1/posts', headers: { authorization: 'Bearer good-token' } })
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/posts',
+      headers: { authorization: 'Bearer good-token' },
+      payload: { body: 'hi' },
+    })
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/posts',
+      headers: { authorization: 'Bearer forged' },
+      payload: { body: 'hi' },
+    })
+
+    expect(seen.feed).toBeUndefined() // public feed always runs as anon
+    expect(seen.publish).toBe('good-token')
+    await app.close()
   })
 })

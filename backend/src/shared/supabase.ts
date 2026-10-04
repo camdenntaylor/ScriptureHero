@@ -1,18 +1,39 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { requestContext } from './request-context.js'
 import type { Cursor } from './pagination.js'
 
 export const GLOBAL_SPACE_ID = '00000000-0000-4000-8000-000000000001'
 
 const clientOptions = { auth: { persistSession: false, autoRefreshToken: false } }
 
-// The secret-key client bypasses RLS and is server-only. Every authorization
-// rule therefore lives in the services, not in the database policies.
-export function createServiceClient(url: string, secretKey: string): SupabaseClient {
-  return createClient(url, secretKey, clientOptions)
-}
-
 export function createAuthClient(url: string, publishableKey: string): SupabaseClient {
   return createClient(url, publishableKey, clientOptions)
+}
+
+export interface ClientSource {
+  current(): SupabaseClient
+}
+
+// Uses the publishable key plus the caller's own access token, never a secret
+// key, so Postgres row level security is enforced on every query. Services still
+// authorize each action; RLS is defense in depth.
+export class RequestClientSource implements ClientSource {
+  constructor(
+    private readonly url: string,
+    private readonly publishableKey: string,
+  ) {}
+
+  current(): SupabaseClient {
+    const context = requestContext.getStore()
+    if (context?.client) return context.client
+
+    const client = createClient(this.url, this.publishableKey, {
+      ...clientOptions,
+      global: { headers: context?.accessToken ? { Authorization: `Bearer ${context.accessToken}` } : {} },
+    })
+    if (context) context.client = client
+    return client
+  }
 }
 
 interface SupabaseResult<T> {

@@ -6,7 +6,7 @@ The migration in `migrations/` is the source of truth for the October 5 prototyp
 
 | Table | Monday use | Who may read through RLS |
 | --- | --- | --- |
-| `profiles` | Public display name and optional bio; created after Auth signup | Everyone |
+| `profiles` | Public display name, optional bio/location, and avatar path; created after Auth signup | Everyone |
 | `spaces` | One seeded Global Space | Everyone sees Global |
 | `posts` | Text posts, initially published in Global | Everyone sees published Global posts; authors see their own other states |
 | `soul_questions` | Owner's private question text and optional private label | Owner only |
@@ -20,7 +20,9 @@ The initial post default is `published` so the Monday prototype can show a submi
 
 ## Backend integration
 
-The browser should use Supabase only for Auth. Application reads and writes go through `/api/v1` on the Fastify backend. Pass the user's access token to the backend; verify it there and authorize each operation. Keep any Supabase secret or service-role key server-only. A service-role client bypasses RLS, so backend authorization remains essential. Return explicit response objects: never serialize full table rows or attach Soul Questions to author-facing, feed, save, or message responses.
+The browser uses Supabase for Auth and signed avatar uploads. Profile and Soul Question reads/writes go through `/api/v1` on the Fastify backend. The backend verifies the user's access token through Supabase Auth and calls PostgREST with the same token, so RLS still applies. It uses only the publishable key. Return explicit response objects: never serialize full table rows or attach Soul Questions to author-facing, feed, save, or message responses.
+
+The `20261002000000_profile_photos.sql` migration adds optional profile location/avatar fields and a public `avatars` bucket. Authenticated users may upload only to their own folder. The browser requests a signed upload URL and transfers the file, then records its path through `PATCH /api/v1/me/avatar`. Keep the bucket's size and MIME restrictions in place.
 
 Suggested bounded queries:
 
@@ -42,7 +44,7 @@ supabase db push --dry-run
 supabase db push
 ```
 
-If the remote project already has application tables, inspect and baseline it before pushing. Do not reset the remote project. For local database tests, start Docker and run:
+If the remote project already has application tables, inspect and baseline it before pushing. Do not reset the remote project. Add the project's publishable key to both `frontend/.env` (`VITE_SUPABASE_PUBLISHABLE_KEY`) and `backend/.env` (`SUPABASE_PUBLISHABLE_KEY`), along with the URL from the examples. The backend loads its `.env` at startup. Never put a secret or service-role key in the frontend. For local database tests, start Docker and run:
 
 ```text
 supabase start

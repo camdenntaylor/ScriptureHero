@@ -1,6 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { PageRequest } from '../../shared/pagination.js'
-import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap } from '../../shared/supabase.js'
+import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap, type ClientSource } from '../../shared/supabase.js'
 import { POST_COLUMNS, SupabasePostRepository, fromPostRow, type PostRow } from '../posts/supabase.repository.js'
 import type { SavedPostRecord, SavedPostRepository } from './model.js'
 
@@ -13,8 +12,12 @@ interface SaveRow {
 export class SupabaseSavedPostRepository implements SavedPostRepository {
   private readonly posts: SupabasePostRepository
 
-  constructor(private readonly client: SupabaseClient) {
-    this.posts = new SupabasePostRepository(client)
+  constructor(private readonly source: ClientSource) {
+    this.posts = new SupabasePostRepository(source)
+  }
+
+  private get client() {
+    return this.source.current()
   }
 
   async save(userId: string, postId: string): Promise<SavedPostRecord | null> {

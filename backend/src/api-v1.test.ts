@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { buildApp } from './app.js'
+import { buildApp } from './application.js'
 import { createInMemoryDependencies } from './dependencies.js'
 import type { Authenticator } from './shared/auth.js'
 import { InMemoryDatabase } from './shared/in-memory-database.js'

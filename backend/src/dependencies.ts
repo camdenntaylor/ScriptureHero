@@ -10,7 +10,7 @@ import type { SavedPostRepository } from './modules/saved-posts/model.js'
 import { SupabaseSavedPostRepository } from './modules/saved-posts/supabase.repository.js'
 import { denyAllAuthenticator, type Authenticator } from './shared/auth.js'
 import { InMemoryDatabase } from './shared/in-memory-database.js'
-import { createAuthClient, createServiceClient } from './shared/supabase.js'
+import { RequestClientSource, createAuthClient } from './shared/supabase.js'
 import { SupabaseAuthenticator } from './shared/supabase-authenticator.js'
 
 export interface AppDependencies {
@@ -32,21 +32,20 @@ export function createInMemoryDependencies(
   }
 }
 
-export function hasSupabaseConfig(
-  config: AppConfig,
-): config is AppConfig & { SUPABASE_URL: string; SUPABASE_PUBLISHABLE_KEY: string; SUPABASE_SECRET_KEY: string } {
-  return Boolean(config.SUPABASE_URL && config.SUPABASE_PUBLISHABLE_KEY && config.SUPABASE_SECRET_KEY)
+type SupabaseConfig = AppConfig & { SUPABASE_URL: string; SUPABASE_PUBLISHABLE_KEY: string }
+
+export function hasSupabaseConfig(config: AppConfig): config is SupabaseConfig {
+  return Boolean(config.SUPABASE_URL && config.SUPABASE_PUBLISHABLE_KEY)
 }
 
-export function createSupabaseDependencies(
-  config: AppConfig & { SUPABASE_URL: string; SUPABASE_PUBLISHABLE_KEY: string; SUPABASE_SECRET_KEY: string },
-): AppDependencies {
-  const service = createServiceClient(config.SUPABASE_URL, config.SUPABASE_SECRET_KEY)
-  const auth = createAuthClient(config.SUPABASE_URL, config.SUPABASE_PUBLISHABLE_KEY)
+// Uses only the project URL and publishable key. Database calls carry the
+// caller's own access token (see RequestClientSource), so no secret key is needed.
+export function createSupabaseDependencies(config: SupabaseConfig): AppDependencies {
+  const source = new RequestClientSource(config.SUPABASE_URL, config.SUPABASE_PUBLISHABLE_KEY)
   return {
-    authenticator: new SupabaseAuthenticator(auth),
-    posts: new SupabasePostRepository(service),
-    savedPosts: new SupabaseSavedPostRepository(service),
-    heroes: new SupabaseHeroRepository(service),
+    authenticator: new SupabaseAuthenticator(createAuthClient(config.SUPABASE_URL, config.SUPABASE_PUBLISHABLE_KEY)),
+    posts: new SupabasePostRepository(source),
+    savedPosts: new SupabaseSavedPostRepository(source),
+    heroes: new SupabaseHeroRepository(source),
   }
 }
