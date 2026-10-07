@@ -256,6 +256,8 @@ textarea:focus { border-color: var(--accent); }
 .demo-note { font-size: .8rem; color: var(--muted); line-height: 1.8; margin: 18px 0; }
 .prototype-modal textarea + .full-width { margin-top: 17px; }
 .remove-saved { display: block; margin: 8px auto -5px; font-size: .85rem; font-weight: 600; }
+.onboarding-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 8px; }
+.onboarding-skip { justify-content: center; }
 .toast-region { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: max-content; max-width: min(550px, calc(100% - 30px)); z-index: 20; }
 .toast { display: flex; align-items: center; gap: 10px; background: var(--ink); color: var(--paper); padding: 6px 6px 6px 18px; border-radius: var(--radius-pill); box-shadow: var(--shadow-lg); font-size: .9rem; font-weight: 600; line-height: 1.6; }
 .toast .icon-button { flex-shrink: 0; }

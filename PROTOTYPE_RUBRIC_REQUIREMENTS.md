@@ -38,5 +38,17 @@ The rubric wants a goal handed to the user before they start (e.g., "find an ins
 
 ## Also worth doing before submission
 
-- Write the required submission note describing how the prototype emphasizes the core design feature and minimizes tangential ones. Source material already exists: README's Need/Persona/Capability/Value table (capability = "find and share personal spiritual insights with people beyond your usual circle," value = "connection") and `PRODUCT_SPEC.md`'s Soul Questions / Scripture Hero loop. This is a short write-up, not new building — just needs pulling together and submitting alongside the link.
 - Do a final pass confirming nothing forces a visitor into one linear path (e.g., browsing the feed and Welcome/Heroes should all be reachable without signing in first, per `SMALL_SCALE_PLAN.md`'s visitor-preview requirement).
+
+## Done
+
+- ✅ Public link confirmed live: <https://scripture-hero-frontend.vercel.app>
+- ✅ Early-stage notice: `LandingPage.tsx`'s footer label is live (was commented out).
+- ✅ Onboarding/goal modal: shows once per browser session on first load, states this is an early-stage prototype, gives a concrete goal ("save an insight, see who becomes your Scripture Hero"), and is explicitly skippable (`OnboardingModal.tsx`).
+- ✅ Submission write-up drafted below — paste it into the comment box with the public link.
+
+### Submission note (paste alongside the public link)
+
+> Scripture Hero's core design feature is helping people find and share personal spiritual insight with others beyond their usual circle, built around a simple connection loop: browse a global feed of real experiences, save the ones that speak to you, and privately thank or message the person who shared it as your "Scripture Hero." Every screen in this prototype serves that loop — Welcome leads with the capability and value (connection) before any feature detail, Home demonstrates finding and sharing insight, and Scripture Heroes makes the resulting connection and gratitude tangible. We deliberately minimized or deferred functions discovery research didn't support as essential to that core loop: no public commenting or debate, no algorithmic ranking, no group chat, no media beyond simple text and an optional scripture reference, and no visible moderation queue. Private "Soul Questions" exist only to connect a saver's situation to a post, never to invite public advice-seeking, keeping the feed about shared insight rather than open debate.
+
+Feel free to edit this to sound like your own team's voice before submitting — it's a starting draft, not final copy.

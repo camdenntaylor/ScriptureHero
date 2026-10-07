@@ -77,11 +77,10 @@ export function LandingPage() {
         </div>
       </section>
       <footer className="landing-footer">
-        {/* <span>Scripture Hero</span> */}
-
-        {/* <span className="prototype-label">
-          UX prototype · fictional community
-        </span> */}
+        <span className="prototype-label">
+          Early-stage prototype for a class project — not a real product or
+          community.
+        </span>
       </footer>
     </main>
   );
