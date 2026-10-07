@@ -93,3 +93,15 @@ pnpm typecheck && pnpm test && pnpm build
 ```
 
 Local sign-in (development only): `Authorization: Bearer dev:11111111-1111-4111-8111-111111111111` (Amara) or `dev:22222222-2222-4222-8222-222222222222` (Mateo). The seeded post IDs are `33333333-3333-4333-8333-333333333333` and `44444444-4444-4444-8444-444444444444`.
+
+## Demo content on the live Supabase project
+
+`scripts/seed-demo-posts.mjs` populates the real Global feed with 100 themed text posts so the live project doesn't demo empty. It signs up (or signs back in) ten fictional author accounts — named after Book of Mormon figures (e.g. `nephi@scripturehero.invalid`) so they're obviously not real users — then posts through the normal `/rest/v1/posts` path using each author's own access token, the same way a real signed-in user would. It never uses a service-role key.
+
+```bash
+SUPABASE_URL=https://wxqaatvbtasjnsyqxnev.supabase.co \
+SUPABASE_PUBLISHABLE_KEY=<publishable key from Project Settings > API> \
+node backend/scripts/seed-demo-posts.mjs
+```
+
+Requires "Confirm email" temporarily turned off under Authentication → Sign In / Providers → Email, so signup returns a usable session immediately; turn it back on afterward. Safe to re-run — existing demo accounts sign in instead of re-signing-up — but it does not dedupe posts, so re-running adds another 100.
