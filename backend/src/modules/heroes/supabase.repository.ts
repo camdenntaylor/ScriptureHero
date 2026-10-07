@@ -70,7 +70,9 @@ export class SupabaseHeroRepository implements HeroRepository {
     const saves = unwrap(
       await this.client
         .from('saved_posts')
-        .select('created_at, post_id, posts!inner(id, title, scripture_reference, author:profiles(id, display_name))')
+        .select(
+          'created_at, post_id, posts!inner(id, title, scripture_reference, author:profiles!posts_author_id_fkey(id, display_name))',
+        )
         .eq('user_id', userId)
         .eq('posts.space_id', GLOBAL_SPACE_ID)
         .eq('posts.status', 'published')
@@ -114,16 +116,14 @@ export class SupabaseHeroRepository implements HeroRepository {
 
   async findOrCreateConversation(initiatorId: string, heroId: string, originPostId: string) {
     const find = async () => {
-      const row = unwrap(
-        await this.client
-          .from('hero_conversations')
-          .select(CONVERSATION_COLUMNS)
-          .eq('initiator_id', initiatorId)
-          .eq('origin_post_id', originPostId)
-          .maybeSingle(),
-        'Find conversation',
-      ) as unknown as ConversationRow | null
-      return row
+      const result = await this.client
+        .from('hero_conversations')
+        .select(CONVERSATION_COLUMNS)
+        .eq('initiator_id', initiatorId)
+        .eq('origin_post_id', originPostId)
+        .maybeSingle()
+      if (result.error) throw new Error(`Find conversation failed (${result.error.code ?? 'unknown'})`)
+      return result.data as unknown as ConversationRow | null
     }
 
     const existing = await find()

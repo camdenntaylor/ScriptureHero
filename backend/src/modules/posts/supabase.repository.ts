@@ -2,7 +2,8 @@ import type { PageRequest } from '../../shared/pagination.js'
 import { GLOBAL_SPACE_ID, keysetFilter, normalizeTimestamp, unwrap, type ClientSource } from '../../shared/supabase.js'
 import type { NewPost, PostRecord, PostRepository } from './model.js'
 
-export const POST_COLUMNS = 'id, title, body, scripture_reference, created_at, author:profiles(id, display_name)'
+export const POST_COLUMNS =
+  'id, title, body, scripture_reference, created_at, author:profiles!posts_author_id_fkey(id, display_name)'
 
 export interface PostRow {
   id: string
