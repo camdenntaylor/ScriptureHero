@@ -17,6 +17,9 @@ importers:
       '@fastify/cors':
         specifier: ^11.1.0
         version: 11.3.0
+      '@supabase/supabase-js':
+        specifier: ^2.117.2
+        version: 2.117.2
       fastify:
         specifier: ^5.6.2
         version: 5.12.0
