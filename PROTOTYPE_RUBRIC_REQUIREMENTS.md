@@ -12,9 +12,9 @@ This checks the current app against the actual grading rubric, not `SMALL_SCALE_
 | --- | --- | --- | --- |
 | Instructions followed | 20 | At risk | Public link and both notices are done; still depends on screen count below before Saturday. |
 | Low-fidelity look + early-stage notice | 20 | ✅ Done | `LandingPage.tsx`'s footer label is live, and `OnboardingModal.tsx` restates it on first visit. |
-| Entry screen signifies overarching capability | 40 | Likely done | Welcome's "Learn through connection" headline + single filled CTA already leads with capability over feature detail. Worth a final look once other screens exist, so it still reads as the clear entry point. |
-| Conventions, attention, grouping, usability principles | 40 | Likely done, needs a dedicated pass | Grouping/proximity work is documented in `README.md`'s design-justification section. Rubric wants this reviewed **once per principle, across the whole prototype** — do that pass once new screens exist. |
-| Design library and component reuse | 40 | Likely done | `DESIGN_SYSTEM.md` plus shared CSS classes (`button-primary`, `button-outline`, card/section patterns in `styles.css`) already give a reusable library. Confirm new screens draw from it instead of one-off styles. |
+| Entry screen signifies overarching capability | 40 | ✅ Done | Verified: Welcome's "Learn through connection" headline + single `button-primary` CTA leads with capability over feature detail, no hex colors or inline styles bypassing the design system. |
+| Conventions, attention, grouping, usability principles | 40 | ✅ Fixed | Checked every screen against `DESIGN_SYSTEM.md`'s own rules and found (then fixed) two real violations: `HomePage.tsx` and `ProfilePage.tsx` had no page heading at all (one was commented out, the other never had one) — both now have a `.page-heading h1`, so every screen tells the user where they are. |
+| Design library and component reuse | 40 | ✅ Fixed | Found `HeroesPage.tsx` could show **two** `.button-primary` buttons at once (the empty-state "Explore your feed" CTA plus the always-present "Share an insight" one) — exactly the state a brand-new visitor with zero saved Heroes would see first. The system's own rule is one solid-green button per view. Changed the empty-state button to `button-soft`. No hex colors, inline styles, or emoji found anywhere in the components — tokens and the icon set are used consistently. |
 | Fully functional, non-linear, goal-driven | 40 | Partial | The goal/onboarding modal is done (see below). Screen count is the one piece still missing — see below. |
 
 ## The one real gap left: screen count (20–30+ screens, non-linear)
@@ -38,6 +38,7 @@ Assign this across the team — it's the single highest-point-value item left (`
 - ✅ Early-stage notice: `LandingPage.tsx`'s footer label is live (was commented out).
 - ✅ Onboarding/goal modal: shows once per browser session on first load, states this is an early-stage prototype, gives a concrete goal ("save an insight, see who becomes your Scripture Hero"), and is explicitly skippable (`OnboardingModal.tsx`).
 - ✅ Submission write-up drafted below — paste it into the comment box with the public link.
+- ✅ Design-system audit: checked every screen against `DESIGN_SYSTEM.md`'s own rules (page headings, one primary button per view, tokens-only colors, no emoji). Found and fixed two real violations — missing page headings on Home and Profile, and a double-primary-button state on Heroes when a visitor has no saved Heroes yet.
 
 ### Submission note (paste alongside the public link)
 

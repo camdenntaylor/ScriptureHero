@@ -52,6 +52,9 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
 
   return (
     <div className="profile-page">
+      <header className="page-heading">
+        <h1>Your profile.</h1>
+      </header>
       <div className="profile-grid">
         <section className="profile-card" aria-labelledby="details-heading">
           <h2 id="details-heading">Personal details</h2>

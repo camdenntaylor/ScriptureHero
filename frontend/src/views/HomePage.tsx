@@ -209,7 +209,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
     <div className="home-columns">
       <div className="feed-column">
         {!app.profile && <div className="home-login-note"><div><strong>A place for your own reflections.</strong><p>Log in to keep a private question list and edit your profile.</p></div><a className="button button-soft" href="#login">Log in <Icon name="arrow" size={17} /></a></div>}
-        {/* <header className="page-heading"><h1>Your daily dose of connection.</h1></header> */}
+        <header className="page-heading"><h1>Your daily dose of connection.</h1></header>
         <button
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
