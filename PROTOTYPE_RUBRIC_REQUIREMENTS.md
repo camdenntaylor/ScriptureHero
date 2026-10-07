@@ -10,16 +10,14 @@ This checks the current app against the actual grading rubric, not `SMALL_SCALE_
 
 | Rubric criterion | Points | Status | What's missing |
 | --- | --- | --- | --- |
-| Instructions followed | 20 | At risk | Depends on everything below landing before Saturday — public link itself is done. |
-| Low-fidelity look + early-stage notice | 20 | **Missing** | `frontend/src/views/LandingPage.tsx` has a `prototype-label` span ("UX prototype · fictional community") but it's commented out. Nothing currently tells a user this is early-stage. Needs a visible label or modal, in plain English. |
+| Instructions followed | 20 | At risk | Public link and both notices are done; still depends on screen count below before Saturday. |
+| Low-fidelity look + early-stage notice | 20 | ✅ Done | `LandingPage.tsx`'s footer label is live, and `OnboardingModal.tsx` restates it on first visit. |
 | Entry screen signifies overarching capability | 40 | Likely done | Welcome's "Learn through connection" headline + single filled CTA already leads with capability over feature detail. Worth a final look once other screens exist, so it still reads as the clear entry point. |
 | Conventions, attention, grouping, usability principles | 40 | Likely done, needs a dedicated pass | Grouping/proximity work is documented in `README.md`'s design-justification section. Rubric wants this reviewed **once per principle, across the whole prototype** — do that pass once new screens exist. |
 | Design library and component reuse | 40 | Likely done | `DESIGN_SYSTEM.md` plus shared CSS classes (`button-primary`, `button-outline`, card/section patterns in `styles.css`) already give a reusable library. Confirm new screens draw from it instead of one-off styles. |
-| Fully functional, non-linear, goal-driven | 40 | **Missing two pieces** | See below — this is the biggest gap. |
+| Fully functional, non-linear, goal-driven | 40 | Partial | The goal/onboarding modal is done (see below). Screen count is the one piece still missing — see below. |
 
-## The two real gaps to close
-
-### 1. Screen count (20–30+ screens, non-linear)
+## The one real gap left: screen count (20–30+ screens, non-linear)
 
 The app currently has about 6 real screens: Welcome, Home, Heroes, Login, Profile, Soul Questions (plus a couple of tab-states inside Home and Heroes). The rubric wants enough screens that it "feels like a fully functional app," with multiple valid routes — not one path.
 
@@ -29,12 +27,6 @@ This doesn't mean building real backend features for all of them. A lo-fi protot
 - Each settings/help/about/report-a-post/share-sheet type screen counts.
 
 Assign this across the team — it's the single highest-point-value item left (`40 pts`) and the most labor, so don't leave it to one person this late.
-
-### 2. User goal given upfront + non-linear confirmation
-
-The rubric wants a goal handed to the user before they start (e.g., "find an insight that speaks to you and save it" or "share something you're learning"), delivered via a modal or written instructions, with multiple valid routes to get there — and if there's an onboarding flow, it must be skippable.
-
-`PrototypeModal.tsx` only handles in-app actions (save/message/share/compose) today — there's no onboarding/goal modal on first load. Needs a new modal (shown once per session, skippable) that: states plainly this is an early-stage prototype (closing gap #1 above too), and gives the visitor a concrete goal with no forced single path to it.
 
 ## Also worth doing before submission
 
