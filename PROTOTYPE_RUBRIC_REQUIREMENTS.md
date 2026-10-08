@@ -11,22 +11,36 @@ This checks the current app against the actual grading rubric, not `SMALL_SCALE_
 | Rubric criterion | Points | Status | What's missing |
 | --- | --- | --- | --- |
 | Instructions followed | 20 | At risk | Public link and both notices are done; still depends on screen count below before Saturday. |
-| Low-fidelity look + early-stage notice | 20 | ✅ Done | `LandingPage.tsx`'s footer label is live, and `OnboardingModal.tsx` restates it on first visit. |
+| Low-fidelity look + early-stage notice | 20 | ✅ Done | Stated in plain English via two quiet lines in `LandingPage.tsx`'s Welcome copy (not a modal — kept the calm feel `DESIGN_SYSTEM.md` asks for). |
 | Entry screen signifies overarching capability | 40 | ✅ Done | Verified: Welcome's "Learn through connection" headline + single `button-primary` CTA leads with capability over feature detail, no hex colors or inline styles bypassing the design system. |
 | Conventions, attention, grouping, usability principles | 40 | ✅ Fixed | Checked every screen against `DESIGN_SYSTEM.md`'s own rules and found (then fixed) two real violations: `HomePage.tsx` and `ProfilePage.tsx` had no page heading at all (one was commented out, the other never had one) — both now have a `.page-heading h1`, so every screen tells the user where they are. |
 | Design library and component reuse | 40 | ✅ Fixed | Found `HeroesPage.tsx` could show **two** `.button-primary` buttons at once (the empty-state "Explore your feed" CTA plus the always-present "Share an insight" one) — exactly the state a brand-new visitor with zero saved Heroes would see first. The system's own rule is one solid-green button per view. Changed the empty-state button to `button-soft`. No hex colors, inline styles, or emoji found anywhere in the components — tokens and the icon set are used consistently. |
-| Fully functional, non-linear, goal-driven | 40 | Partial | The goal/onboarding modal is done (see below). Screen count is the one piece still missing — see below. |
+| Fully functional, non-linear, goal-driven | 40 | Partial | The goal is stated in Welcome copy (see above). Screen count is the one piece still in progress — see below. |
 
 ## The one real gap left: screen count (20–30+ screens, non-linear)
 
-The app currently has about 6 real screens: Welcome, Home, Heroes, Login, Profile, Soul Questions (plus a couple of tab-states inside Home and Heroes). The rubric wants enough screens that it "feels like a fully functional app," with multiple valid routes — not one path.
+Concrete plan the team agreed on, being built in chunks:
 
-This doesn't mean building real backend features for all of them. A lo-fi prototype is allowed to fake it: static or fixture-backed screens are fine as long as they're navigable and look finished. Fastest ways to add real screen count without new backend work:
-- Break existing screens into their natural sub-screens (e.g., a post's own detail view, a user's public profile view distinct from "my profile," an edit-profile screen distinct from view-profile, a notifications screen, a settings screen, a search/explore screen, an individual conversation thread as its own screen distinct from the Heroes list, empty states, a "create account" step separate from "sign in").
-- Add the Spaces concept from `PRODUCT_SPEC.md` (friends / family / ward / city / congregation / global) as its own set of screens, even if only the Global space is wired to real data — the others can be static previews.
-- Each settings/help/about/report-a-post/share-sheet type screen counts.
+| # | Screen | Status |
+| --- | --- | --- |
+| 1 | Welcome | ✅ existing |
+| 2 | Home / Global feed | ✅ existing |
+| 3 | **Topics** (search/browse insights by topic) | ✅ done — third tab next to "For you" on Home |
+| 4 | **Spaces directory** (simulated groups — congregation, family, friends, city) | ✅ done |
+| 5 | **A Space's feed** | ✅ done — one template screen, reused per space |
+| 6 | Scripture Heroes | ✅ existing |
+| 7 | **Soul Questions Directory** (public FAQ/prompt library) | ⏳ next chunk |
+| 8 | Soul Questions (private, yours) | ✅ existing |
+| 9 | Login | ✅ existing |
+| 10 | **My Profile (Overview)** | ⏳ planned — stats, saved count, hero badges |
+| 11 | **Edit Profile** | ⏳ planned — split out from current Profile, adds favorite verse |
+| 12 | **Account & Privacy Settings** | ⏳ planned |
+| 13 | **Notifications Center** | ⏳ planned |
+| 14 | **Notification Preferences** | ⏳ planned |
 
-Assign this across the team — it's the single highest-point-value item left (`40 pts`) and the most labor, so don't leave it to one person this late.
+Dropped: a "most commonly asked questions" trending panel was considered for the Soul Questions Directory but cut — it ran against the product's own privacy principle that Soul Questions are never disclosed to anyone, even in aggregate.
+
+That's 14 screens once the plan is complete (8 new, 1 existing split in two, 5 untouched) — a real jump from the original 6, though still a bit short of the rubric's 20-30 if graded by strict route count. Counting tab-states (Home's for-you/saved/topics, Heroes' heroes/helped) as distinct views too, it's closer to 17-18.
 
 ## Also worth doing before submission
 
@@ -35,10 +49,10 @@ Assign this across the team — it's the single highest-point-value item left (`
 ## Done
 
 - ✅ Public link confirmed live: <https://scripture-hero-frontend.vercel.app>
-- ✅ Early-stage notice: `LandingPage.tsx`'s footer label is live (was commented out).
-- ✅ Early-stage notice + goal: folded into two quiet lines of Welcome-page copy instead of a modal, to keep the calm feel `DESIGN_SYSTEM.md` asks for. No popup, nothing to dismiss.
+- ✅ Early-stage notice + goal: two quiet lines of Welcome-page copy, no modal, no popup to dismiss.
 - ✅ Submission write-up drafted below — paste it into the comment box with the public link.
 - ✅ Design-system audit: checked every screen against `DESIGN_SYSTEM.md`'s own rules (page headings, one primary button per view, tokens-only colors, no emoji). Found and fixed two real violations — missing page headings on Home and Profile, and a double-primary-button state on Heroes when a visitor has no saved Heroes yet.
+- ✅ Topics + Spaces screens (see table above).
 
 ### Submission note (paste alongside the public link)
 
