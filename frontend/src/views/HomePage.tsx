@@ -1,206 +1,59 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { PrototypeController } from "../controllers/usePrototypeController";
-import type { Insight } from "../models/prototype";
+import { insights } from "../services/prototypeData";
 import { Icon } from "./components/Icon";
-import { Avatar } from "./components/Avatar";
+import { InsightCard } from "./components/InsightCard";
 
-function ReflectionVideo({ post }: { post: Insight }) {
-  const player = useRef<HTMLVideoElement>(null);
-  const [started, setStarted] = useState(false);
-  const [error, setError] = useState(false);
-  async function play() {
-    setError(false);
-    setStarted(true);
-    try {
-      await player.current?.play();
-    } catch {
-      setError(true);
-      setStarted(false);
-    }
-  }
-  return (
-    <figure className="reflection-video">
-      <div className="video-frame">
-        <video
-          ref={player}
-          src={post.video}
-          controls={started}
-          playsInline
-          preload="metadata"
-          aria-label={`Video reflection: ${post.title}`}
-          onError={() => setError(true)}
-        />
-        {!started && (
-          <button
-            className="video-cover"
-            onClick={() => void play()}
-            aria-label={`Play ${post.title}`}
-          >
-            <span className="play-circle">
-              <Icon name="play" size={25} />
-            </span>
-            <span>Pause. Breathe. Trust.</span>
-            <small>A moment of reflection</small>
-          </button>
-        )}
-      </div>
-      <figcaption>
-        {error ? (
-          <span role="alert">
-            The video couldn’t load.{" "}
-            <button
-              className="button-link"
-              onClick={() => {
-                player.current?.load();
-                void play();
-              }}
-            >
-              Try again
-            </button>
-          </span>
-        ) : (
-          "A quiet moment in nature · no spoken audio"
-        )}
-      </figcaption>
-    </figure>
+function TopicsBrowser({ app }: { app: PrototypeController }) {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<string | null>(null);
+  const allTopics = [...new Set(insights.flatMap((post) => post.topics))].sort();
+  const matchingTopics = allTopics.filter((topic) =>
+    topic.toLowerCase().includes(query.trim().toLowerCase()),
   );
-}
+  const results = selected ? insights.filter((post) => post.topics.includes(selected)) : [];
 
-function InsightCard({
-  post,
-  app,
-}: {
-  post: Insight;
-  app: PrototypeController;
-}) {
-  const [showComments, setShowComments] = useState(false);
-  const [comment, setComment] = useState("");
-  const liked = app.liked.includes(post.id);
-  const saved = app.saved.some((item) => item.postId === post.id);
-  const extraComments = app.comments[post.id] ?? [];
-  return (
-    <article className="insight-card" aria-labelledby={`title-${post.id}`}>
-      <header className="post-header">
-        <Avatar person={post.author} />
-        <div className="person-meta">
-          <strong>{post.author.name}</strong>
-          <span>
-            {post.author.location} <span aria-hidden="true">·</span> {post.time}
-          </span>
-        </div>
-        <span className="global-label">
-          <Icon name="globe" size={14} /> Global
-        </span>
-      </header>
-      <div className="post-copy">
-        <h2 id={`title-${post.id}`}>{post.title}</h2>
-        <p className="post-body">{post.body}</p>
-      </div>
-      {post.video ? (
-        <ReflectionVideo post={post} />
-      ) : (
-        <blockquote className="scripture-quote">
-          <Icon name="book" size={20} />
-          <div>
-            <p>{post.verse}</p>
-            <cite>{post.scripture}</cite>
-          </div>
-        </blockquote>
-      )}
-      {post.video && (
-        <p className="video-scripture">
-          <Icon name="book" size={16} /> {post.scripture}
-        </p>
-      )}
-      <div className="post-actions">
-        <button
-          className={liked ? "post-action is-liked" : "post-action"}
-          onClick={() => app.toggleLike(post.id)}
-          aria-pressed={liked}
-          aria-label={`${liked ? "Unlike" : "Like"} ${post.author.name}’s insight`}
-        >
-          <Icon name="heart" />
-          <span>{post.likes + (liked ? 1 : 0)}</span>
+  if (selected) {
+    return (
+      <div className="topics-browser">
+        <button className="button-link topics-back" onClick={() => setSelected(null)}>
+          <Icon name="chevron" size={16} /> All topics
         </button>
-        <button
-          className="post-action"
-          onClick={() => setShowComments(!showComments)}
-          aria-expanded={showComments}
-          aria-controls={`comments-${post.id}`}
-          aria-label={`Comment on ${post.author.name}’s insight`}
-        >
-          <Icon name="message" />
-          <span>{post.comments.length + extraComments.length}</span>
-        </button>
-        <button
-          className="post-action share-action"
-          onClick={() => void app.share(post)}
-          aria-label={`Share ${post.author.name}’s insight`}
-        >
-          <Icon name="share" />
-          <span>Share</span>
-        </button>
-        <button
-          className={`post-action save-action${saved ? " is-saved" : ""}`}
-          onClick={() => app.profile ? app.setDialog({ type: "save", post }) : window.location.hash = '#login'}
-          aria-label={`${saved ? "Manage saved" : "Add"} ${post.author.name}’s insight ${saved ? "" : "to soul question helplist"}`}
-        >
-          <Icon name={saved ? "check" : "bookmark"} size={18} />
-          <span>{saved ? "In your helplist" : "Add to helplist"}</span>
-        </button>
-      </div>
-      {showComments && (
-        <section
-          id={`comments-${post.id}`}
-          className="comments-panel"
-          aria-label="Comments"
-        >
-          <p className="comments-intro">
-            A little encouragement goes a long way.
-          </p>
-          {[
-            ...post.comments,
-            ...extraComments.map((body) => ({ name: "You", body })),
-          ].map((item, index) => (
-            <div className="comment" key={`${post.id}-${index}`}>
-              <strong>{item.name}</strong>
-              <p>{item.body}</p>
-            </div>
+        <h2 className="topics-selected-heading">{selected}</h2>
+        <div className="insight-list">
+          {results.map((post) => (
+            <InsightCard key={post.id} post={post} app={app} />
           ))}
-          {post.comments.length + extraComments.length === 0 && (
-            <p className="muted">Be the first to leave a kind word.</p>
-          )}
-          <form
-            className="comment-form"
-            onSubmit={(event) => {
-              event.preventDefault();
-              app.addComment(post.id, comment);
-              setComment("");
-            }}
-          >
-            <label className="sr-only" htmlFor={`comment-${post.id}`}>
-              Your comment
-            </label>
-            <input
-              id={`comment-${post.id}`}
-              placeholder="Leave a thoughtful comment…"
-              value={comment}
-              maxLength={500}
-              onChange={(event) => setComment(event.target.value)}
-              required
-            />
-            <button
-              className="icon-button"
-              type="submit"
-              disabled={!comment.trim()}
-              aria-label="Post comment"
-            >
-              <Icon name="arrow" />
-            </button>
-          </form>
-        </section>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="topics-browser">
+      <label className="sr-only" htmlFor="topics-search">
+        Search topics
+      </label>
+      <div className="topics-search">
+        <Icon name="search" size={18} />
+        <input
+          id="topics-search"
+          placeholder="What are you needing today? Try “patience” or “hope”…"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </div>
+      <div className="topic-chip-grid">
+        {matchingTopics.map((topic) => (
+          <button className="topic-chip" key={topic} onClick={() => setSelected(topic)}>
+            {topic}
+          </button>
+        ))}
+      </div>
+      {matchingTopics.length === 0 && (
+        <p className="muted">No topics match “{query}” yet. Try a different word.</p>
       )}
-    </article>
+    </div>
   );
 }
 
@@ -247,35 +100,50 @@ export function HomePage({ app }: { app: PrototypeController }) {
               {new Set(app.saved.map((item) => item.postId)).size}
             </span>
           </button>
+          <button
+            aria-pressed={app.filter === "topics"}
+            className={app.filter === "topics" ? "active" : ""}
+            onClick={() => app.setFilter("topics")}
+          >
+            <Icon name="search" size={17} /> Topics
+          </button>
           <span className="feed-caption">
             {app.filter === "for-you"
               ? "Stories from the community"
-              : "A little wisdom to return to"}
+              : app.filter === "saved"
+                ? "A little wisdom to return to"
+                : "Find what you're needing today"}
           </span>
         </div>
-        <div className="insight-list">
-          {app.visiblePosts.map((post) => (
-            <InsightCard key={post.id} post={post} app={app} />
-          ))}
-        </div>
-        {app.visiblePosts.length === 0 && (
-          <div className="empty-state">
-            <Icon name="bookmark" size={32} />
-            <h2>A place for words that stay with you.</h2>
-            <p>Save an insight to a Soul Question and you’ll find it here.</p>
-            <button
-              className="button button-soft"
-              onClick={() => app.setFilter("for-you")}
-            >
-              Find an insight <Icon name="arrow" />
-            </button>
-          </div>
-        )}
-        {app.visiblePosts.length > 0 && (
-          <p className="end-of-feed">
-            <Icon name="sun" size={18} /> You’re all caught up. Take a little
-            light with you.
-          </p>
+        {app.filter === "topics" ? (
+          <TopicsBrowser app={app} />
+        ) : (
+          <>
+            <div className="insight-list">
+              {app.visiblePosts.map((post) => (
+                <InsightCard key={post.id} post={post} app={app} />
+              ))}
+            </div>
+            {app.visiblePosts.length === 0 && (
+              <div className="empty-state">
+                <Icon name="bookmark" size={32} />
+                <h2>A place for words that stay with you.</h2>
+                <p>Save an insight to a Soul Question and you’ll find it here.</p>
+                <button
+                  className="button button-soft"
+                  onClick={() => app.setFilter("for-you")}
+                >
+                  Find an insight <Icon name="arrow" />
+                </button>
+              </div>
+            )}
+            {app.visiblePosts.length > 0 && (
+              <p className="end-of-feed">
+                <Icon name="sun" size={18} /> You’re all caught up. Take a little
+                light with you.
+              </p>
+            )}
+          </>
         )}
       </div>
       <aside className="feed-aside" aria-label="Your private reflections">

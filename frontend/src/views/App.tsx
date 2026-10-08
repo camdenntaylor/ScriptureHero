@@ -6,6 +6,7 @@ import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
 import { HeroesPage } from "./HeroesPage";
+import { SpacesPage } from "./SpacesPage";
 import { PrototypeModal } from "./components/PrototypeModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
 import type { Screen } from "../models/prototype";
@@ -22,6 +23,7 @@ export function App() {
   const navigation: { screen: Screen; label: string; icon: IconName }[] = [
     { screen: "welcome", label: "Welcome", icon: "globe" },
     { screen: "home", label: "Home", icon: "home" },
+    { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
     ...(app.profile
       ? [
@@ -130,6 +132,8 @@ export function App() {
           <main id="main-content" className="workspace-main" tabIndex={-1}>
             {app.screen === "home" ? (
               <HomePage app={app} />
+            ) : app.screen === "spaces" ? (
+              <SpacesPage app={app} />
             ) : app.screen === "heroes" ? (
               <HeroesPage app={app} />
             ) : app.screen === "questions" && app.profile ? (
@@ -144,7 +148,7 @@ export function App() {
       )}
       {!welcome && !login && !loading && (
         <nav
-          className={`mobile-nav${app.profile ? " mobile-nav-four" : ""}`}
+          className={`mobile-nav mobile-nav-${navigation.length}`}
           aria-label="Mobile navigation"
         >
           {navigation.map((item) => (

@@ -17,6 +17,8 @@ const paths = {
   people: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.9M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm4-3.9a4 4 0 0 1 0 7.8',
   chevron: 'm9 5 7 7-7 7',
   mail: 'M3 5h18v14H3Zm0 0 9 8 9-8',
+  search: 'M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM21 21l-4.35-4.35',
+  grid: 'M4 4h7v7H4ZM13 4h7v7h-7ZM4 13h7v7H4ZM13 13h7v7h-7Z',
 } as const
 
 export type IconName = keyof typeof paths

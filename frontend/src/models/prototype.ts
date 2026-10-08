@@ -4,8 +4,9 @@ export type Screen =
   | "heroes"
   | "login"
   | "profile"
-  | "questions";
-export type FeedFilter = "for-you" | "saved";
+  | "questions"
+  | "spaces";
+export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
   name: string;
@@ -24,6 +25,15 @@ export interface Insight {
   likes: number;
   comments: { name: string; body: string }[];
   video?: string;
+  topics: string[];
+}
+export interface Space {
+  id: string;
+  name: string;
+  kind: string;
+  description: string;
+  memberCount: number;
+  joinedByDefault: boolean;
 }
 export interface SoulQuestion {
   id: string;
@@ -79,5 +89,7 @@ export function screenFromHash(hash: string): Screen {
           ? "profile"
           : hash === "#questions"
             ? "questions"
-            : "welcome";
+            : hash === "#spaces"
+              ? "spaces"
+              : "welcome";
 }
