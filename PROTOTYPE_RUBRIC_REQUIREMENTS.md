@@ -10,12 +10,12 @@ This checks the current app against the actual grading rubric, not `SMALL_SCALE_
 
 | Rubric criterion | Points | Status | What's missing |
 | --- | --- | --- | --- |
-| Instructions followed | 20 | At risk | Public link and both notices are done; still depends on screen count below before Saturday. |
+| Instructions followed | 20 | ✅ Done | Public link, notices, and screen count are all done. Worth a final team walkthrough before submitting, but nothing blocking left. |
 | Low-fidelity look + early-stage notice | 20 | ✅ Done | Stated in plain English via two quiet lines in `LandingPage.tsx`'s Welcome copy (not a modal — kept the calm feel `DESIGN_SYSTEM.md` asks for). |
 | Entry screen signifies overarching capability | 40 | ✅ Done | Verified: Welcome's "Learn through connection" headline + single `button-primary` CTA leads with capability over feature detail, no hex colors or inline styles bypassing the design system. |
 | Conventions, attention, grouping, usability principles | 40 | ✅ Fixed | Checked every screen against `DESIGN_SYSTEM.md`'s own rules and found (then fixed) two real violations: `HomePage.tsx` and `ProfilePage.tsx` had no page heading at all (one was commented out, the other never had one) — both now have a `.page-heading h1`, so every screen tells the user where they are. |
 | Design library and component reuse | 40 | ✅ Fixed | Found `HeroesPage.tsx` could show **two** `.button-primary` buttons at once (the empty-state "Explore your feed" CTA plus the always-present "Share an insight" one) — exactly the state a brand-new visitor with zero saved Heroes would see first. The system's own rule is one solid-green button per view. Changed the empty-state button to `button-soft`. No hex colors, inline styles, or emoji found anywhere in the components — tokens and the icon set are used consistently. |
-| Fully functional, non-linear, goal-driven | 40 | Partial | The goal is stated in Welcome copy (see above). Screen count is the one piece still in progress — see below. |
+| Fully functional, non-linear, goal-driven | 40 | ✅ Done | The goal is stated in Welcome copy. Screen count is complete — see below. Non-linearity: Welcome/Home/Heroes/Spaces/Library are all reachable without signing in, per the visitor-preview requirement. |
 
 ## The one real gap left: screen count (20–30+ screens, non-linear)
 
@@ -32,15 +32,15 @@ Concrete plan the team agreed on, being built in chunks:
 | 7 | **Soul Questions Directory** (public FAQ/prompt library) | ✅ done — `#library`, linked from Soul Questions and Home's aside |
 | 8 | Soul Questions (private, yours) | ✅ existing |
 | 9 | Login | ✅ existing |
-| 10 | **My Profile (Overview)** | ⏳ planned — stats, saved count, hero badges |
-| 11 | **Edit Profile** | ⏳ planned — split out from current Profile, adds favorite verse |
-| 12 | **Account & Privacy Settings** | ⏳ planned |
-| 13 | **Notifications Center** | ⏳ planned |
-| 14 | **Notification Preferences** | ⏳ planned |
+| 10 | **My Profile (Overview)** | ✅ done — stats, saved count, badges, link-cards out to the three below |
+| 11 | **Edit Profile** | ✅ done — split out from Profile, adds a favorite-verse field |
+| 12 | **Account & Privacy Settings** | ✅ done |
+| 13 | **Notifications Center** | ✅ done — header bell links here since it's not in top nav |
+| 14 | **Notification Preferences** | ✅ done |
 
 Dropped: a "most commonly asked questions" trending panel was considered for the Soul Questions Directory but cut — it ran against the product's own privacy principle that Soul Questions are never disclosed to anyone, even in aggregate.
 
-That's 15 screens as of now (8 top-level routes + meaningful sub-states: Home's 3 tabs with Topics' browse/results modes, Heroes' 2 tabs, Login's sign-in/sign-up/check-email), up from 6 this morning. The remaining chunk (Profile split, Settings, Notifications Center, Notification Preferences) adds 5 more top-level screens, which puts the total at 20 — clearing the rubric's floor.
+**Plan complete.** 12 top-level routes; counting meaningful sub-states (Home's 3 tabs with Topics' browse/results modes, Heroes' 2 tabs, Login's sign-in/sign-up/check-email, Spaces' directory/feed), **20 distinct views** — up from 6 this morning, and at the rubric's floor for "feels like a fully functional app."
 
 ## Also worth doing before submission
 
@@ -53,6 +53,7 @@ That's 15 screens as of now (8 top-level routes + meaningful sub-states: Home's 
 - ✅ Submission write-up drafted below — paste it into the comment box with the public link.
 - ✅ Design-system audit: checked every screen against `DESIGN_SYSTEM.md`'s own rules (page headings, one primary button per view, tokens-only colors, no emoji). Found and fixed two real violations — missing page headings on Home and Profile, and a double-primary-button state on Heroes when a visitor has no saved Heroes yet.
 - ✅ Topics + Spaces screens (see table above).
+- ✅ Soul Questions Directory, Profile split (Overview/Edit), Account & Privacy Settings, Notifications Center, Notification Preferences (see table above). Screen-count plan is complete: 20 distinct views.
 
 ### Submission note (paste alongside the public link)
 
