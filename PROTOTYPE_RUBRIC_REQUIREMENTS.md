@@ -29,7 +29,7 @@ Concrete plan the team agreed on, being built in chunks:
 | 4 | **Spaces directory** (simulated groups — congregation, family, friends, city) | ✅ done |
 | 5 | **A Space's feed** | ✅ done — one template screen, reused per space |
 | 6 | Scripture Heroes | ✅ existing |
-| 7 | **Soul Questions Directory** (public FAQ/prompt library) | ⏳ next chunk |
+| 7 | **Soul Questions Directory** (public FAQ/prompt library) | ✅ done — `#library`, linked from Soul Questions and Home's aside |
 | 8 | Soul Questions (private, yours) | ✅ existing |
 | 9 | Login | ✅ existing |
 | 10 | **My Profile (Overview)** | ⏳ planned — stats, saved count, hero badges |
@@ -40,7 +40,7 @@ Concrete plan the team agreed on, being built in chunks:
 
 Dropped: a "most commonly asked questions" trending panel was considered for the Soul Questions Directory but cut — it ran against the product's own privacy principle that Soul Questions are never disclosed to anyone, even in aggregate.
 
-That's 14 screens once the plan is complete (8 new, 1 existing split in two, 5 untouched) — a real jump from the original 6, though still a bit short of the rubric's 20-30 if graded by strict route count. Counting tab-states (Home's for-you/saved/topics, Heroes' heroes/helped) as distinct views too, it's closer to 17-18.
+That's 15 screens as of now (8 top-level routes + meaningful sub-states: Home's 3 tabs with Topics' browse/results modes, Heroes' 2 tabs, Login's sign-in/sign-up/check-email), up from 6 this morning. The remaining chunk (Profile split, Settings, Notifications Center, Notification Preferences) adds 5 more top-level screens, which puts the total at 20 — clearing the rubric's floor.
 
 ## Also worth doing before submission
 
