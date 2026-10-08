@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { PrototypeController } from '../controllers/usePrototypeController'
 import { Icon } from './components/Icon'
 
 export function SoulQuestionsPage({ app }: { app: PrototypeController }) {
-  const [question, setQuestion] = useState('')
+  const [question, setQuestion] = useState(app.promptDraft ?? '')
+  // Consume the prefill once on arrival; this page owns the field after that.
+  useEffect(() => {
+    if (app.promptDraft) app.setPromptDraft(null)
+  }, [])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   async function record(event: React.FormEvent<HTMLFormElement>) {
@@ -29,6 +33,7 @@ export function SoulQuestionsPage({ app }: { app: PrototypeController }) {
         <p className="field-hint">{question.length}/500</p>
         <button className="button button-primary" type="submit" disabled={!question.trim() || busy}><Icon name="plus" size={18} /> {busy ? 'Recording…' : 'Record question'}</button>
       </form>
+      <a className="button-link" href="#library"><Icon name="book" size={16} /> Not sure where to start? Browse common questions</a>
       {error && <p className="form-error" role="alert">{error}</p>}
       <div className="profile-questions" aria-live="polite">
         {app.questions.length ? <ul>{app.questions.map(item => <li key={item.id}><span className="question-dot" /><p>{item.title}</p><button className="icon-button" type="button" onClick={() => void remove(item.id)} aria-label="Remove this Soul Question"><Icon name="close" size={18} /></button></li>)}</ul> : <div className="empty-state"><Icon name="book" size={27} /><h2>No questions yet.</h2><p>Start with whatever is on your heart.</p></div>}

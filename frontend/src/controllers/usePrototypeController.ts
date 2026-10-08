@@ -17,6 +17,7 @@ export function usePrototypeController() {
   const [notice, setNotice] = useState('')
   const [thanked, setThanked] = useState<string[]>([])
   const [drafts, setDrafts] = useState<string[]>([])
+  const [promptDraft, setPromptDraft] = useState<string | null>(null)
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
@@ -177,7 +178,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft }
+  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>

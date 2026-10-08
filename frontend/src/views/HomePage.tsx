@@ -163,6 +163,9 @@ export function HomePage({ app }: { app: PrototypeController }) {
           <a className="button-link questions-heroes-link" href={app.profile ? '#questions' : '#login'}>
             {app.profile ? 'Open your private questions' : 'Log in'} <Icon name="arrow" size={17} />
           </a>
+          <a className="button-link questions-heroes-link" href="#library">
+            Not sure where to start? <Icon name="arrow" size={17} />
+          </a>
         </section>
       </aside>
     </div>

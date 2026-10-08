@@ -76,6 +76,26 @@ export const insights: Insight[] = [
   },
 ]
 
+// A public library of common starting points. Distinct from a signed-in
+// user's own private Soul Questions (app.questions) — nothing here is tied
+// to a person or ever shown as "asked by" anyone.
+export const soulQuestionPrompts: string[] = [
+  'How do I find peace when life feels uncertain?',
+  "How do I know if I'm on the right path?",
+  'How do I forgive someone who hurt me deeply?',
+  'What do I do when I feel alone, even around others?',
+  "How do I trust God's timing when I'm tired of waiting?",
+  'How do I stop comparing my life to everyone else’s?',
+  'What does it look like to truly let go of guilt?',
+  "How do I find gratitude when things aren't going well?",
+  'How do I support someone who is grieving?',
+  'How do I find the courage to make a hard change?',
+  "How do I feel close to God when I don't feel anything at all?",
+  'How do I build a stronger relationship with my family?',
+  'How do I know if I’m truly listening to others?',
+  'How do I keep showing up when I feel discouraged?',
+]
+
 export const spaces: Space[] = [
   { id: 'oakwood-ward', name: 'Oakwood Ward', kind: 'Congregation', description: 'Insights shared by and for members of Oakwood Ward.', memberCount: 86, joinedByDefault: true },
   { id: 'garcia-family', name: 'The Garcia Family', kind: 'Family', description: 'A private space for the Garcia family to share and stay close.', memberCount: 12, joinedByDefault: true },

@@ -7,6 +7,7 @@ import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
 import { HeroesPage } from "./HeroesPage";
 import { SpacesPage } from "./SpacesPage";
+import { QuestionsLibraryPage } from "./QuestionsLibraryPage";
 import { PrototypeModal } from "./components/PrototypeModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
 import type { Screen } from "../models/prototype";
@@ -136,6 +137,8 @@ export function App() {
               <SpacesPage app={app} />
             ) : app.screen === "heroes" ? (
               <HeroesPage app={app} />
+            ) : app.screen === "library" ? (
+              <QuestionsLibraryPage app={app} />
             ) : app.screen === "questions" && app.profile ? (
               <SoulQuestionsPage app={app} />
             ) : app.profile ? (

@@ -5,7 +5,8 @@ export type Screen =
   | "login"
   | "profile"
   | "questions"
-  | "spaces";
+  | "spaces"
+  | "library";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
@@ -91,5 +92,7 @@ export function screenFromHash(hash: string): Screen {
             ? "questions"
             : hash === "#spaces"
               ? "spaces"
-              : "welcome";
+              : hash === "#library"
+                ? "library"
+                : "welcome";
 }
