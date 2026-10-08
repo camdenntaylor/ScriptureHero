@@ -7,7 +7,6 @@ import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
 import { HeroesPage } from "./HeroesPage";
 import { PrototypeModal } from "./components/PrototypeModal";
-import { OnboardingModal } from "./components/OnboardingModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
 import type { Screen } from "../models/prototype";
 import { avatarUrl } from "../services/supabase";
@@ -160,7 +159,6 @@ export function App() {
           ))}
         </nav>
       )}
-      <OnboardingModal />
       {app.dialog && <PrototypeModal key={app.dialog.type} app={app} />}
       <div className="toast-region" aria-live="polite" aria-atomic="true">
         {app.notice && (

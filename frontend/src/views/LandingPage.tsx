@@ -20,6 +20,11 @@ export function LandingPage() {
             <Icon name="globe" size={16} /> Every background. Every stage of
             faith. You belong here.
           </p>
+          <p className="welcome-note">
+            <Icon name="leaf" size={16} /> New here? Try browsing the feed
+            and saving an insight that speaks to you — there's no single
+            path to follow.
+          </p>
         </div>
         <div className="connection-scene">
           <div

@@ -36,7 +36,7 @@ Assign this across the team — it's the single highest-point-value item left (`
 
 - ✅ Public link confirmed live: <https://scripture-hero-frontend.vercel.app>
 - ✅ Early-stage notice: `LandingPage.tsx`'s footer label is live (was commented out).
-- ✅ Onboarding/goal modal: shows once per browser session on first load, states this is an early-stage prototype, gives a concrete goal ("save an insight, see who becomes your Scripture Hero"), and is explicitly skippable (`OnboardingModal.tsx`).
+- ✅ Early-stage notice + goal: folded into two quiet lines of Welcome-page copy instead of a modal, to keep the calm feel `DESIGN_SYSTEM.md` asks for. No popup, nothing to dismiss.
 - ✅ Submission write-up drafted below — paste it into the comment box with the public link.
 - ✅ Design-system audit: checked every screen against `DESIGN_SYSTEM.md`'s own rules (page headings, one primary button per view, tokens-only colors, no emoji). Found and fixed two real violations — missing page headings on Home and Profile, and a double-primary-button state on Heroes when a visitor has no saved Heroes yet.
 
