@@ -18,6 +18,8 @@ export function usePrototypeController() {
   const [thanked, setThanked] = useState<string[]>([])
   const [drafts, setDrafts] = useState<string[]>([])
   const [promptDraft, setPromptDraft] = useState<string | null>(null)
+  // Demo-only: not part of the real AccountProfile, never sent to the backend.
+  const [favoriteVerse, setFavoriteVerse] = useState('')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
@@ -117,6 +119,7 @@ export function usePrototypeController() {
     setComments({})
     setLiked([])
     setThanked([])
+    setFavoriteVerse('')
     window.location.hash = '#welcome'
   }
   async function updateProfile(details: Pick<AccountProfile, 'name' | 'location' | 'bio'>) {
@@ -178,7 +181,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft }
+  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>

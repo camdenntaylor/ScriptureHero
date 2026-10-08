@@ -1,16 +1,9 @@
-import { useState, type FormEvent } from "react";
 import type { PrototypeController } from "../controllers/usePrototypeController";
 import { avatarUrl } from "../services/supabase";
-import { Icon } from "./components/Icon";
+import { Icon, type IconName } from "./components/Icon";
 
 export function ProfilePage({ app }: { app: PrototypeController }) {
   const profile = app.profile!;
-  const [name, setName] = useState(profile.name);
-  const [location, setLocation] = useState(profile.location);
-  const [bio, setBio] = useState(profile.bio);
-  const [busy, setBusy] = useState(false);
-  const [uploadBusy, setUploadBusy] = useState(false);
-  const [error, setError] = useState("");
   const photoUrl = avatarUrl(profile.avatarPath);
   const initials = profile.name
     .trim()
@@ -19,156 +12,128 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
     .slice(0, 2)
     .join("")
     .toUpperCase();
-
-  async function saveDetails(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!name.trim()) return;
-    setBusy(true);
-    setError("");
-    try {
-      await app.updateProfile({ name, location, bio });
-    } catch (cause) {
-      setError(
-        cause instanceof Error ? cause.message : "Unable to save your profile.",
-      );
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function choosePhoto(file: File) {
-    setUploadBusy(true);
-    setError("");
-    try {
-      await app.updatePhoto(file);
-    } catch (cause) {
-      setError(
-        cause instanceof Error ? cause.message : "Unable to upload your photo.",
-      );
-    } finally {
-      setUploadBusy(false);
-    }
-  }
+  const savedCount = new Set(app.saved.map((item) => item.postId)).size;
+  const possibleBadges: ({ icon: IconName; label: string } | false)[] = [
+    savedCount >= 1 && { icon: "bookmark", label: "First save" },
+    app.heroes.length >= 1 && { icon: "heart", label: "Found a Scripture Hero" },
+    app.questions.length >= 1 && { icon: "book", label: "Reflective heart" },
+  ];
+  const badges = possibleBadges.filter((badge): badge is { icon: IconName; label: string } => Boolean(badge));
 
   return (
     <div className="profile-page">
       <header className="page-heading">
         <h1>Your profile.</h1>
       </header>
-      <div className="profile-grid">
-        <section className="profile-card" aria-labelledby="details-heading">
-          <h2 id="details-heading">Personal details</h2>
-          <p>
-            Your name, location, bio, and photo are public profile details. Your
-            Soul Questions stay separate and private.
-          </p>
-          <div className="photo-row">
-            {photoUrl ? (
-              <img
-                className="profile-photo"
-                src={photoUrl}
-                alt="Your profile"
-              />
-            ) : (
-              <span
-                className="avatar avatar-gold avatar-large"
-                aria-hidden="true"
-              >
-                {initials}
-              </span>
-            )}
-            <div>
-              <label
-                className="button button-soft upload-label"
-                htmlFor="profile-photo"
-              >
-                {uploadBusy ? "Uploading…" : "Choose photo"}
-              </label>
-              <input
-                id="profile-photo"
-                className="sr-only"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                disabled={uploadBusy}
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (file) void choosePhoto(file);
-                  event.target.value = "";
-                }}
-              />
-              <p className="field-hint">
-                JPG, PNG or WebP · up to 5 MB · public
+
+      <section className="profile-card" aria-label="Profile summary">
+        <div className="photo-row">
+          {photoUrl ? (
+            <img className="profile-photo" src={photoUrl} alt="Your profile" />
+          ) : (
+            <span className="avatar avatar-gold avatar-large" aria-hidden="true">
+              {initials}
+            </span>
+          )}
+          <div>
+            <h2>{profile.name}</h2>
+            {profile.location && (
+              <p className="person-location">
+                <Icon name="globe" size={13} /> {profile.location}
               </p>
-            </div>
+            )}
           </div>
-          <form onSubmit={saveDetails}>
-            <label className="field-label" htmlFor="profile-name">
-              Name
-            </label>
-            <input
-              id="profile-name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              maxLength={80}
-              required
-              autoComplete="name"
-            />
-            <label className="field-label" htmlFor="profile-location">
-              Location <span className="optional">optional</span>
-            </label>
-            <input
-              id="profile-location"
-              value={location}
-              onChange={(event) => setLocation(event.target.value)}
-              maxLength={80}
-              autoComplete="address-level2"
-            />
-            <label className="field-label" htmlFor="profile-bio">
-              About you <span className="optional">optional</span>
-            </label>
-            <textarea
-              id="profile-bio"
-              rows={4}
-              value={bio}
-              onChange={(event) => setBio(event.target.value)}
-              maxLength={280}
-              placeholder="A little about yourself…"
-            />
-            <p className="field-hint">{bio.length}/280</p>
-            {error && (
-              <p className="form-error" role="alert">
-                {error}
-              </p>
-            )}
-            <button
-              className="button button-primary"
-              type="submit"
-              disabled={busy}
-            >
-              {busy ? "Saving…" : "Save details"}
-            </button>
-          </form>
+        </div>
+        {profile.bio && <p>{profile.bio}</p>}
+        {app.favoriteVerse && (
+          <blockquote className="scripture-quote">
+            <Icon name="book" size={18} />
+            <div>
+              <cite>{app.favoriteVerse}</cite>
+            </div>
+          </blockquote>
+        )}
+        <a className="button button-soft" href="#profile-edit">
+          Edit profile <Icon name="arrow" size={17} />
+        </a>
+      </section>
+
+      <section className="impact-banner" aria-label="Your activity">
+        <div className="impact-intro">
+          <span className="round-icon">
+            <Icon name="heart" size={24} />
+          </span>
+          <div>
+            <h2>Your activity</h2>
+            <p>A quick look at your little corner.</p>
+          </div>
+        </div>
+        <div className="impact-stats">
+          <div>
+            <strong>{savedCount}</strong>
+            <span>insights saved</span>
+          </div>
+          <div>
+            <strong>{app.questions.length}</strong>
+            <span>Soul Questions</span>
+          </div>
+          <div>
+            <strong>{app.heroes.length}</strong>
+            <span>{app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}</span>
+          </div>
+        </div>
+      </section>
+
+      {badges.length > 0 && (
+        <section aria-label="Badges">
+          <div className="section-intro">
+            <h2>Badges</h2>
+          </div>
+          <div className="badge-row">
+            {badges.map((badge) => (
+              <span className="hero-badge" key={badge.label}>
+                <Icon name={badge.icon} size={13} /> {badge.label}
+              </span>
+            ))}
+          </div>
         </section>
-        <section
-          className="profile-card soul-card"
-          aria-labelledby="soul-heading"
-        >
+      )}
+
+      <div className="profile-links-grid">
+        <section className="profile-card soul-card">
           <div className="aside-heading">
             <Icon name="book" size={20} />
-            <h2 id="soul-heading">A private place to reflect</h2>
+            <h2>Soul Questions</h2>
             <Icon name="lock" size={15} />
           </div>
-          <p>Record and revisit your Soul Questions in your private space.</p>
+          <p>Record and revisit what you're carrying, privately.</p>
           <a className="button button-soft" href="#questions">
-            Open Soul Questions <Icon name="arrow" size={17} />
+            Open <Icon name="arrow" size={17} />
+          </a>
+        </section>
+        <section className="profile-card soul-card">
+          <div className="aside-heading">
+            <Icon name="lock" size={20} />
+            <h2>Account & Privacy</h2>
+          </div>
+          <p>Control anonymous posting, messages, and space visibility.</p>
+          <a className="button button-soft" href="#settings-privacy">
+            Open <Icon name="arrow" size={17} />
+          </a>
+        </section>
+        <section className="profile-card soul-card">
+          <div className="aside-heading">
+            <Icon name="bell" size={20} />
+            <h2>Notifications</h2>
+          </div>
+          <p>See what's happened since you've been away.</p>
+          <a className="button button-soft" href="#notifications">
+            Open <Icon name="arrow" size={17} />
           </a>
         </section>
       </div>
-      <button
-        className="button-link"
-        type="button"
-        onClick={() => void app.signOut()}
-      >
+
+      <button className="button-link" type="button" onClick={() => void app.signOut()}>
         Sign out
       </button>
     </div>

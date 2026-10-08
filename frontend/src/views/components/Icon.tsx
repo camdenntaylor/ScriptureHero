@@ -19,6 +19,7 @@ const paths = {
   mail: 'M3 5h18v14H3Zm0 0 9 8 9-8',
   search: 'M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM21 21l-4.35-4.35',
   grid: 'M4 4h7v7H4ZM13 4h7v7h-7ZM4 13h7v7H4ZM13 13h7v7h-7Z',
+  bell: 'M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9ZM13.73 21a2 2 0 0 1-3.46 0',
 } as const
 
 export type IconName = keyof typeof paths

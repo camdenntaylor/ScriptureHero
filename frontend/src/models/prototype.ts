@@ -6,7 +6,11 @@ export type Screen =
   | "profile"
   | "questions"
   | "spaces"
-  | "library";
+  | "library"
+  | "profile-edit"
+  | "settings-privacy"
+  | "notifications"
+  | "notification-settings";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
@@ -94,5 +98,13 @@ export function screenFromHash(hash: string): Screen {
               ? "spaces"
               : hash === "#library"
                 ? "library"
-                : "welcome";
+                : hash === "#profile-edit"
+                  ? "profile-edit"
+                  : hash === "#settings-privacy"
+                    ? "settings-privacy"
+                    : hash === "#notifications"
+                      ? "notifications"
+                      : hash === "#notification-settings"
+                        ? "notification-settings"
+                        : "welcome";
 }

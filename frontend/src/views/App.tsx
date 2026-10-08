@@ -1,7 +1,11 @@
 import { LandingPage } from "./LandingPage";
 import { Login } from "./Login";
 import { ProfilePage } from "./ProfilePage";
+import { ProfileEditPage } from "./ProfileEditPage";
 import { SoulQuestionsPage } from "./SoulQuestionsPage";
+import { SettingsPrivacyPage } from "./SettingsPrivacyPage";
+import { NotificationsPage } from "./NotificationsPage";
+import { NotificationSettingsPage } from "./NotificationSettingsPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -13,10 +17,19 @@ import { usePrototypeController } from "../controllers/usePrototypeController";
 import type { Screen } from "../models/prototype";
 import { avatarUrl } from "../services/supabase";
 
+const PRIVATE_SCREENS: Screen[] = [
+  "profile",
+  "profile-edit",
+  "questions",
+  "settings-privacy",
+  "notifications",
+  "notification-settings",
+];
+
 export function App() {
   const app = usePrototypeController();
   const welcome = app.screen === "welcome";
-  const privateRoute = app.screen === "profile" || app.screen === "questions";
+  const privateRoute = PRIVATE_SCREENS.includes(app.screen);
   const login =
     (app.screen === "login" && !app.profile) ||
     (privateRoute && !app.profile && !app.authLoading);
@@ -38,7 +51,7 @@ export function App() {
   ];
   const active = (screen: Screen) =>
     app.screen === screen ||
-    (screen === "profile" && app.screen === "questions");
+    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen));
   const initials = app.profile?.name
     .trim()
     .split(/\s+/)
@@ -77,6 +90,14 @@ export function App() {
             </a>
           </>
         ) : app.profile ? (
+          <div className="header-actions">
+          <a
+            className="icon-button header-bell"
+            href="#notifications"
+            aria-label="Open notifications"
+          >
+            <Icon name="bell" size={20} />
+          </a>
           <a
             className="demo-profile"
             href="#profile"
@@ -98,6 +119,7 @@ export function App() {
               </span>
             )}
           </a>
+          </div>
         ) : (
           <a className="button button-outline" href="#login">
             Log in
@@ -141,6 +163,14 @@ export function App() {
               <QuestionsLibraryPage app={app} />
             ) : app.screen === "questions" && app.profile ? (
               <SoulQuestionsPage app={app} />
+            ) : app.screen === "profile-edit" && app.profile ? (
+              <ProfileEditPage app={app} />
+            ) : app.screen === "settings-privacy" && app.profile ? (
+              <SettingsPrivacyPage app={app} />
+            ) : app.screen === "notifications" && app.profile ? (
+              <NotificationsPage app={app} />
+            ) : app.screen === "notification-settings" && app.profile ? (
+              <NotificationSettingsPage app={app} />
             ) : app.profile ? (
               <ProfilePage app={app} />
             ) : (
