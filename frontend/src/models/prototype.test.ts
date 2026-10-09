@@ -41,6 +41,8 @@ describe('the prototype help loop', () => {
     expect(screenFromHash('#welcome')).toBe('welcome')
     expect(screenFromHash('#home')).toBe('home')
     expect(screenFromHash('#heroes')).toBe('heroes')
+    expect(screenFromHash('#messages')).toBe('messages')
+    expect(screenFromHash('#chat')).toBe('chat')
     expect(screenFromHash('#login')).toBe('login')
     expect(screenFromHash('#profile')).toBe('profile')
     expect(screenFromHash('#questions')).toBe('questions')

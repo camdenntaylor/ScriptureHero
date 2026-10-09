@@ -25,7 +25,7 @@ export function NotificationSettingsPage({ app }: { app: PrototypeController }) 
         <fieldset className="question-choices">
           <label>
             <input type="checkbox" checked={push} onChange={(event) => { setPush(event.target.checked); setSaved(false) }} />
-            <span>Push notifications — saves, thank-yous, and space activity</span>
+            <span>Push notifications — messages, thank-yous, and space activity</span>
           </label>
           <label>
             <input type="checkbox" checked={email} onChange={(event) => { setEmail(event.target.checked); setSaved(false) }} />

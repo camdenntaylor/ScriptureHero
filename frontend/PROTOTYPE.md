@@ -6,12 +6,16 @@ Start from the repository root with `pnpm --filter @scripture-hero/frontend dev`
 
 1. Welcome (`#welcome`): “Learn through connection” is the dominant affordance. “Find your community” opens Home.
 2. Home (`#home`): read fictional global insights, play the nature video, toggle likes, add local comments, and copy an insight to share it. “Add to helplist” opens a private Soul Question selector. “Your helplist” shows saved posts. Repeated saves do not duplicate them.
-3. Scripture Heroes (`#heroes`): saved authors appear in “Your Scripture Heroes.” “Send a little thanks” simulates an anonymous note. “People you’ve helped” shows anonymous aggregate impact and separate fictional members who opted in to share appreciation and receive replies.
+3. Scripture Heroes (`#heroes`): saved authors appear in “Your Scripture Heroes.” “Send a little thanks” lets the sender choose anonymous thanks or a named chat. “People you’ve helped” shows anonymous aggregate impact and separate fictional members who opted in to share appreciation and receive replies. “Send a message” opens a conversation.
 4. Login (`#login`): sign in or create an account with Supabase email/password Auth. Welcome and Home link here.
 5. Profile (`#profile`): edit the signed-in user's display name, location, and bio, and upload a profile photo to Supabase Storage. Signed-in users can reach it from the header and navigation.
 6. Soul Questions (`#questions`): open this private screen from Profile to record or remove questions through the backend API. Questions do not appear on the profile or in the feed.
+7. Messages (`#messages`): preview fictional conversations as Avery without an account. Start a chat with a fictional contact, filter unread notes, or resume a draft. Conversations (`#chat`) support text replies and thank-you notes. Named notes use Avery’s fictional identity; anonymous notes have separate read-only histories. Reloading `#chat` shows a safe inbox link because the selected thread is held only in memory.
+8. Notifications (`#notifications`): thank-you notes stay in the notification center and open their original conversation or anonymous note history. Opening a note marks it read in both places; “Mark all as read” keeps the entries. Saves never generate author notifications. Space-activity examples remain fictional.
 
-The logo and Welcome navigation return to screen 1. Browser back/forward work. Phone layouts use bottom navigation. The private screens require a verified Supabase session.
+The logo and Welcome navigation return to screen 1. Browser back/forward work. Phone layouts use bottom navigation. Profile, settings, and private Soul Question screens require a verified Supabase session. Messages and the notification center are explicitly fictional previews accessible without sign-in; they expose no real account messages.
+
+Messaging preview details and review steps: [Direct messaging](../docs/DIRECT_MESSAGING.md).
 
 The feed, likes, comments, saved-post helplist, Heroes, messages, and drafted posts remain prototype fixtures and in-memory interactions. Login, profile edits, photo uploads, and Soul Questions use Supabase and `/api/v1` backend endpoints. The backend verifies the Auth token on every account request and uses that user's token with Row Level Security. Raw Soul Questions are returned only through the owner-scoped endpoint, never in profile or public responses. Local development needs `frontend/.env` and `backend/.env` with the project URL and publishable key; the key can be found in Supabase Dashboard → Settings → API Keys. Do not use a secret or service-role key in the frontend.
 

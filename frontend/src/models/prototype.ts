@@ -10,6 +10,8 @@ export type Screen =
   | "profile-edit"
   | "settings-privacy"
   | "notifications"
+  | "messages"
+  | "chat"
   | "notification-settings";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
@@ -84,6 +86,8 @@ export function publicShareText(post: Insight): string {
 }
 
 export function screenFromHash(hash: string): Screen {
+  if (hash === '#messages') return 'messages';
+  if (hash === '#chat') return 'chat';
   return hash === "#home"
     ? "home"
     : hash === "#heroes"

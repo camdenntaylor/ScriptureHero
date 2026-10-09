@@ -6,6 +6,8 @@ import { SoulQuestionsPage } from "./SoulQuestionsPage";
 import { SettingsPrivacyPage } from "./SettingsPrivacyPage";
 import { NotificationsPage } from "./NotificationsPage";
 import { NotificationSettingsPage } from "./NotificationSettingsPage";
+import { MessagesPage } from "./MessagesPage";
+import { ConversationPage } from "./ConversationPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -22,7 +24,6 @@ const PRIVATE_SCREENS: Screen[] = [
   "profile-edit",
   "questions",
   "settings-privacy",
-  "notifications",
   "notification-settings",
 ];
 
@@ -39,6 +40,7 @@ export function App() {
     { screen: "home", label: "Home", icon: "home" },
     { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
+    { screen: "messages", label: "Messages", icon: "message" },
     ...(app.profile
       ? [
           {
@@ -51,7 +53,8 @@ export function App() {
   ];
   const active = (screen: Screen) =>
     app.screen === screen ||
-    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen));
+    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen)) ||
+    (screen === "messages" && app.screen === "chat");
   const initials = app.profile?.name
     .trim()
     .split(/\s+/)
@@ -97,6 +100,7 @@ export function App() {
             aria-label="Open notifications"
           >
             <Icon name="bell" size={20} />
+            {app.messaging.unreadTotal > 0 && <span className="header-unread" aria-hidden="true" />}
           </a>
           <a
             className="demo-profile"
@@ -121,9 +125,10 @@ export function App() {
           </a>
           </div>
         ) : (
-          <a className="button button-outline" href="#login">
-            Log in
-          </a>
+          <div className="header-actions">
+            <a className="icon-button header-bell" href="#notifications" aria-label="Open demo notifications"><Icon name="bell" size={20} />{app.messaging.unreadTotal > 0 && <span className="header-unread" aria-hidden="true" />}</a>
+            <a className="button button-outline" href="#login">Log in</a>
+          </div>
         )}
       </header>
 
@@ -167,7 +172,11 @@ export function App() {
               <ProfileEditPage app={app} />
             ) : app.screen === "settings-privacy" && app.profile ? (
               <SettingsPrivacyPage app={app} />
-            ) : app.screen === "notifications" && app.profile ? (
+            ) : app.screen === "messages" ? (
+              <MessagesPage app={app} />
+            ) : app.screen === "chat" ? (
+              <ConversationPage key={app.messaging.selected?.id ?? 'empty'} app={app} />
+            ) : app.screen === "notifications" ? (
               <NotificationsPage app={app} />
             ) : app.screen === "notification-settings" && app.profile ? (
               <NotificationSettingsPage app={app} />

@@ -4,8 +4,9 @@ import { insights } from '../services/prototypeData'
 import { copyInsight } from '../services/prototypeSharing'
 import { createMyQuestion, deleteMyQuestion, getMyProfile, listMyQuestions, saveMyProfile, uploadAvatar, type AccountProfile, type PrivateQuestion } from '../services/accountApi'
 import { supabase } from '../services/supabase'
+import { useMessagingController } from './useMessagingController'
 
-export type PrototypeDialog = { type: 'save'; post: Insight } | { type: 'message'; person: Person; thanks: boolean } | { type: 'share'; post: Insight } | { type: 'compose' } | null
+export type PrototypeDialog = { type: 'save'; post: Insight } | { type: 'message'; person: Person; thanks: true } | { type: 'share'; post: Insight } | { type: 'compose' } | null
 
 export function usePrototypeController() {
   const [screen, setScreen] = useState(() => screenFromHash(window.location.hash))
@@ -21,6 +22,7 @@ export function usePrototypeController() {
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState('')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
+  const messaging = useMessagingController(profile?.id ?? 'visitor-preview')
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
   const [accountError, setAccountError] = useState('')
@@ -51,7 +53,7 @@ export function usePrototypeController() {
     void refreshAccount()
     if (!supabase) return
     const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
-      if (event === 'SIGNED_OUT') { ++loadVersion.current; setProfile(null); setQuestions([]); setSaved([]); setDialog(null); setAccountError(''); setAuthLoading(false) }
+      if (event === 'SIGNED_OUT') { ++loadVersion.current; setProfile(null); setQuestions([]); setSaved([]); setDialog(null); setThanked([]); setAccountError(''); setAuthLoading(false); messaging.reset() }
       if (event === 'SIGNED_IN') window.setTimeout(() => void refreshAccount(), 0)
     })
     return () => subscription.unsubscribe()
@@ -74,7 +76,8 @@ export function usePrototypeController() {
   }, [profile, screen])
 
   useEffect(() => {
-    const title = screen === 'welcome' ? 'Learn through connection' : screen === 'home' ? 'Your home' : screen === 'heroes' ? 'Scripture Heroes' : screen === 'profile' && signedIn ? 'Your profile' : screen === 'questions' && signedIn ? 'Your Soul Questions' : 'Sign in'
+    const titles = { welcome: 'Learn through connection', home: 'Your home', heroes: 'Scripture Heroes', messages: 'Messages', chat: 'Conversation', notifications: 'Notifications', spaces: 'Spaces', library: 'Questions library', profile: 'Your profile', 'profile-edit': 'Edit profile', questions: 'Your Soul Questions', 'settings-privacy': 'Account & privacy', 'notification-settings': 'Notification preferences', login: 'Sign in' }
+    const title = titles[screen]
     document.title = `${title} · Scripture Hero`
     window.scrollTo({ top: 0, behavior: 'instant' })
     document.getElementById('main-content')?.focus({ preventScroll: true })
@@ -119,6 +122,7 @@ export function usePrototypeController() {
     setComments({})
     setLiked([])
     setThanked([])
+    messaging.reset()
     setFavoriteVerse('')
     window.location.hash = '#welcome'
   }
@@ -170,10 +174,12 @@ export function usePrototypeController() {
     try { await copyInsight(post); setNotice('Insight copied. You can paste it into a message.') }
     catch { setDialog({ type: 'share', post }) }
   }
-  function sendDemoMessage(person: Person, thanks: boolean) {
-    if (thanks) setThanked(current => current.includes(person.id) ? current : [...current, person.id])
+  function sendDemoMessage(person: Person, body: string, anonymous: boolean) {
+    if (!messaging.sendThanks(person, body, anonymous)) return false
+    setThanked(current => current.includes(person.id) ? current : [...current, person.id])
     setDialog(null)
-    setNotice(`${thanks ? 'Thank-you' : 'Message'} saved in this demo. Nothing was sent to a real person.`)
+    setNotice('Thank-you note saved in this demo.')
+    return true
   }
   function submitDraft(body: string) {
     if (!body.trim()) return
@@ -181,7 +187,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse }
+  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, messaging }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>
