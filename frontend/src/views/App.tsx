@@ -24,6 +24,9 @@ const PRIVATE_SCREENS: Screen[] = [
   "profile-edit",
   "questions",
   "settings-privacy",
+  "messages",
+  "chat",
+  "notifications",
   "notification-settings",
 ];
 
@@ -40,9 +43,13 @@ export function App() {
     { screen: "home", label: "Home", icon: "home" },
     { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
-    { screen: "messages", label: "Messages", icon: "message" },
     ...(app.profile
       ? [
+          {
+            screen: "messages" as const,
+            label: "Messages",
+            icon: "message" as const,
+          },
           {
             screen: "profile" as const,
             label: "Profile",
@@ -53,8 +60,8 @@ export function App() {
   ];
   const active = (screen: Screen) =>
     app.screen === screen ||
-    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen)) ||
-    (screen === "messages" && app.screen === "chat");
+    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen) && !["messages", "chat", "notifications"].includes(app.screen)) ||
+    (screen === "messages" && ["chat", "notifications"].includes(app.screen));
   const initials = app.profile?.name
     .trim()
     .split(/\s+/)
@@ -125,10 +132,7 @@ export function App() {
           </a>
           </div>
         ) : (
-          <div className="header-actions">
-            <a className="icon-button header-bell" href="#notifications" aria-label="Open demo notifications"><Icon name="bell" size={20} />{app.messaging.unreadTotal > 0 && <span className="header-unread" aria-hidden="true" />}</a>
-            <a className="button button-outline" href="#login">Log in</a>
-          </div>
+          <a className="button button-outline" href="#login">Log in</a>
         )}
       </header>
 
@@ -205,7 +209,7 @@ export function App() {
           ))}
         </nav>
       )}
-      {app.dialog && <PrototypeModal key={app.dialog.type} app={app} />}
+      {app.dialog && (app.dialog.type !== 'message' || app.profile) && <PrototypeModal key={app.dialog.type} app={app} />}
       <div className="toast-region" aria-live="polite" aria-atomic="true">
         {app.notice && (
           <div className="toast">

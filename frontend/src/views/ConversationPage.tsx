@@ -21,9 +21,9 @@ export function ConversationPage({ app }: { app: PrototypeController }) {
       {thread.person ? <Avatar person={thread.person} large /> : <span className="avatar avatar-gold avatar-large"><Icon name="lock" size={26} /></span>}
       <div><h1>{conversationName(thread)}</h1><p>{thread.mode === 'named' ? 'A thoughtful conversation, just between you two.' : thread.mode === 'anonymous-sent' ? 'Your anonymous thank-you notes.' : 'A little kindness from someone in the community.'}</p></div>
     </header>
-    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Preview as Avery. Notes are simulated and never delivered.</p>
+    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Mock conversation. Notes are simulated and never delivered.</p>
     <section className="conversation-panel" aria-label="Conversation">
-      <p className="conversation-privacy"><Icon name="lock" size={16} />{thread.mode === 'named' ? 'In a named chat, Avery appears as the sender. Your Soul Questions and helplist stay private.' : thread.mode === 'anonymous-sent' ? 'Your name stays hidden. Anonymous notes are separate from named chats and cannot receive replies.' : 'The sender chose to stay anonymous. Their identity stays private, and replies are unavailable.'}</p>
+      <p className="conversation-privacy"><Icon name="lock" size={16} />{thread.mode === 'named' ? 'In a named chat, your profile name appears as the sender. Your Soul Questions and helplist stay private.' : thread.mode === 'anonymous-sent' ? 'Your name stays hidden. Anonymous notes are separate from named chats and cannot receive replies.' : 'The sender chose to stay anonymous. Their identity stays private, and replies are unavailable.'}</p>
       <div className="message-history" role="log" aria-label="Message history" aria-relevant="additions" tabIndex={0}>
         {thread.messages.length === 0 && <div className="empty-state"><Icon name="message" size={28} /><h2>Begin with a kind word.</h2><p>Only what you choose to write goes into this conversation.</p></div>}
         {thread.messages.map(message => <article key={message.id} className={`chat-message chat-message-${message.direction}${message.kind === 'thanks' ? ' chat-thanks' : ''}`}>

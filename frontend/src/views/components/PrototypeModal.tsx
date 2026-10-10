@@ -27,13 +27,13 @@ export function PrototypeModal({ app }: { app: PrototypeController }) {
       <fieldset className="question-choices">
         <legend>How to send your thanks</legend>
         <label><input type="radio" name="thanks-privacy" checked={anonymous} onChange={() => setAnonymous(true)} /><span>Anonymous thanks — your name stays hidden; no replies</span></label>
-        <label><input type="radio" name="thanks-privacy" checked={!anonymous} onChange={() => setAnonymous(false)} /><span>Named chat — Avery appears as the sender; they can reply</span></label>
+        <label><input type="radio" name="thanks-privacy" checked={!anonymous} onChange={() => setAnonymous(false)} /><span>Named chat — your profile name appears as the sender; they can reply</span></label>
       </fieldset>
       <label className="field-label" htmlFor="message-body">Your thank-you note</label>
       <textarea id="message-body" rows={5} maxLength={500} value={body} onChange={event => { setBody(event.target.value); setMessageError('') }} placeholder="Start with a kind word…" required />
       <p className="field-hint">{body.length}/500 · Leave out personal question details.</p>
-      <p className="privacy-note"><Icon name="lock" size={16} />{anonymous ? 'Your note stays separate from named chats. Leave out your name if you want to stay anonymous.' : 'Choosing a named chat shares Avery’s name. Your Soul Questions and saved-post details are never attached.'}</p>
-      <p className="demo-note">Preview as Avery. Notes are simulated and never delivered.</p>
+      <p className="privacy-note"><Icon name="lock" size={16} />{anonymous ? 'Your note stays separate from named chats. Leave out your name if you want to stay anonymous.' : 'Choosing a named chat shares your profile name. Your Soul Questions and saved-post details are never attached.'}</p>
+      <p className="demo-note">Mock conversation. Notes are simulated and never delivered.</p>
       {messageError && <p className="form-error" role="alert">{messageError}</p>}
       <button className="button button-primary full-width" disabled={!body.trim()}><Icon name="mail" size={18} />{anonymous ? 'Send anonymous thanks' : 'Send thanks in a named chat'}</button>
     </form>}

@@ -7,7 +7,7 @@ export function NotificationsPage({ app }: { app: PrototypeController }) {
   return <div className="profile-page">
     <a className="button-link topics-back" href="#messages"><Icon name="chevron" size={16} /> Your conversations</a>
     <header className="page-heading"><h1>Notifications.</h1><p>Little thank-yous and thoughtful messages from the community.</p></header>
-    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Fictional activity for Avery’s preview. Your saved insights never notify their authors.</p>
+    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Mock activity for your account. Your saved insights never notify their authors.</p>
     <button className="button button-soft" disabled={messaging.unreadTotal === 0} onClick={messaging.markAllRead}><Icon name="check" size={17} /> Mark all as read</button>
     <ul className="notification-list" aria-label="Message notifications">
       {messaging.notifications.map(item => <li key={item.id}>

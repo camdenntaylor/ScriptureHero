@@ -22,7 +22,7 @@ export function usePrototypeController() {
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState('')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
-  const messaging = useMessagingController(profile?.id ?? 'visitor-preview')
+  const messaging = useMessagingController(profile?.id ?? null)
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
   const [accountError, setAccountError] = useState('')

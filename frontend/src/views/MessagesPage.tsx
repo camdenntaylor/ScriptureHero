@@ -19,7 +19,7 @@ export function MessagesPage({ app }: { app: PrototypeController }) {
       <h1>{choosing ? 'Start with a hello.' : 'Your conversations.'}</h1>
       <p>{choosing ? 'Choose someone from the fictional community.' : 'A place for thoughtful hellos and little thank-yous.'}</p>
     </header>
-    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Preview as Avery. All people are fictional; notes stay in this tab and reset on reload.</p>
+    <p className="messaging-demo-note"><Icon name="leaf" size={18} /> Mock conversations for your account. Contacts are fictional; notes stay in this tab and reset on reload.</p>
     {choosing ? <>
       <button className="button-link topics-back" onClick={() => setChoosing(false)}><Icon name="chevron" size={16} /> Back to conversations</button>
       <label className="sr-only" htmlFor="contact-search">Search fictional people</label>

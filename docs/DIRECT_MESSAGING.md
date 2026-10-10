@@ -17,9 +17,12 @@ pnpm install --frozen-lockfile
 pnpm --filter @scripture-hero/frontend dev
 ```
 
-Open `http://localhost:5173/#messages`. No sign-in or backend is needed for the
-messaging preview. You are trying the experience as fictional Avery, even when
-signed in to a real profile. The account screens retain their existing Auth flow.
+Sign in through the existing account flow, then open Messages or
+`http://localhost:5173/#messages`. The tab and notification bell appear only when
+signed in. Direct links to Messages, chats, and Notifications require sign-in too.
+Each signed-in account gets a fresh copy of the fictional chats automatically;
+there is no messaging database setup. Existing Auth/profile services still need
+their normal frontend/backend Supabase configuration.
 
 1. Open Marcus’s thank-you in Notifications. The same note appears in his chat;
    its unread status clears in the inbox and notification center.
@@ -51,6 +54,9 @@ signed in to a real profile. The account screens retain their existing Auth flow
   profiles and opted-in appreciation fixtures, never from private helpful marks.
 - State and drafts stay in memory; nothing is added to URLs, browser storage,
   analytics, or network requests. Reload and account transitions reset the preview.
+- Signed-out visitors have no mock chat state or contacts. Account verification
+  shows a loading state before any messaging content. Switching accounts starts
+  fresh mock conversations instead of carrying another account's notes or drafts.
 - The privacy and notification preference screens still simulate settings;
   they do not establish messaging permissions or deliver push/email notifications.
 - `#chat` holds no person or conversation ID. Reloading it asks the visitor to
@@ -70,12 +76,20 @@ exclusion of private context. Check the inbox, chat, thank-you dialog, and
 notifications at phone and desktop sizes in both Day and Evening modes. Check
 keyboard focus, long text, no-results search, unread-empty state, and reload.
 
-Completed for this branch: type checking, all 48 tests (13 frontend and 35
+Completed for the initial screen prototype: type checking, all 48 tests (13 frontend and 35
 backend), and production builds passed. Browser verification covered 375 × 812
 and 1366 × 900 layouts in Day and Evening modes, plus a 320-pixel long-message
 check with no horizontal overflow. Sending, both thank-you choices, notification
 links, draft preservation, no-results search, unread-empty state, and reload
 recovery were exercised. Live two-account delivery remains outside this prototype.
+
+The signed-in-only follow-up passed type checking, production builds, and all 61
+tests (26 frontend and 35 backend). Local browser checks with intercepted mock
+Auth/profile responses verified signed-out navigation and direct-link gating,
+sign-in, seeded chats, sending, sign-out, and switching to a fresh second account
+at 375 × 812 and 1366 × 900 in both themes. No real accounts were created and no
+messages were delivered. To manually review, confirm Messages is absent while
+signed out, then sign in and check that the default chats appear.
 
 ## Connecting real accounts later
 

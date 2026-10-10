@@ -2,29 +2,37 @@ import { useEffect, useState } from 'react'
 import type { Person } from '../models/prototype'
 import { findNamedConversation, messageNotifications, messagingReducer, orderedConversations, unreadCount, type DemoMessage, type MessagingAction } from '../models/messaging'
 import { createDemoMessaging, messagingContacts } from '../services/prototypeMessages'
+import type { MessagingState } from '../models/messaging'
 
-export function useMessagingController(ownerKey: string) {
-  const [session, setSession] = useState(() => ({ ownerKey, state: createDemoMessaging(), selectedId: null as string | null }))
+function initialState(ownerKey: string | null): MessagingState {
+  return ownerKey ? createDemoMessaging() : { conversations: [], readMessageIds: [], drafts: {} }
+}
+
+export function useMessagingController(ownerKey: string | null) {
+  const [session, setSession] = useState(() => ({ ownerKey, state: initialState(ownerKey), selectedId: null as string | null }))
   // Hide the old owner's state immediately, including the render before effects.
-  const current = session.ownerKey === ownerKey ? session : { ownerKey, state: createDemoMessaging(), selectedId: null }
+  const current = session.ownerKey === ownerKey ? session : { ownerKey, state: initialState(ownerKey), selectedId: null }
   useEffect(() => {
-    setSession(previous => previous.ownerKey === ownerKey ? previous : { ownerKey, state: createDemoMessaging(), selectedId: null })
+    setSession(previous => previous.ownerKey === ownerKey ? previous : { ownerKey, state: initialState(ownerKey), selectedId: null })
   }, [ownerKey])
 
   function dispatch(action: MessagingAction) {
+    if (!ownerKey) return
     setSession(previous => {
-      const next = previous.ownerKey === ownerKey ? previous : { ownerKey, state: createDemoMessaging(), selectedId: null }
+      const next = previous.ownerKey === ownerKey ? previous : { ownerKey, state: initialState(ownerKey), selectedId: null }
       return { ...next, state: messagingReducer(next.state, action) }
     })
   }
 
   function openThread(id: string) {
+    if (!ownerKey) { window.location.hash = '#login'; return }
     if (!current.state.conversations.some(thread => thread.id === id)) return
     setSession({ ...current, selectedId: id, state: messagingReducer(current.state, { type: 'read', conversationId: id }) })
     window.location.hash = '#chat'
   }
 
   function startChat(person: Person) {
+    if (!ownerKey) { window.location.hash = '#login'; return }
     const id = findNamedConversation(current.state, person.id)?.id ?? crypto.randomUUID()
     const state = messagingReducer(current.state, { type: 'open', person, conversationId: id })
     setSession({ ...current, selectedId: id, state: messagingReducer(state, { type: 'read', conversationId: id }) })
@@ -36,6 +44,7 @@ export function useMessagingController(ownerKey: string) {
   }
 
   function sendThanks(person: Person, body: string, anonymous: boolean) {
+    if (!ownerKey) return false
     const action: MessagingAction = { type: 'thanks', person, anonymous, conversationId: crypto.randomUUID(), message: message(body, 'thanks') }
     const state = messagingReducer(current.state, action)
     if (state === current.state) return false
@@ -47,7 +56,7 @@ export function useMessagingController(ownerKey: string) {
 
   const selected = current.state.conversations.find(thread => thread.id === current.selectedId) ?? null
   function send(body: string) {
-    if (!selected) return false
+    if (!ownerKey || !selected) return false
     const action: MessagingAction = { type: 'send', conversationId: selected.id, message: message(body, 'message') }
     if (messagingReducer(current.state, action) === current.state) return false
     dispatch(action)
@@ -55,13 +64,13 @@ export function useMessagingController(ownerKey: string) {
   }
 
   function reset() {
-    setSession({ ownerKey, state: createDemoMessaging(), selectedId: null })
+    setSession({ ownerKey, state: initialState(ownerKey), selectedId: null })
   }
 
   return {
     state: current.state,
     conversations: orderedConversations(current.state),
-    contacts: messagingContacts,
+    contacts: ownerKey ? messagingContacts : [],
     selected,
     unreadTotal: current.state.conversations.reduce((total, thread) => total + unreadCount(current.state, thread), 0),
     notifications: messageNotifications(current.state),
