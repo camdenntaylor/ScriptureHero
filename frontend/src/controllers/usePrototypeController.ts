@@ -20,6 +20,8 @@ export function usePrototypeController() {
   const [promptDraft, setPromptDraft] = useState<string | null>(null)
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState('')
+  const [viewedPersonId, setViewedPersonId] = useState<string | null>(null)
+  const [theme, setTheme] = useState<'day' | 'evening' | 'system'>('system')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
@@ -85,6 +87,11 @@ export function usePrototypeController() {
     const timer = window.setTimeout(() => setNotice(''), 6000)
     return () => window.clearTimeout(timer)
   }, [notice])
+
+  useEffect(() => {
+    if (theme === 'system') delete document.documentElement.dataset.theme
+    else document.documentElement.dataset.theme = theme
+  }, [theme])
 
   const heroes = getHeroes(insights, saved)
   const visiblePosts = filter === 'saved' ? insights.filter(post => saved.some(item => item.postId === post.id)) : insights
@@ -181,7 +188,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse }
+  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, viewedPersonId, setViewedPersonId, theme, setTheme }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>

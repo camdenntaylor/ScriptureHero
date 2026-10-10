@@ -6,6 +6,14 @@ import { SoulQuestionsPage } from "./SoulQuestionsPage";
 import { SettingsPrivacyPage } from "./SettingsPrivacyPage";
 import { NotificationsPage } from "./NotificationsPage";
 import { NotificationSettingsPage } from "./NotificationSettingsPage";
+import { PublicProfilePage } from "./PublicProfilePage";
+import { AboutPage } from "./AboutPage";
+import { HelpPage } from "./HelpPage";
+import { TermsPage } from "./TermsPage";
+import { PrivacyPage } from "./PrivacyPage";
+import { BlockedAccountsPage } from "./BlockedAccountsPage";
+import { DeleteAccountPage } from "./DeleteAccountPage";
+import { AppearancePage } from "./AppearancePage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -24,6 +32,9 @@ const PRIVATE_SCREENS: Screen[] = [
   "settings-privacy",
   "notifications",
   "notification-settings",
+  "blocked-accounts",
+  "delete-account",
+  "appearance",
 ];
 
 export function App() {
@@ -171,6 +182,22 @@ export function App() {
               <NotificationsPage app={app} />
             ) : app.screen === "notification-settings" && app.profile ? (
               <NotificationSettingsPage app={app} />
+            ) : app.screen === "blocked-accounts" && app.profile ? (
+              <BlockedAccountsPage />
+            ) : app.screen === "delete-account" && app.profile ? (
+              <DeleteAccountPage app={app} />
+            ) : app.screen === "appearance" && app.profile ? (
+              <AppearancePage app={app} />
+            ) : app.screen === "public-profile" ? (
+              <PublicProfilePage app={app} />
+            ) : app.screen === "about" ? (
+              <AboutPage />
+            ) : app.screen === "help" ? (
+              <HelpPage />
+            ) : app.screen === "terms" ? (
+              <TermsPage />
+            ) : app.screen === "privacy" ? (
+              <PrivacyPage />
             ) : app.profile ? (
               <ProfilePage app={app} />
             ) : (
