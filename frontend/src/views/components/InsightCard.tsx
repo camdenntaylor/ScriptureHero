@@ -90,7 +90,11 @@ export function InsightCard({ post, app }: { post: Insight; app: PrototypeContro
         </span>
       </header>
       <div className="post-copy">
-        <h2 id={`title-${post.id}`}>{post.title}</h2>
+        <h2 id={`title-${post.id}`}>
+          <a className="post-title-link" href="#post" onClick={() => app.setViewedPostId(post.id)}>
+            {post.title}
+          </a>
+        </h2>
         <p className="post-body">{post.body}</p>
       </div>
       {post.video ? (

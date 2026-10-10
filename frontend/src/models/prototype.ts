@@ -18,7 +18,12 @@ export type Screen =
   | "privacy"
   | "blocked-accounts"
   | "delete-account"
-  | "appearance";
+  | "appearance"
+  | "post"
+  | "report"
+  | "settings-account"
+  | "invite"
+  | "messages";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
@@ -111,6 +116,11 @@ const HASH_SCREENS: Record<string, Screen> = {
   "#blocked-accounts": "blocked-accounts",
   "#delete-account": "delete-account",
   "#appearance": "appearance",
+  "#post": "post",
+  "#report": "report",
+  "#settings-account": "settings-account",
+  "#invite": "invite",
+  "#messages": "messages",
 }
 
 export function screenFromHash(hash: string): Screen {

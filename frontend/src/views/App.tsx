@@ -14,6 +14,11 @@ import { PrivacyPage } from "./PrivacyPage";
 import { BlockedAccountsPage } from "./BlockedAccountsPage";
 import { DeleteAccountPage } from "./DeleteAccountPage";
 import { AppearancePage } from "./AppearancePage";
+import { PostDetailPage } from "./PostDetailPage";
+import { ReportPostPage } from "./ReportPostPage";
+import { SettingsAccountPage } from "./SettingsAccountPage";
+import { InviteFriendsPage } from "./InviteFriendsPage";
+import { MessagesPage } from "./MessagesPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -35,6 +40,9 @@ const PRIVATE_SCREENS: Screen[] = [
   "blocked-accounts",
   "delete-account",
   "appearance",
+  "settings-account",
+  "invite",
+  "messages",
 ];
 
 export function App() {
@@ -188,8 +196,18 @@ export function App() {
               <DeleteAccountPage app={app} />
             ) : app.screen === "appearance" && app.profile ? (
               <AppearancePage app={app} />
+            ) : app.screen === "settings-account" && app.profile ? (
+              <SettingsAccountPage app={app} />
+            ) : app.screen === "invite" && app.profile ? (
+              <InviteFriendsPage />
+            ) : app.screen === "messages" && app.profile ? (
+              <MessagesPage app={app} />
             ) : app.screen === "public-profile" ? (
               <PublicProfilePage app={app} />
+            ) : app.screen === "post" ? (
+              <PostDetailPage app={app} />
+            ) : app.screen === "report" ? (
+              <ReportPostPage app={app} />
             ) : app.screen === "about" ? (
               <AboutPage />
             ) : app.screen === "help" ? (

@@ -31,7 +31,10 @@ export function NotificationsPage({ app }: { app: PrototypeController }) {
           </li>
         ))}
       </ul>
-      <a className="button-link" href="#notification-settings">
+      <a className="button-link settings-link" href="#messages">
+        <Icon name="message" size={16} /> View all messages
+      </a>
+      <a className="button-link settings-link" href="#notification-settings">
         <Icon name="bell" size={16} /> Notification preferences
       </a>
     </div>

@@ -21,6 +21,7 @@ export function usePrototypeController() {
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState('')
   const [viewedPersonId, setViewedPersonId] = useState<string | null>(null)
+  const [viewedPostId, setViewedPostId] = useState<string | null>(null)
   const [theme, setTheme] = useState<'day' | 'evening' | 'system'>('system')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
@@ -188,7 +189,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, viewedPersonId, setViewedPersonId, theme, setTheme }
+  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, viewedPersonId, setViewedPersonId, viewedPostId, setViewedPostId, theme, setTheme }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>
