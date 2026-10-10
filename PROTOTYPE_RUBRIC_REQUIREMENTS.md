@@ -19,7 +19,7 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 
 ## Full page inventory
 
-**20 top-level routes, ~27 distinct views counting tab/mode states within a screen as their own view.** Both numbers clear the rubric's 20-30 floor.
+**25 top-level routes, ~32 distinct views counting tab/mode states within a screen as their own view.** Both numbers sit inside the rubric's 20-30 floor (25 strict) or just past it (32 with sub-states) — comfortable margin either way a grader counts.
 
 | # | Route | Page | Access | Reached from | Sub-states |
 | --- | --- | --- | --- | --- | --- |
@@ -43,6 +43,11 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 | 18 | `#blocked-accounts` | Blocked Accounts | Private | Account & Privacy Settings | — |
 | 19 | `#delete-account` | Delete Account | Private | Account & Privacy Settings | — |
 | 20 | `#appearance` | Appearance (Day / Evening / Match device) | Private | Account & Privacy Settings | — |
+| 21 | `#post` | Post Detail | Public | Tap a post's title in the feed | — |
+| 22 | `#report` | Report a Post | Public | "Report this post" on Post Detail | — |
+| 23 | `#settings-account` | Account Settings (sign-in method, password reset) | Private | Account & Privacy Settings | — |
+| 24 | `#invite` | Invite Friends | Private | Account & Privacy Settings | — |
+| 25 | `#messages` | Messages | Private | Notifications page | — |
 
 "Private" means it requires signing in; signed-out visitors are redirected to Login. Everything else is browsable by a first-time, signed-out visitor, satisfying the non-linear visitor-preview requirement.
 
@@ -58,6 +63,7 @@ Dropped along the way: a "most commonly asked questions" trending panel was cons
 6. **Design-system audit #2** — re-verified all of the above against `DESIGN_SYSTEM.md`; everything passed.
 7. **8 more standard pages** (routes 13–20) — Public Profile, About, Help & Support, Terms, Privacy, Blocked Accounts, Delete Account, Appearance. Added specifically to clear the screen-count floor by strict route count, not just by counting tab-states. None of these touch the main nav — they're reachable the same way real apps surface them (footer links, settings sub-pages, tapping someone's name), so nothing about the app's primary navigation changed or got more complicated.
 8. **Final fix** — Public Profile was missing its page heading; caught and fixed before the last commit.
+9. **5 more pages** (routes 21–25) — Post Detail, Report a Post, Account Settings, Invite Friends, Messages. Added to clear 20 routes with real margin (requested target: 25). Same rule as the last batch: no changes to the main nav, reached through tapping a post title, Post Detail's report link, and two more entries in Settings' "More" list.
 
 ## Also worth doing before submission
 
