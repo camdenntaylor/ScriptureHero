@@ -15,15 +15,20 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
   const savedCount = new Set(app.saved.map((item) => item.postId)).size;
   const possibleBadges: ({ icon: IconName; label: string } | false)[] = [
     savedCount >= 1 && { icon: "bookmark", label: "First save" },
-    app.heroes.length >= 1 && { icon: "heart", label: "Found a Scripture Hero" },
+    app.heroes.length >= 1 && {
+      icon: "heart",
+      label: "Found a Scripture Hero",
+    },
     app.questions.length >= 1 && { icon: "book", label: "Reflective heart" },
   ];
-  const badges = possibleBadges.filter((badge): badge is { icon: IconName; label: string } => Boolean(badge));
+  const badges = possibleBadges.filter(
+    (badge): badge is { icon: IconName; label: string } => Boolean(badge),
+  );
 
   return (
     <div className="profile-page">
       <header className="page-heading">
-        <h1>Your profile.</h1>
+        <h1>Your profile</h1>
       </header>
 
       <section className="profile-card" aria-label="Profile summary">
@@ -31,7 +36,10 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           {photoUrl ? (
             <img className="profile-photo" src={photoUrl} alt="Your profile" />
           ) : (
-            <span className="avatar avatar-gold avatar-large" aria-hidden="true">
+            <span
+              className="avatar avatar-gold avatar-large"
+              aria-hidden="true"
+            >
               {initials}
             </span>
           )}
@@ -57,6 +65,7 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           Edit profile <Icon name="arrow" size={17} />
         </a>
       </section>
+      <br />
 
       <section className="impact-banner" aria-label="Your activity">
         <div className="impact-intro">
@@ -79,11 +88,14 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           </div>
           <div>
             <strong>{app.heroes.length}</strong>
-            <span>{app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}</span>
+            <span>
+              {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}
+            </span>
           </div>
         </div>
       </section>
 
+      <br />
       {badges.length > 0 && (
         <section aria-label="Badges">
           <div className="section-intro">
@@ -133,7 +145,11 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
         </section>
       </div>
 
-      <button className="button-link" type="button" onClick={() => void app.signOut()}>
+      <button
+        className="button-link"
+        type="button"
+        onClick={() => void app.signOut()}
+      >
         Sign out
       </button>
     </div>

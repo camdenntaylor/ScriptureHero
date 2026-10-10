@@ -59,24 +59,30 @@ export function ProfileEditPage({ app }: { app: PrototypeController }) {
         <Icon name="chevron" size={16} /> Your profile
       </a>
       <header className="page-heading">
-        <h1>Edit your profile.</h1>
+        <h1>Edit your profile</h1>
       </header>
       <section className="profile-card" aria-labelledby="details-heading">
         <h2 id="details-heading">Personal details</h2>
         <p>
-          Your name, location, bio, photo, and favorite verse are public
-          profile details. Your Soul Questions stay separate and private.
+          Your name, location, bio, photo, and favorite verse are public profile
+          details. Your Soul Questions stay separate and private.
         </p>
         <div className="photo-row">
           {photoUrl ? (
             <img className="profile-photo" src={photoUrl} alt="Your profile" />
           ) : (
-            <span className="avatar avatar-gold avatar-large" aria-hidden="true">
+            <span
+              className="avatar avatar-gold avatar-large"
+              aria-hidden="true"
+            >
               {initials}
             </span>
           )}
           <div>
-            <label className="button button-soft upload-label" htmlFor="profile-photo">
+            <label
+              className="button button-soft upload-label"
+              htmlFor="profile-photo"
+            >
               {uploadBusy ? "Uploading…" : "Choose photo"}
             </label>
             <input
@@ -143,7 +149,11 @@ export function ProfileEditPage({ app }: { app: PrototypeController }) {
               {error}
             </p>
           )}
-          <button className="button button-primary" type="submit" disabled={busy}>
+          <button
+            className="button button-primary"
+            type="submit"
+            disabled={busy}
+          >
             {busy ? "Saving…" : "Save details"}
           </button>
         </form>
