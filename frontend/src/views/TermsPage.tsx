@@ -1,8 +1,8 @@
 import { StaticPage } from './components/StaticPage'
 
-export function TermsPage() {
+export function TermsPage({ signedIn = false }: { signedIn?: boolean }) {
   return (
-    <StaticPage eyebrow="LEGAL" title="Terms of service.">
+    <StaticPage signedIn={signedIn} eyebrow="LEGAL" title="Terms of service.">
       <p className="muted">
         This is a placeholder page for a class project prototype, shown here to demonstrate what a real Terms
         of Service page would look like. It is not a binding legal document.

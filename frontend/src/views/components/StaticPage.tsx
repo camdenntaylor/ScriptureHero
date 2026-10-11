@@ -6,13 +6,15 @@ export function StaticPage({
   title,
   intro,
   children,
-  backHref = '#welcome',
-  backLabel = 'Welcome',
+  signedIn = false,
+  backHref = signedIn ? '#home' : '#welcome',
+  backLabel = signedIn ? 'Home' : 'Welcome',
 }: {
   eyebrow?: string
   title: string
   intro?: string
   children: ReactNode
+  signedIn?: boolean
   backHref?: string
   backLabel?: string
 }) {

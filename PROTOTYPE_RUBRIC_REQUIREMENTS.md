@@ -19,11 +19,11 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 
 ## Full page inventory
 
-**25 top-level routes, ~32 distinct views counting tab/mode states within a screen as their own view.** Both numbers sit inside the rubric's 20-30 floor (25 strict) or just past it (32 with sub-states) — comfortable margin either way a grader counts.
+**26 top-level routes, ~34 distinct views counting tab/mode states within a screen as their own view.** Both numbers sit inside the rubric's 20-30 floor (26 strict) or just past it (34 with sub-states) — comfortable margin either way a grader counts.
 
 | # | Route | Page | Access | Reached from | Sub-states |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `#welcome` | Welcome | Public | Entry point / logo | — |
+| 1 | `#welcome` | Welcome | Public visitor view | Entry point / visitor logo; signed-in members go Home | — |
 | 2 | `#home` | Home / Global feed | Public | Main nav | For you · Saved · Topics (browse) · Topics (results) — 4 |
 | 3 | `#spaces` | Spaces directory | Public | Main nav | Directory · a Space's feed — 2 |
 | 4 | `#heroes` | Scripture Heroes | Public | Main nav | Your Heroes · People you've helped — 2 |
@@ -42,12 +42,13 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 | 17 | `#privacy` | Privacy Policy | Public | Welcome footer | — |
 | 18 | `#blocked-accounts` | Blocked Accounts | Private | Account & Privacy Settings | — |
 | 19 | `#delete-account` | Delete Account | Private | Account & Privacy Settings | — |
-| 20 | `#appearance` | Appearance (Day / Evening / Match device) | Private | Account & Privacy Settings | — |
+| 20 | `#appearance` | Appearance (Day / Evening / System) | Private | Profile, Account & Privacy Settings | — |
 | 21 | `#post` | Post Detail | Public | Tap a post's title in the feed | — |
 | 22 | `#report` | Report a Post | Public | "Report this post" on Post Detail | — |
 | 23 | `#settings-account` | Account Settings (sign-in method, password reset) | Private | Account & Privacy Settings | — |
 | 24 | `#invite` | Invite Friends | Private | Account & Privacy Settings | — |
-| 25 | `#messages` | Messages | Private | Notifications page | — |
+| 25 | #messages | Messages | Private | Main nav, Notifications, Heroes | Inbox · new contact picker — 2 |
+| 26 | #chat | Conversation / anonymous note history | Private | Messages, Notifications, Heroes | — |
 
 "Private" means it requires signing in; signed-out visitors are redirected to Login. Everything else is browsable by a first-time, signed-out visitor, satisfying the non-linear visitor-preview requirement.
 

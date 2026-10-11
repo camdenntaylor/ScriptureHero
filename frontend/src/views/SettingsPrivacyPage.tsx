@@ -23,7 +23,7 @@ export function SettingsPrivacyPage({ app }: { app: PrototypeController }) {
       <header className="page-heading">
         <h1>Account &amp; privacy.</h1>
       </header>
-      <section className="profile-card" aria-label="Privacy settings">
+      <section className="profile-card settings-card" aria-label="Privacy settings">
         <h2>Posting</h2>
         <fieldset className="question-choices">
           <label>
@@ -68,7 +68,7 @@ export function SettingsPrivacyPage({ app }: { app: PrototypeController }) {
         </button>
       </section>
 
-      <section className="profile-card" aria-label="More account settings">
+      <section className="profile-card settings-card" aria-label="More account settings">
         <h2>More</h2>
         <a className="button-link settings-link" href="#settings-account">
           <Icon name="mail" size={16} /> Account settings

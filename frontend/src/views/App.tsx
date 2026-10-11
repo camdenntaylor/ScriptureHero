@@ -6,6 +6,9 @@ import { SoulQuestionsPage } from "./SoulQuestionsPage";
 import { SettingsPrivacyPage } from "./SettingsPrivacyPage";
 import { NotificationsPage } from "./NotificationsPage";
 import { NotificationSettingsPage } from "./NotificationSettingsPage";
+import { AppearancePage } from "./AppearancePage";
+import { MessagesPage } from "./MessagesPage";
+import { ConversationPage } from "./ConversationPage";
 import { PublicProfilePage } from "./PublicProfilePage";
 import { AboutPage } from "./AboutPage";
 import { HelpPage } from "./HelpPage";
@@ -13,12 +16,10 @@ import { TermsPage } from "./TermsPage";
 import { PrivacyPage } from "./PrivacyPage";
 import { BlockedAccountsPage } from "./BlockedAccountsPage";
 import { DeleteAccountPage } from "./DeleteAccountPage";
-import { AppearancePage } from "./AppearancePage";
 import { PostDetailPage } from "./PostDetailPage";
 import { ReportPostPage } from "./ReportPostPage";
 import { SettingsAccountPage } from "./SettingsAccountPage";
 import { InviteFriendsPage } from "./InviteFriendsPage";
-import { MessagesPage } from "./MessagesPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -27,7 +28,7 @@ import { SpacesPage } from "./SpacesPage";
 import { QuestionsLibraryPage } from "./QuestionsLibraryPage";
 import { PrototypeModal } from "./components/PrototypeModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
-import type { Screen } from "../models/prototype";
+import { screenForAccount, type Screen } from "../models/prototype";
 import { avatarUrl } from "../services/supabase";
 
 const PRIVATE_SCREENS: Screen[] = [
@@ -35,31 +36,38 @@ const PRIVATE_SCREENS: Screen[] = [
   "profile-edit",
   "questions",
   "settings-privacy",
+  "appearance",
+  "messages",
+  "chat",
   "notifications",
   "notification-settings",
   "blocked-accounts",
   "delete-account",
-  "appearance",
   "settings-account",
   "invite",
-  "messages",
 ];
 
 export function App() {
   const app = usePrototypeController();
-  const welcome = app.screen === "welcome";
-  const privateRoute = PRIVATE_SCREENS.includes(app.screen);
+  const screen = screenForAccount(app.screen, Boolean(app.profile));
+  const welcome = screen === "welcome" && !app.authLoading;
+  const privateRoute = PRIVATE_SCREENS.includes(screen);
   const login =
-    (app.screen === "login" && !app.profile) ||
+    (screen === "login" && !app.profile) ||
     (privateRoute && !app.profile && !app.authLoading);
-  const loading = privateRoute && !app.profile && app.authLoading;
+  const loading = (privateRoute || screen === "welcome") && !app.profile && app.authLoading;
   const navigation: { screen: Screen; label: string; icon: IconName }[] = [
-    { screen: "welcome", label: "Welcome", icon: "globe" },
+    ...(!app.profile && !app.authLoading ? [{ screen: "welcome" as const, label: "Welcome", icon: "globe" as const }] : []),
     { screen: "home", label: "Home", icon: "home" },
     { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
     ...(app.profile
       ? [
+          {
+            screen: "messages" as const,
+            label: "Messages",
+            icon: "message" as const,
+          },
           {
             screen: "profile" as const,
             label: "Profile",
@@ -68,9 +76,10 @@ export function App() {
         ]
       : []),
   ];
-  const active = (screen: Screen) =>
-    app.screen === screen ||
-    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen));
+  const active = (destination: Screen) =>
+    screen === destination ||
+    (destination === "profile" && PRIVATE_SCREENS.includes(screen) && !["messages", "chat", "notifications"].includes(screen)) ||
+    (destination === "messages" && ["chat", "notifications"].includes(screen));
   const initials = app.profile?.name
     .trim()
     .split(/\s+/)
@@ -89,8 +98,8 @@ export function App() {
       <header className="site-header">
         <a
           className="brand"
-          href="#welcome"
-          aria-label="Scripture Hero welcome"
+          href={app.profile ? '#home' : '#welcome'}
+          aria-label={app.profile ? 'Scripture Hero home' : 'Scripture Hero welcome'}
         >
           <Logo />
           <span>Scripture Hero</span>
@@ -116,6 +125,7 @@ export function App() {
             aria-label="Open notifications"
           >
             <Icon name="bell" size={20} />
+            {app.messaging.unreadTotal > 0 && <span className="header-unread" aria-hidden="true" />}
           </a>
           <a
             className="demo-profile"
@@ -140,9 +150,7 @@ export function App() {
           </a>
           </div>
         ) : (
-          <a className="button button-outline" href="#login">
-            Log in
-          </a>
+          <a className="button button-outline" href="#login">Log in</a>
         )}
       </header>
 
@@ -172,55 +180,65 @@ export function App() {
             </nav>
           </aside>
           <main id="main-content" className="workspace-main" tabIndex={-1}>
-            {app.screen === "home" ? (
+            {screen === "home" ? (
               <HomePage app={app} />
-            ) : app.screen === "spaces" ? (
+            ) : screen === "spaces" ? (
               <SpacesPage app={app} />
-            ) : app.screen === "heroes" ? (
+            ) : screen === "heroes" ? (
               <HeroesPage app={app} />
-            ) : app.screen === "library" ? (
+            ) : screen === "library" ? (
               <QuestionsLibraryPage app={app} />
-            ) : app.screen === "questions" && app.profile ? (
+            ) : screen === "questions" && app.profile ? (
               <SoulQuestionsPage app={app} />
-            ) : app.screen === "profile-edit" && app.profile ? (
+            ) : screen === "profile-edit" && app.profile ? (
               <ProfileEditPage app={app} />
-            ) : app.screen === "settings-privacy" && app.profile ? (
+            ) : screen === "settings-privacy" && app.profile ? (
               <SettingsPrivacyPage app={app} />
-            ) : app.screen === "notifications" && app.profile ? (
-              <NotificationsPage app={app} />
-            ) : app.screen === "notification-settings" && app.profile ? (
-              <NotificationSettingsPage app={app} />
-            ) : app.screen === "blocked-accounts" && app.profile ? (
-              <BlockedAccountsPage />
-            ) : app.screen === "delete-account" && app.profile ? (
-              <DeleteAccountPage app={app} />
-            ) : app.screen === "appearance" && app.profile ? (
+            ) : screen === "appearance" && app.profile ? (
               <AppearancePage app={app} />
-            ) : app.screen === "settings-account" && app.profile ? (
-              <SettingsAccountPage app={app} />
-            ) : app.screen === "invite" && app.profile ? (
-              <InviteFriendsPage />
-            ) : app.screen === "messages" && app.profile ? (
+            ) : screen === "messages" ? (
               <MessagesPage app={app} />
-            ) : app.screen === "public-profile" ? (
+            ) : screen === "chat" ? (
+              <ConversationPage key={app.messaging.selected?.id ?? 'empty'} app={app} />
+            ) : screen === "notifications" ? (
+              <NotificationsPage app={app} />
+            ) : screen === "notification-settings" && app.profile ? (
+              <NotificationSettingsPage app={app} />
+            ) : screen === "blocked-accounts" && app.profile ? (
+              <BlockedAccountsPage />
+            ) : screen === "delete-account" && app.profile ? (
+              <DeleteAccountPage app={app} />
+            ) : screen === "settings-account" && app.profile ? (
+              <SettingsAccountPage app={app} />
+            ) : screen === "invite" && app.profile ? (
+              <InviteFriendsPage />
+            ) : screen === "public-profile" ? (
               <PublicProfilePage app={app} />
-            ) : app.screen === "post" ? (
+            ) : screen === "post" ? (
               <PostDetailPage app={app} />
-            ) : app.screen === "report" ? (
+            ) : screen === "report" ? (
               <ReportPostPage app={app} />
-            ) : app.screen === "about" ? (
-              <AboutPage />
-            ) : app.screen === "help" ? (
-              <HelpPage />
-            ) : app.screen === "terms" ? (
-              <TermsPage />
-            ) : app.screen === "privacy" ? (
-              <PrivacyPage />
+            ) : screen === "about" ? (
+              <AboutPage signedIn={Boolean(app.profile)} />
+            ) : screen === "help" ? (
+              <HelpPage signedIn={Boolean(app.profile)} />
+            ) : screen === "terms" ? (
+              <TermsPage signedIn={Boolean(app.profile)} />
+            ) : screen === "privacy" ? (
+              <PrivacyPage signedIn={Boolean(app.profile)} />
             ) : app.profile ? (
               <ProfilePage app={app} />
             ) : (
               <HomePage app={app} />
             )}
+            {app.profile && <footer className="community-footer">
+              <nav className="footer-links" aria-label="Information">
+                <a href="#about">About</a>
+                <a href="#help">Help</a>
+                <a href="#terms">Terms</a>
+                <a href="#privacy">Privacy</a>
+              </nav>
+            </footer>}
           </main>
         </div>
       )}
@@ -241,7 +259,7 @@ export function App() {
           ))}
         </nav>
       )}
-      {app.dialog && <PrototypeModal key={app.dialog.type} app={app} />}
+      {app.dialog && (app.dialog.type !== 'message' || app.profile) && <PrototypeModal key={app.dialog.type} app={app} />}
       <div className="toast-region" aria-live="polite" aria-atomic="true">
         {app.notice && (
           <div className="toast">

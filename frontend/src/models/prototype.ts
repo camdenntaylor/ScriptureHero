@@ -23,7 +23,8 @@ export type Screen =
   | "report"
   | "settings-account"
   | "invite"
-  | "messages";
+  | "messages"
+  | "chat";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
@@ -121,8 +122,14 @@ const HASH_SCREENS: Record<string, Screen> = {
   "#settings-account": "settings-account",
   "#invite": "invite",
   "#messages": "messages",
+  "#chat": "chat",
 }
 
 export function screenFromHash(hash: string): Screen {
   return HASH_SCREENS[hash] ?? "welcome"
+}
+
+/** Returning members enter the community instead of the visitor welcome page. */
+export function screenForAccount(screen: Screen, signedIn: boolean): Screen {
+  return signedIn && (screen === 'welcome' || screen === 'login') ? 'home' : screen;
 }

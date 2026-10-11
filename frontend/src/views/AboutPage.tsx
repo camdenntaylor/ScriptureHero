@@ -1,8 +1,8 @@
 import { StaticPage } from './components/StaticPage'
 
-export function AboutPage() {
+export function AboutPage({ signedIn = false }: { signedIn?: boolean }) {
   return (
-    <StaticPage eyebrow="OUR STORY" title="About Scripture Hero.">
+    <StaticPage signedIn={signedIn} eyebrow="OUR STORY" title="About Scripture Hero.">
       <h2>Teaching the world about Jesus, one verse at a time.</h2>
       <p>
         Scripture Hero is a non-denominational space to share spiritual experiences and find wisdom in the

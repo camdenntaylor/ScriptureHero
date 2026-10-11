@@ -13,6 +13,9 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
         <h1>We’re part of each other’s story</h1>
         <Logo className="heroes-watermark" />
       </header>
+      <a className="button-link" href={app.profile ? "#messages" : "#login"}>
+        <Icon name="message" size={17} /> {app.profile ? "Open your conversations" : "Log in to message"}
+      </a>
       <section className="impact-banner" aria-label="Your impact">
         <div className="impact-intro">
           <span className="round-icon">
@@ -137,7 +140,7 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
           )}
           <p className="hero-privacy">
             <Icon name="lock" size={14} /> Your Soul Questions and saved
-            connections are visible only to you. Thanks are anonymous.
+            connections are visible only to you. Choose anonymous thanks or a named chat.
           </p>
         </section>
       ) : (
@@ -173,11 +176,7 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
                 <button
                   className="button button-outline"
                   onClick={() =>
-                    app.setDialog({
-                      type: "message",
-                      person: item.person,
-                      thanks: false,
-                    })
+                    app.messaging.startChat(item.person)
                   }
                 >
                   <Icon name="message" size={17} /> Send a message

@@ -65,7 +65,6 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           Edit profile <Icon name="arrow" size={17} />
         </a>
       </section>
-      <br />
 
       <section className="impact-banner" aria-label="Your activity">
         <div className="impact-intro">
@@ -95,7 +94,6 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
         </div>
       </section>
 
-      <br />
       {badges.length > 0 && (
         <section aria-label="Badges">
           <div className="section-intro">
@@ -142,6 +140,14 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           <a className="button button-soft" href="#notifications">
             Open <Icon name="arrow" size={17} />
           </a>
+        </section>
+        <section className="profile-card">
+          <div className="aside-heading">
+            <Icon name="sun" size={20} />
+            <h2>Appearance</h2>
+          </div>
+          <p>Choose Day, Evening, or follow your device.</p>
+          <a className="button button-soft" href="#appearance">Open <Icon name="arrow" size={17} /></a>
         </section>
       </div>
 

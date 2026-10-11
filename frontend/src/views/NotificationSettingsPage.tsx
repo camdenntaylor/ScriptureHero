@@ -20,12 +20,12 @@ export function NotificationSettingsPage({ app }: { app: PrototypeController }) 
       <header className="page-heading">
         <h1>Notification preferences.</h1>
       </header>
-      <section className="profile-card" aria-label="Notification preferences">
+      <section className="profile-card settings-card" aria-label="Notification preferences">
         <h2>How you're notified</h2>
         <fieldset className="question-choices">
           <label>
             <input type="checkbox" checked={push} onChange={(event) => { setPush(event.target.checked); setSaved(false) }} />
-            <span>Push notifications — saves, thank-yous, and space activity</span>
+            <span>Push notifications — messages, thank-yous, and space activity</span>
           </label>
           <label>
             <input type="checkbox" checked={email} onChange={(event) => { setEmail(event.target.checked); setSaved(false) }} />

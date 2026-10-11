@@ -29,9 +29,9 @@ const faqs: { question: string; answer: string }[] = [
   },
 ]
 
-export function HelpPage() {
+export function HelpPage({ signedIn = false }: { signedIn?: boolean }) {
   return (
-    <StaticPage eyebrow="SUPPORT" title="Help & support.">
+    <StaticPage signedIn={signedIn} eyebrow="SUPPORT" title="Help & support.">
       {faqs.map((item) => (
         <Fragment key={item.question}>
           <h2>{item.question}</h2>

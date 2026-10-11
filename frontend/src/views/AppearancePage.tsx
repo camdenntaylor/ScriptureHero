@@ -1,32 +1,32 @@
+import { useState } from 'react'
 import type { PrototypeController } from '../controllers/usePrototypeController'
 import { Icon } from './components/Icon'
 
-const OPTIONS = [
-  ['system', 'Match my device'],
-  ['day', 'Day — cream paper, brown ink'],
-  ['evening', 'Evening — neutral gray, off-white text'],
+const modes = [
+  { value: 'system', label: 'System', description: 'Follow your device’s light or dark setting.' },
+  { value: 'day', label: 'Day', description: 'Warm cream surfaces and olive accents.' },
+  { value: 'evening', label: 'Evening', description: 'Soft gray surfaces for quieter light.' },
 ] as const
 
 export function AppearancePage({ app }: { app: PrototypeController }) {
-  return (
-    <div className="profile-page">
-      <a className="button-link topics-back" href="#settings-privacy">
-        <Icon name="chevron" size={16} /> Account & privacy
-      </a>
-      <header className="page-heading">
-        <h1>Appearance.</h1>
-      </header>
-      <section className="profile-card" aria-label="Appearance settings">
-        <h2>Theme</h2>
-        <fieldset className="question-choices">
-          {OPTIONS.map(([value, label]) => (
-            <label key={value}>
-              <input type="radio" name="theme" value={value} checked={app.theme === value} onChange={() => app.setTheme(value)} />
-              <span>{label}</span>
-            </label>
-          ))}
-        </fieldset>
-      </section>
-    </div>
-  )
+  const [mode, setMode] = useState(app.appearance.mode)
+  return <div className="profile-page">
+    <a className="button-link topics-back" href="#profile"><Icon name="chevron" size={16} /> Your profile</a>
+    <header className="page-heading"><h1>Make yourself comfortable.</h1><p>Choose how Scripture Hero looks on this device.</p></header>
+    <form className="profile-card settings-card" onSubmit={event => {
+      event.preventDefault()
+      app.appearance.update(mode)
+      app.setNotice('Appearance updated.')
+    }}>
+      <h2>Appearance</h2>
+      <fieldset className="question-choices">
+        <legend>Color theme</legend>
+        {modes.map(choice => <label key={choice.value}>
+          <input type="radio" name="appearance-mode" checked={mode === choice.value} onChange={() => setMode(choice.value)} />
+          <span className="setting-choice-copy"><strong>{choice.label}</strong><span>{choice.description}</span></span>
+        </label>)}
+      </fieldset>
+      <button className="button button-primary" type="submit"><Icon name="check" size={17} /> Save appearance</button>
+    </form>
+  </div>
 }
