@@ -108,4 +108,21 @@ restrictions as an authorization boundary.
 The feature branch keeps `main` unchanged. Review its diff, then share the branch
 and open a pull request when ready. Ask your brother to try the flows above before
 merging. A local commit is a checkpoint; pushing shares the branch; merging is the
-separate action that changes `main`. This work does not push, deploy, or merge.
+separate action that changes `main`. Publishing the feature branch shares it for review; a pull request merge integrates it into `main`.
+
+## Main integration
+
+The feature branch incorporates `main` at `78b5623`, including the expanded
+public profile, post detail/report, information, and account settings screens.
+Messages retains the working inbox/conversation flow; Appearance retains saved
+device preferences. Shared controller and route conflicts were resolved to keep
+both sets of features, and incoming profile spacers use the verified CSS gaps.
+Signed-in members can reach the information pages from the community footer,
+whose back links return Home; visitors retain Welcome's information links.
+
+Verification after integration: type checking, all 80 tests (45 frontend and 35
+backend), and production builds passed with pinned pnpm 11.19.0. The build has a
+non-blocking warning for its roughly 510 kB main JavaScript bundle. Isolated
+browser checks at 375 × 812 and 1366 × 900 covered the incoming routes, feed →
+public profile → post detail → report, Heroes → chat, named/anonymous thanks and
+notification links, settings spacing, and saved appearance in both themes.

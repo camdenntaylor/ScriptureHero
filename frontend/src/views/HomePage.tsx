@@ -7,16 +7,23 @@ import { InsightCard } from "./components/InsightCard";
 function TopicsBrowser({ app }: { app: PrototypeController }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
-  const allTopics = [...new Set(insights.flatMap((post) => post.topics))].sort();
+  const allTopics = [
+    ...new Set(insights.flatMap((post) => post.topics)),
+  ].sort();
   const matchingTopics = allTopics.filter((topic) =>
     topic.toLowerCase().includes(query.trim().toLowerCase()),
   );
-  const results = selected ? insights.filter((post) => post.topics.includes(selected)) : [];
+  const results = selected
+    ? insights.filter((post) => post.topics.includes(selected))
+    : [];
 
   if (selected) {
     return (
       <div className="topics-browser">
-        <button className="button-link topics-back" onClick={() => setSelected(null)}>
+        <button
+          className="button-link topics-back"
+          onClick={() => setSelected(null)}
+        >
           <Icon name="chevron" size={16} /> All topics
         </button>
         <h2 className="topics-selected-heading">{selected}</h2>
@@ -45,13 +52,19 @@ function TopicsBrowser({ app }: { app: PrototypeController }) {
       </div>
       <div className="topic-chip-grid">
         {matchingTopics.map((topic) => (
-          <button className="topic-chip" key={topic} onClick={() => setSelected(topic)}>
+          <button
+            className="topic-chip"
+            key={topic}
+            onClick={() => setSelected(topic)}
+          >
             {topic}
           </button>
         ))}
       </div>
       {matchingTopics.length === 0 && (
-        <p className="muted">No topics match “{query}” yet. Try a different word.</p>
+        <p className="muted">
+          No topics match “{query}” yet. Try a different word.
+        </p>
       )}
     </div>
   );
@@ -61,16 +74,33 @@ export function HomePage({ app }: { app: PrototypeController }) {
   return (
     <div className="home-columns">
       <div className="feed-column">
-        {!app.profile && <div className="home-login-note"><div><strong>A place for your own reflections.</strong><p>Log in to keep a private question list and edit your profile.</p></div><a className="button button-soft" href="#login">Log in <Icon name="arrow" size={17} /></a></div>}
-        <header className="page-heading"><h1>Your daily dose of connection.</h1></header>
+        {!app.profile && (
+          <div className="home-login-note">
+            <div>
+              <strong>A place for your own reflections.</strong>
+              <p>
+                Log in to keep a private question list and edit your profile.
+              </p>
+            </div>
+            <a className="button button-soft" href="#login">
+              Log in <Icon name="arrow" size={17} />
+            </a>
+          </div>
+        )}
+        <header className="page-heading">
+          <h1>Your daily dose of connection</h1>
+        </header>
         <button
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
         >
           <span className="avatar avatar-gold" aria-hidden="true">
-            {app.profile?.name.slice(0, 2).toUpperCase() ?? 'AV'}
+            {app.profile?.name.slice(0, 2).toUpperCase() ?? "AV"}
           </span>
-          <span>What’s on your heart{app.profile ? `, ${app.profile.name.split(' ')[0]}` : ''}?</span>
+          <span>
+            What’s on your heart
+            {app.profile ? `, ${app.profile.name.split(" ")[0]}` : ""}?
+          </span>
           <span className="compose-icon">
             <Icon name="plus" />
           </span>
@@ -128,7 +158,9 @@ export function HomePage({ app }: { app: PrototypeController }) {
               <div className="empty-state">
                 <Icon name="bookmark" size={32} />
                 <h2>A place for words that stay with you.</h2>
-                <p>Save an insight to a Soul Question and you’ll find it here.</p>
+                <p>
+                  Save an insight to a Soul Question and you’ll find it here.
+                </p>
                 <button
                   className="button button-soft"
                   onClick={() => app.setFilter("for-you")}
@@ -139,8 +171,8 @@ export function HomePage({ app }: { app: PrototypeController }) {
             )}
             {app.visiblePosts.length > 0 && (
               <p className="end-of-feed">
-                <Icon name="sun" size={18} /> You’re all caught up. Take a little
-                light with you.
+                <Icon name="sun" size={18} /> You’re all caught up. Take a
+                little light with you.
               </p>
             )}
           </>
@@ -156,12 +188,20 @@ export function HomePage({ app }: { app: PrototypeController }) {
           <p className="aside-description">
             The things you’re holding in your heart.
           </p>
-          <p className="aside-description">{app.profile ? 'Open your private space to record or revisit a question.' : 'Log in to open your private space.'}</p>
+          <p className="aside-description">
+            {app.profile
+              ? "Open your private space to record or revisit a question."
+              : "Log in to open your private space."}
+          </p>
           <p className="privacy-note">
             <Icon name="lock" size={13} /> Just for you. Always private.
           </p>
-          <a className="button-link questions-heroes-link" href={app.profile ? '#questions' : '#login'}>
-            {app.profile ? 'Open your private questions' : 'Log in'} <Icon name="arrow" size={17} />
+          <a
+            className="button-link questions-heroes-link"
+            href={app.profile ? "#questions" : "#login"}
+          >
+            {app.profile ? "Open your private questions" : "Log in"}{" "}
+            <Icon name="arrow" size={17} />
           </a>
           <a className="button-link questions-heroes-link" href="#library">
             Not sure where to start? <Icon name="arrow" size={17} />

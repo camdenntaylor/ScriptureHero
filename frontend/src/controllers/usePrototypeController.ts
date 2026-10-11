@@ -22,6 +22,9 @@ export function usePrototypeController() {
   const [promptDraft, setPromptDraft] = useState<string | null>(null)
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState('')
+  const [viewedPersonId, setViewedPersonId] = useState<string | null>(null)
+  const [viewedPostId, setViewedPostId] = useState<string | null>(null)
+
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const messaging = useMessagingController(profile?.id ?? null)
   const appearance = useAppearanceController()
@@ -79,7 +82,7 @@ export function usePrototypeController() {
   }, [profile, screen])
 
   useEffect(() => {
-    const titles = { welcome: 'Learn through connection', home: 'Your home', heroes: 'Scripture Heroes', messages: 'Messages', chat: 'Conversation', notifications: 'Notifications', spaces: 'Spaces', library: 'Questions library', profile: 'Your profile', 'profile-edit': 'Edit profile', questions: 'Your Soul Questions', 'settings-privacy': 'Account & privacy', appearance: 'Appearance', 'notification-settings': 'Notification preferences', login: 'Sign in' }
+    const titles = { welcome: 'Learn through connection', home: 'Your home', heroes: 'Scripture Heroes', messages: 'Messages', chat: 'Conversation', notifications: 'Notifications', spaces: 'Spaces', library: 'Questions library', profile: 'Your profile', 'profile-edit': 'Edit profile', questions: 'Your Soul Questions', 'settings-privacy': 'Account & privacy', appearance: 'Appearance', 'public-profile': 'Member profile', about: 'About', help: 'Help & support', terms: 'Terms', privacy: 'Privacy', 'blocked-accounts': 'Blocked accounts', 'delete-account': 'Delete account', post: 'Insight', report: 'Report post', 'settings-account': 'Account settings', invite: 'Invite friends', 'notification-settings': 'Notification preferences', login: 'Sign in' }
     const title = titles[currentScreen]
     document.title = `${title} · Scripture Hero`
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -91,6 +94,7 @@ export function usePrototypeController() {
     const timer = window.setTimeout(() => setNotice(''), 6000)
     return () => window.clearTimeout(timer)
   }, [notice])
+
 
   const heroes = getHeroes(insights, saved)
   const visiblePosts = filter === 'saved' ? insights.filter(post => saved.some(item => item.postId === post.id)) : insights
@@ -190,7 +194,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen: currentScreen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, messaging, appearance }
+  return { screen: currentScreen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, messaging, appearance, viewedPersonId, setViewedPersonId, viewedPostId, setViewedPostId }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>

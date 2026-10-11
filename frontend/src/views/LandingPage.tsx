@@ -82,6 +82,12 @@ export function LandingPage() {
         </div>
       </section>
       <footer className="landing-footer">
+        <nav className="footer-links" aria-label="More">
+          <a href="#about">About</a>
+          <a href="#help">Help</a>
+          <a href="#terms">Terms</a>
+          <a href="#privacy">Privacy</a>
+        </nav>
         <span className="prototype-label">
           Early-stage prototype for a class project — not a real product or
           community.

@@ -9,6 +9,17 @@ import { NotificationSettingsPage } from "./NotificationSettingsPage";
 import { AppearancePage } from "./AppearancePage";
 import { MessagesPage } from "./MessagesPage";
 import { ConversationPage } from "./ConversationPage";
+import { PublicProfilePage } from "./PublicProfilePage";
+import { AboutPage } from "./AboutPage";
+import { HelpPage } from "./HelpPage";
+import { TermsPage } from "./TermsPage";
+import { PrivacyPage } from "./PrivacyPage";
+import { BlockedAccountsPage } from "./BlockedAccountsPage";
+import { DeleteAccountPage } from "./DeleteAccountPage";
+import { PostDetailPage } from "./PostDetailPage";
+import { ReportPostPage } from "./ReportPostPage";
+import { SettingsAccountPage } from "./SettingsAccountPage";
+import { InviteFriendsPage } from "./InviteFriendsPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
@@ -30,6 +41,10 @@ const PRIVATE_SCREENS: Screen[] = [
   "chat",
   "notifications",
   "notification-settings",
+  "blocked-accounts",
+  "delete-account",
+  "settings-account",
+  "invite",
 ];
 
 export function App() {
@@ -189,11 +204,41 @@ export function App() {
               <NotificationsPage app={app} />
             ) : screen === "notification-settings" && app.profile ? (
               <NotificationSettingsPage app={app} />
+            ) : screen === "blocked-accounts" && app.profile ? (
+              <BlockedAccountsPage />
+            ) : screen === "delete-account" && app.profile ? (
+              <DeleteAccountPage app={app} />
+            ) : screen === "settings-account" && app.profile ? (
+              <SettingsAccountPage app={app} />
+            ) : screen === "invite" && app.profile ? (
+              <InviteFriendsPage />
+            ) : screen === "public-profile" ? (
+              <PublicProfilePage app={app} />
+            ) : screen === "post" ? (
+              <PostDetailPage app={app} />
+            ) : screen === "report" ? (
+              <ReportPostPage app={app} />
+            ) : screen === "about" ? (
+              <AboutPage signedIn={Boolean(app.profile)} />
+            ) : screen === "help" ? (
+              <HelpPage signedIn={Boolean(app.profile)} />
+            ) : screen === "terms" ? (
+              <TermsPage signedIn={Boolean(app.profile)} />
+            ) : screen === "privacy" ? (
+              <PrivacyPage signedIn={Boolean(app.profile)} />
             ) : app.profile ? (
               <ProfilePage app={app} />
             ) : (
               <HomePage app={app} />
             )}
+            {app.profile && <footer className="community-footer">
+              <nav className="footer-links" aria-label="Information">
+                <a href="#about">About</a>
+                <a href="#help">Help</a>
+                <a href="#terms">Terms</a>
+                <a href="#privacy">Privacy</a>
+              </nav>
+            </footer>}
           </main>
         </div>
       )}

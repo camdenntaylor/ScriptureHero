@@ -67,6 +67,25 @@ export function SettingsPrivacyPage({ app }: { app: PrototypeController }) {
           <Icon name="check" size={17} /> {saved ? 'Saved' : 'Save changes'}
         </button>
       </section>
+
+      <section className="profile-card settings-card" aria-label="More account settings">
+        <h2>More</h2>
+        <a className="button-link settings-link" href="#settings-account">
+          <Icon name="mail" size={16} /> Account settings
+        </a>
+        <a className="button-link settings-link" href="#appearance">
+          <Icon name="sun" size={16} /> Appearance
+        </a>
+        <a className="button-link settings-link" href="#invite">
+          <Icon name="people" size={16} /> Invite friends
+        </a>
+        <a className="button-link settings-link" href="#blocked-accounts">
+          <Icon name="lock" size={16} /> Blocked accounts
+        </a>
+        <a className="button-link settings-link settings-link-danger" href="#delete-account">
+          <Icon name="close" size={16} /> Delete account
+        </a>
+      </section>
     </div>
   )
 }

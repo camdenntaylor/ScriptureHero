@@ -71,19 +71,30 @@ export function InsightCard({ post, app }: { post: Insight; app: PrototypeContro
   return (
     <article className="insight-card" aria-labelledby={`title-${post.id}`}>
       <header className="post-header">
-        <Avatar person={post.author} />
-        <div className="person-meta">
-          <strong>{post.author.name}</strong>
-          <span>
-            {post.author.location} <span aria-hidden="true">·</span> {post.time}
-          </span>
-        </div>
+        <a
+          className="post-author-link"
+          href="#public-profile"
+          onClick={() => app.setViewedPersonId(post.author.id)}
+          aria-label={`View ${post.author.name}'s profile`}
+        >
+          <Avatar person={post.author} />
+          <div className="person-meta">
+            <strong>{post.author.name}</strong>
+            <span>
+              {post.author.location} <span aria-hidden="true">·</span> {post.time}
+            </span>
+          </div>
+        </a>
         <span className="global-label">
           <Icon name="globe" size={14} /> Global
         </span>
       </header>
       <div className="post-copy">
-        <h2 id={`title-${post.id}`}>{post.title}</h2>
+        <h2 id={`title-${post.id}`}>
+          <a className="post-title-link" href="#post" onClick={() => app.setViewedPostId(post.id)}>
+            {post.title}
+          </a>
+        </h2>
         <p className="post-body">{post.body}</p>
       </div>
       {post.video ? (

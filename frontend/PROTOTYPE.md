@@ -15,7 +15,7 @@ Start from the repository root with `pnpm --filter @scripture-hero/frontend dev`
 
 Welcome is for signed-out visitors. Signed-in members land on Home after login; Welcome disappears from navigation and the logo leads to Home. Opening `#welcome` or `#login` with a verified account returns to `#home`. Account verification shows a loading state before deciding which experience to display. Browser back/forward work. Phone layouts use bottom navigation. Profile, settings, private Soul Questions, Messages, conversations, and the notification center require a verified Supabase session. Mock messages are populated only for signed-in accounts and reset on reload or account changes; no messages are sent to the backend or database.
 
-Appearance (`#appearance`, linked from Profile) offers System, Day, and Evening.
+Appearance (`#appearance`, linked from Profile and Account & Privacy) offers System, Day, and Evening.
 Save appearance applies the theme and remembers only that color preference on
 this device. System follows the device setting. Privacy and notification
 preferences remain simulated settings; their controls use the shared choice rows.
@@ -45,3 +45,14 @@ Lighting/mood: warm late afternoon sun; heartfelt, comfortable community moment.
 Color palette: earthy creams, terracotta, and olive.
 Constraints: exactly four adult friends; natural anatomy and gestures; no text, logos, watermark, or interface. No added headline inside the image.
 ```
+
+## Pages retained from main
+
+Public member profiles (`#public-profile`), post detail (`#post`), and reporting
+(`#report`) remain reachable through feed names, post titles, and report links.
+About, Help, Terms, and Privacy stay available to visitors through Welcome's
+footer and to signed-in members through the community footer. Their back links
+lead to Welcome for visitors and Home for signed-in members. Account & Privacy's
+More section retains Account Settings, Appearance, Invite Friends, Blocked
+Accounts, and Delete Account. These inherited prototype settings and actions
+remain simulated; this merge does not add account deletion or reporting APIs.

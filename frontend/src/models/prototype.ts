@@ -9,11 +9,22 @@ export type Screen =
   | "library"
   | "profile-edit"
   | "settings-privacy"
-  | "appearance"
   | "notifications"
+  | "notification-settings"
+  | "public-profile"
+  | "about"
+  | "help"
+  | "terms"
+  | "privacy"
+  | "blocked-accounts"
+  | "delete-account"
+  | "appearance"
+  | "post"
+  | "report"
+  | "settings-account"
+  | "invite"
   | "messages"
-  | "chat"
-  | "notification-settings";
+  | "chat";
 export type FeedFilter = "for-you" | "saved" | "topics";
 export interface Person {
   id: string;
@@ -86,33 +97,36 @@ export function publicShareText(post: Insight): string {
   return `${post.title}\n\n${post.body}\n\n${post.scripture}\n— ${post.author.name}, Scripture Hero`;
 }
 
+const HASH_SCREENS: Record<string, Screen> = {
+  "#home": "home",
+  "#heroes": "heroes",
+  "#login": "login",
+  "#profile": "profile",
+  "#questions": "questions",
+  "#spaces": "spaces",
+  "#library": "library",
+  "#profile-edit": "profile-edit",
+  "#settings-privacy": "settings-privacy",
+  "#notifications": "notifications",
+  "#notification-settings": "notification-settings",
+  "#public-profile": "public-profile",
+  "#about": "about",
+  "#help": "help",
+  "#terms": "terms",
+  "#privacy": "privacy",
+  "#blocked-accounts": "blocked-accounts",
+  "#delete-account": "delete-account",
+  "#appearance": "appearance",
+  "#post": "post",
+  "#report": "report",
+  "#settings-account": "settings-account",
+  "#invite": "invite",
+  "#messages": "messages",
+  "#chat": "chat",
+}
+
 export function screenFromHash(hash: string): Screen {
-  if (hash === '#appearance') return 'appearance';
-  if (hash === '#messages') return 'messages';
-  if (hash === '#chat') return 'chat';
-  return hash === "#home"
-    ? "home"
-    : hash === "#heroes"
-      ? "heroes"
-      : hash === "#login"
-        ? "login"
-        : hash === "#profile"
-          ? "profile"
-          : hash === "#questions"
-            ? "questions"
-            : hash === "#spaces"
-              ? "spaces"
-              : hash === "#library"
-                ? "library"
-                : hash === "#profile-edit"
-                  ? "profile-edit"
-                  : hash === "#settings-privacy"
-                    ? "settings-privacy"
-                    : hash === "#notifications"
-                      ? "notifications"
-                      : hash === "#notification-settings"
-                        ? "notification-settings"
-                        : "welcome";
+  return HASH_SCREENS[hash] ?? "welcome"
 }
 
 /** Returning members enter the community instead of the visitor welcome page. */

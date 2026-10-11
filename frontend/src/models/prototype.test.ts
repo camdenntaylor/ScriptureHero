@@ -44,6 +44,9 @@ describe('the prototype help loop', () => {
     expect(screenFromHash('#messages')).toBe('messages')
     expect(screenFromHash('#chat')).toBe('chat')
     expect(screenFromHash('#appearance')).toBe('appearance')
+    for (const screen of ['public-profile', 'about', 'help', 'terms', 'privacy', 'blocked-accounts', 'delete-account', 'post', 'report', 'settings-account', 'invite'] as const) {
+      expect(screenFromHash(`#${screen}`)).toBe(screen)
+    }
     expect(screenFromHash('#login')).toBe('login')
     expect(screenFromHash('#profile')).toBe('profile')
     expect(screenFromHash('#questions')).toBe('questions')

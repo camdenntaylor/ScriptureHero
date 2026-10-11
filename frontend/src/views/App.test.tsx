@@ -19,6 +19,7 @@ function renderAccount(screen: Screen, signedIn: boolean, authLoading = false) {
     authLoading, accountError: '', dialog: null, notice: '', heroes: [], saved: [], thanked: [],
     questions: [], drafts: [], liked: [], comments: {}, filter: 'for-you', visiblePosts: [], favoriteVerse: '',
     appearance: { mode: 'system', update: vi.fn() },
+    viewedPersonId: 'amara', viewedPostId: 'small-kindness',
     messaging: {
       state, conversations: orderedConversations(state), notifications: messageNotifications(state),
       selected: state.conversations[0], unreadTotal: 2, contacts: messagingContacts,
@@ -81,7 +82,7 @@ describe('messaging account access', () => {
 
   it.each(['welcome', 'login'] as const)('shows Home for a signed-in member visiting #%s', screen => {
     const html = renderAccount(screen, true)
-    expect(html).toContain('Your daily dose of connection.')
+    expect(html).toContain('Your daily dose of connection')
     expect(html).not.toContain('href="#welcome"')
     expect(html).toContain('aria-label="Scripture Hero home"')
     expect(html).not.toContain('landing-shell')
@@ -91,5 +92,29 @@ describe('messaging account access', () => {
     expect(renderAccount('appearance', false)).toContain('Welcome back.')
     expect(renderAccount('appearance', true)).toContain('Make yourself comfortable.')
     expect(renderAccount('profile', true)).toContain('href="#appearance"')
+  })
+
+  it.each(['blocked-accounts', 'delete-account', 'settings-account', 'invite'] as const)('keeps the main branch’s private #%s route gated', screen => {
+    const headings = { 'blocked-accounts': 'Blocked accounts.', 'delete-account': 'Delete your account.', 'settings-account': 'Account settings.', invite: 'Invite friends.' }
+    expect(renderAccount(screen, false)).toContain('Welcome back.')
+    expect(renderAccount(screen, false, true)).toContain('Loading your account')
+    expect(renderAccount(screen, true)).toContain(headings[screen])
+  })
+
+  it.each(['about', 'help', 'terms', 'privacy'] as const)('preserves public #%s and sends members back Home', screen => {
+    const visitor = renderAccount(screen, false)
+    const member = renderAccount(screen, true)
+    expect(visitor).not.toContain('Welcome back.')
+    expect(visitor).toContain('href="#welcome"')
+    expect(member).not.toContain('href="#welcome"')
+    expect(member).toContain('aria-label="Information"')
+    expect(member).toContain(`href="#${screen}"`)
+  })
+
+  it.each(['public-profile', 'post', 'report'] as const)('preserves the main branch’s #%s content route', screen => {
+    const html = renderAccount(screen, false)
+    expect(html).not.toContain('Welcome back.')
+    const headings = { 'public-profile': 'Amara Okafor', post: 'Sometimes, peace looks like a person.', report: 'Report this post.' }
+    expect(html).toContain(headings[screen])
   })
 })
