@@ -9,6 +9,7 @@ export type Screen =
   | "library"
   | "profile-edit"
   | "settings-privacy"
+  | "appearance"
   | "notifications"
   | "messages"
   | "chat"
@@ -86,6 +87,7 @@ export function publicShareText(post: Insight): string {
 }
 
 export function screenFromHash(hash: string): Screen {
+  if (hash === '#appearance') return 'appearance';
   if (hash === '#messages') return 'messages';
   if (hash === '#chat') return 'chat';
   return hash === "#home"
@@ -111,4 +113,9 @@ export function screenFromHash(hash: string): Screen {
                       : hash === "#notification-settings"
                         ? "notification-settings"
                         : "welcome";
+}
+
+/** Returning members enter the community instead of the visitor welcome page. */
+export function screenForAccount(screen: Screen, signedIn: boolean): Screen {
+  return signedIn && (screen === 'welcome' || screen === 'login') ? 'home' : screen;
 }

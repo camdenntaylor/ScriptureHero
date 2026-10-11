@@ -13,7 +13,12 @@ Start from the repository root with `pnpm --filter @scripture-hero/frontend dev`
 7. Messages (`#messages`): appears only when signed in. Each signed-in account starts with its own copy of fictional conversations. Start a chat with a fictional contact, filter unread notes, or resume a draft. Conversations (`#chat`) support text replies and thank-you notes. Named chats represent your profile identity; anonymous notes have separate read-only histories. Reloading `#chat` shows a safe inbox link because the selected thread is held only in memory.
 8. Notifications (`#notifications`): thank-you notes stay in the notification center and open their original conversation or anonymous note history. Opening a note marks it read in both places; “Mark all as read” keeps the entries. Saves never generate author notifications. Space-activity examples remain fictional.
 
-The logo and Welcome navigation return to screen 1. Browser back/forward work. Phone layouts use bottom navigation. Profile, settings, private Soul Questions, Messages, conversations, and the notification center require a verified Supabase session. Mock messages are populated only for signed-in accounts and reset on reload or account changes; no messages are sent to the backend or database.
+Welcome is for signed-out visitors. Signed-in members land on Home after login; Welcome disappears from navigation and the logo leads to Home. Opening `#welcome` or `#login` with a verified account returns to `#home`. Account verification shows a loading state before deciding which experience to display. Browser back/forward work. Phone layouts use bottom navigation. Profile, settings, private Soul Questions, Messages, conversations, and the notification center require a verified Supabase session. Mock messages are populated only for signed-in accounts and reset on reload or account changes; no messages are sent to the backend or database.
+
+Appearance (`#appearance`, linked from Profile) offers System, Day, and Evening.
+Save appearance applies the theme and remembers only that color preference on
+this device. System follows the device setting. Privacy and notification
+preferences remain simulated settings; their controls use the shared choice rows.
 
 Messaging preview details and review steps: [Direct messaging](../docs/DIRECT_MESSAGING.md).
 

@@ -6,6 +6,7 @@ import { SoulQuestionsPage } from "./SoulQuestionsPage";
 import { SettingsPrivacyPage } from "./SettingsPrivacyPage";
 import { NotificationsPage } from "./NotificationsPage";
 import { NotificationSettingsPage } from "./NotificationSettingsPage";
+import { AppearancePage } from "./AppearancePage";
 import { MessagesPage } from "./MessagesPage";
 import { ConversationPage } from "./ConversationPage";
 import { Logo } from "./components/Logo";
@@ -16,7 +17,7 @@ import { SpacesPage } from "./SpacesPage";
 import { QuestionsLibraryPage } from "./QuestionsLibraryPage";
 import { PrototypeModal } from "./components/PrototypeModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
-import type { Screen } from "../models/prototype";
+import { screenForAccount, type Screen } from "../models/prototype";
 import { avatarUrl } from "../services/supabase";
 
 const PRIVATE_SCREENS: Screen[] = [
@@ -24,6 +25,7 @@ const PRIVATE_SCREENS: Screen[] = [
   "profile-edit",
   "questions",
   "settings-privacy",
+  "appearance",
   "messages",
   "chat",
   "notifications",
@@ -32,14 +34,15 @@ const PRIVATE_SCREENS: Screen[] = [
 
 export function App() {
   const app = usePrototypeController();
-  const welcome = app.screen === "welcome";
-  const privateRoute = PRIVATE_SCREENS.includes(app.screen);
+  const screen = screenForAccount(app.screen, Boolean(app.profile));
+  const welcome = screen === "welcome" && !app.authLoading;
+  const privateRoute = PRIVATE_SCREENS.includes(screen);
   const login =
-    (app.screen === "login" && !app.profile) ||
+    (screen === "login" && !app.profile) ||
     (privateRoute && !app.profile && !app.authLoading);
-  const loading = privateRoute && !app.profile && app.authLoading;
+  const loading = (privateRoute || screen === "welcome") && !app.profile && app.authLoading;
   const navigation: { screen: Screen; label: string; icon: IconName }[] = [
-    { screen: "welcome", label: "Welcome", icon: "globe" },
+    ...(!app.profile && !app.authLoading ? [{ screen: "welcome" as const, label: "Welcome", icon: "globe" as const }] : []),
     { screen: "home", label: "Home", icon: "home" },
     { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
@@ -58,10 +61,10 @@ export function App() {
         ]
       : []),
   ];
-  const active = (screen: Screen) =>
-    app.screen === screen ||
-    (screen === "profile" && PRIVATE_SCREENS.includes(app.screen) && !["messages", "chat", "notifications"].includes(app.screen)) ||
-    (screen === "messages" && ["chat", "notifications"].includes(app.screen));
+  const active = (destination: Screen) =>
+    screen === destination ||
+    (destination === "profile" && PRIVATE_SCREENS.includes(screen) && !["messages", "chat", "notifications"].includes(screen)) ||
+    (destination === "messages" && ["chat", "notifications"].includes(screen));
   const initials = app.profile?.name
     .trim()
     .split(/\s+/)
@@ -80,8 +83,8 @@ export function App() {
       <header className="site-header">
         <a
           className="brand"
-          href="#welcome"
-          aria-label="Scripture Hero welcome"
+          href={app.profile ? '#home' : '#welcome'}
+          aria-label={app.profile ? 'Scripture Hero home' : 'Scripture Hero welcome'}
         >
           <Logo />
           <span>Scripture Hero</span>
@@ -162,27 +165,29 @@ export function App() {
             </nav>
           </aside>
           <main id="main-content" className="workspace-main" tabIndex={-1}>
-            {app.screen === "home" ? (
+            {screen === "home" ? (
               <HomePage app={app} />
-            ) : app.screen === "spaces" ? (
+            ) : screen === "spaces" ? (
               <SpacesPage app={app} />
-            ) : app.screen === "heroes" ? (
+            ) : screen === "heroes" ? (
               <HeroesPage app={app} />
-            ) : app.screen === "library" ? (
+            ) : screen === "library" ? (
               <QuestionsLibraryPage app={app} />
-            ) : app.screen === "questions" && app.profile ? (
+            ) : screen === "questions" && app.profile ? (
               <SoulQuestionsPage app={app} />
-            ) : app.screen === "profile-edit" && app.profile ? (
+            ) : screen === "profile-edit" && app.profile ? (
               <ProfileEditPage app={app} />
-            ) : app.screen === "settings-privacy" && app.profile ? (
+            ) : screen === "settings-privacy" && app.profile ? (
               <SettingsPrivacyPage app={app} />
-            ) : app.screen === "messages" ? (
+            ) : screen === "appearance" && app.profile ? (
+              <AppearancePage app={app} />
+            ) : screen === "messages" ? (
               <MessagesPage app={app} />
-            ) : app.screen === "chat" ? (
+            ) : screen === "chat" ? (
               <ConversationPage key={app.messaging.selected?.id ?? 'empty'} app={app} />
-            ) : app.screen === "notifications" ? (
+            ) : screen === "notifications" ? (
               <NotificationsPage app={app} />
-            ) : app.screen === "notification-settings" && app.profile ? (
+            ) : screen === "notification-settings" && app.profile ? (
               <NotificationSettingsPage app={app} />
             ) : app.profile ? (
               <ProfilePage app={app} />

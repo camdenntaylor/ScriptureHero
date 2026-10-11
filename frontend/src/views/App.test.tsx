@@ -17,6 +17,8 @@ function renderAccount(screen: Screen, signedIn: boolean, authLoading = false) {
     screen,
     profile: signedIn ? { id: 'account', name: 'Cooper', bio: '', location: '', avatarPath: null } : null,
     authLoading, accountError: '', dialog: null, notice: '', heroes: [], saved: [], thanked: [],
+    questions: [], drafts: [], liked: [], comments: {}, filter: 'for-you', visiblePosts: [], favoriteVerse: '',
+    appearance: { mode: 'system', update: vi.fn() },
     messaging: {
       state, conversations: orderedConversations(state), notifications: messageNotifications(state),
       selected: state.conversations[0], unreadTotal: 2, contacts: messagingContacts,
@@ -63,5 +65,31 @@ describe('messaging account access', () => {
     const html = renderAccount('chat', true)
     expect(html).toContain('href="#messages" aria-current="page"')
     expect(html).not.toContain('href="#profile" aria-current="page"')
+  })
+
+  it('keeps the welcome page available to visitors', () => {
+    const html = renderAccount('welcome', false)
+    expect(html).toContain('landing-shell')
+    expect(html).toContain('A dedicated platform for')
+  })
+
+  it('does not flash Welcome while an existing account is being verified', () => {
+    const html = renderAccount('welcome', false, true)
+    expect(html).toContain('Loading your account')
+    expect(html).not.toContain('A dedicated platform for')
+  })
+
+  it.each(['welcome', 'login'] as const)('shows Home for a signed-in member visiting #%s', screen => {
+    const html = renderAccount(screen, true)
+    expect(html).toContain('Your daily dose of connection.')
+    expect(html).not.toContain('href="#welcome"')
+    expect(html).toContain('aria-label="Scripture Hero home"')
+    expect(html).not.toContain('landing-shell')
+  })
+
+  it('requires sign-in for Appearance and makes it accessible from Profile', () => {
+    expect(renderAccount('appearance', false)).toContain('Welcome back.')
+    expect(renderAccount('appearance', true)).toContain('Make yourself comfortable.')
+    expect(renderAccount('profile', true)).toContain('href="#appearance"')
   })
 })

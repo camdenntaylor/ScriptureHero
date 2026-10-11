@@ -131,6 +131,14 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
             Open <Icon name="arrow" size={17} />
           </a>
         </section>
+        <section className="profile-card">
+          <div className="aside-heading">
+            <Icon name="sun" size={20} />
+            <h2>Appearance</h2>
+          </div>
+          <p>Choose Day, Evening, or follow your device.</p>
+          <a className="button button-soft" href="#appearance">Open <Icon name="arrow" size={17} /></a>
+        </section>
       </div>
 
       <button className="button-link" type="button" onClick={() => void app.signOut()}>

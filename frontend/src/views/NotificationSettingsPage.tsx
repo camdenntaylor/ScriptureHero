@@ -20,7 +20,7 @@ export function NotificationSettingsPage({ app }: { app: PrototypeController }) 
       <header className="page-heading">
         <h1>Notification preferences.</h1>
       </header>
-      <section className="profile-card" aria-label="Notification preferences">
+      <section className="profile-card settings-card" aria-label="Notification preferences">
         <h2>How you're notified</h2>
         <fieldset className="question-choices">
           <label>

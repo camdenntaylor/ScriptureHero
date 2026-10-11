@@ -23,7 +23,7 @@ export function SettingsPrivacyPage({ app }: { app: PrototypeController }) {
       <header className="page-heading">
         <h1>Account &amp; privacy.</h1>
       </header>
-      <section className="profile-card" aria-label="Privacy settings">
+      <section className="profile-card settings-card" aria-label="Privacy settings">
         <h2>Posting</h2>
         <fieldset className="question-choices">
           <label>

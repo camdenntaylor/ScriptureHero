@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { addToHelplist, getHeroes, screenFromHash, type FeedFilter, type Insight, type Person } from '../models/prototype'
+import { addToHelplist, getHeroes, screenFromHash, screenForAccount, type FeedFilter, type Insight, type Person } from '../models/prototype'
 import { insights } from '../services/prototypeData'
 import { copyInsight } from '../services/prototypeSharing'
 import { createMyQuestion, deleteMyQuestion, getMyProfile, listMyQuestions, saveMyProfile, uploadAvatar, type AccountProfile, type PrivateQuestion } from '../services/accountApi'
 import { supabase } from '../services/supabase'
 import { useMessagingController } from './useMessagingController'
+import { useAppearanceController } from './useAppearanceController'
 
 export type PrototypeDialog = { type: 'save'; post: Insight } | { type: 'message'; person: Person; thanks: true } | { type: 'share'; post: Insight } | { type: 'compose' } | null
 
@@ -23,10 +24,12 @@ export function usePrototypeController() {
   const [favoriteVerse, setFavoriteVerse] = useState('')
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const messaging = useMessagingController(profile?.id ?? null)
+  const appearance = useAppearanceController()
   const [questions, setQuestions] = useState<PrivateQuestion[]>([])
   const [authLoading, setAuthLoading] = useState(Boolean(supabase))
   const [accountError, setAccountError] = useState('')
   const signedIn = Boolean(profile)
+  const currentScreen = screenForAccount(screen, signedIn)
   const loadVersion = useRef(0)
 
   async function refreshAccount() {
@@ -72,16 +75,16 @@ export function usePrototypeController() {
   }, [])
 
   useEffect(() => {
-    if (profile && screen === 'login') window.location.hash = '#profile'
+    if (profile && screenForAccount(screen, true) !== screen) window.location.replace('#home')
   }, [profile, screen])
 
   useEffect(() => {
-    const titles = { welcome: 'Learn through connection', home: 'Your home', heroes: 'Scripture Heroes', messages: 'Messages', chat: 'Conversation', notifications: 'Notifications', spaces: 'Spaces', library: 'Questions library', profile: 'Your profile', 'profile-edit': 'Edit profile', questions: 'Your Soul Questions', 'settings-privacy': 'Account & privacy', 'notification-settings': 'Notification preferences', login: 'Sign in' }
-    const title = titles[screen]
+    const titles = { welcome: 'Learn through connection', home: 'Your home', heroes: 'Scripture Heroes', messages: 'Messages', chat: 'Conversation', notifications: 'Notifications', spaces: 'Spaces', library: 'Questions library', profile: 'Your profile', 'profile-edit': 'Edit profile', questions: 'Your Soul Questions', 'settings-privacy': 'Account & privacy', appearance: 'Appearance', 'notification-settings': 'Notification preferences', login: 'Sign in' }
+    const title = titles[currentScreen]
     document.title = `${title} · Scripture Hero`
     window.scrollTo({ top: 0, behavior: 'instant' })
     document.getElementById('main-content')?.focus({ preventScroll: true })
-  }, [screen, signedIn])
+  }, [currentScreen, signedIn])
 
   useEffect(() => {
     if (!notice) return
@@ -97,14 +100,14 @@ export function usePrototypeController() {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw new Error('Unable to sign in. Check your email and password, then try again.')
     setAuthLoading(true)
-    window.location.hash = '#profile'
+    window.location.hash = '#home'
   }
   async function signUp(email: string, password: string) {
     if (!supabase) throw new Error('Supabase is not configured for this site.')
     const redirectTo = import.meta.env.VITE_AUTH_REDIRECT_URL ?? window.location.origin
     const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } })
     if (error) throw new Error('Unable to create the account. Check your details and try again.')
-    if (data.session) { setAuthLoading(true); window.location.hash = '#profile'; return 'signed-in' as const }
+    if (data.session) { setAuthLoading(true); window.location.hash = '#home'; return 'signed-in' as const }
     return 'check-email' as const
   }
   async function signOut() {
@@ -187,7 +190,7 @@ export function usePrototypeController() {
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
   }
-  return { screen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, messaging }
+  return { screen: currentScreen, profile, questions, authLoading, accountError, refreshAccount, signIn, signUp, signOut, updateProfile, updatePhoto, addQuestion, removeQuestion, saved, liked, comments, filter, setFilter, dialog, setDialog, notice, setNotice, thanked, drafts, heroes, visiblePosts, toggleLike, addComment, save, removeSaved, share, sendDemoMessage, submitDraft, promptDraft, setPromptDraft, favoriteVerse, setFavoriteVerse, messaging, appearance }
 }
 
 export type PrototypeController = ReturnType<typeof usePrototypeController>

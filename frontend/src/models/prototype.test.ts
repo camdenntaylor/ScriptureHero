@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { addToHelplist, getHeroes, publicShareText, screenFromHash, type Insight } from './prototype'
+import { addToHelplist, getHeroes, publicShareText, screenFromHash, screenForAccount, type Insight } from './prototype'
 import { appreciations, insights, questions } from '../services/prototypeData'
 
 describe('the prototype help loop', () => {
@@ -43,9 +43,19 @@ describe('the prototype help loop', () => {
     expect(screenFromHash('#heroes')).toBe('heroes')
     expect(screenFromHash('#messages')).toBe('messages')
     expect(screenFromHash('#chat')).toBe('chat')
+    expect(screenFromHash('#appearance')).toBe('appearance')
     expect(screenFromHash('#login')).toBe('login')
     expect(screenFromHash('#profile')).toBe('profile')
     expect(screenFromHash('#questions')).toBe('questions')
     expect(screenFromHash('#unknown')).toBe('welcome')
+  })
+
+  it('keeps Welcome for visitors and sends returning members to Home', () => {
+    expect(screenForAccount('welcome', false)).toBe('welcome')
+    expect(screenForAccount('login', false)).toBe('login')
+    expect(screenForAccount('welcome', true)).toBe('home')
+    expect(screenForAccount('login', true)).toBe('home')
+    expect(screenForAccount('appearance', true)).toBe('appearance')
+    expect(screenForAccount('messages', true)).toBe('messages')
   })
 })

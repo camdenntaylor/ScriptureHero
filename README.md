@@ -35,7 +35,7 @@ These are predictions for a later evaluation, not findings.
 - **First-glance signal:** The connected-souls logo, community photo, dominant “Learn through connection” headline, and single filled CTA signal connection before close reading. The supporting sentence names sharing and finding wisdom.
 - **Landing focus:** The AI repeated the promise in an eyebrow, explanatory lines, and footer copy. I removed repetitions and reduced the principles to scannable labels, strengthening hierarchy around the headline and CTA.
 - **Gestalt grouping:** On Welcome, proximity groups the headline, capability, and CTA. On Home, common region defines each post and the tinted private-question panel. On Heroes, similarity groups impact measures and repeated person cards; tabs separate the two relationship types.
-- **Mission and navigation:** Home demonstrates finding and sharing insight; Heroes demonstrates the resulting connection. Desktop and mobile navigation both include **Welcome**.
+- **Mission and navigation:** Home demonstrates finding and sharing insight; Heroes demonstrates the resulting connection. Visitors can reach **Welcome** from desktop and mobile navigation. Signed-in members start on **Home**, and the logo returns them there.
 - **Important revision:** Repeated slogans and secondary panels competed with the feed. I reduced Home to one heading, removed decorative rail copy, folded the useful Heroes link into the sticky Soul Questions card, and simplified the Heroes heading. The five-second capability question motivated the clearer hierarchy; proximity and common region motivated the consolidated panel.
 
 ## Before and after
