@@ -3,6 +3,8 @@ import type { Person } from '../models/prototype'
 import { findNamedConversation, messageNotifications, messagingReducer, orderedConversations, unreadCount, type DemoMessage, type MessagingAction } from '../models/messaging'
 import { createDemoMessaging, messagingContacts } from '../services/prototypeMessages'
 import type { MessagingState } from '../models/messaging'
+import posthog from '../posthog'
+import { posthogLog } from '../posthogLogger'
 
 function initialState(ownerKey: string | null): MessagingState {
   return ownerKey ? createDemoMessaging() : { conversations: [], readMessageIds: [], drafts: {} }
@@ -36,6 +38,7 @@ export function useMessagingController(ownerKey: string | null) {
     const id = findNamedConversation(current.state, person.id)?.id ?? crypto.randomUUID()
     const state = messagingReducer(current.state, { type: 'open', person, conversationId: id })
     setSession({ ...current, selectedId: id, state: messagingReducer(state, { type: 'read', conversationId: id }) })
+    posthog.capture('conversation_started')
     window.location.hash = '#chat'
   }
 
@@ -60,6 +63,8 @@ export function useMessagingController(ownerKey: string | null) {
     const action: MessagingAction = { type: 'send', conversationId: selected.id, message: message(body, 'message') }
     if (messagingReducer(current.state, action) === current.state) return false
     dispatch(action)
+    posthog.capture('message_sent')
+    posthogLog.messageSent()
     return true
   }
 

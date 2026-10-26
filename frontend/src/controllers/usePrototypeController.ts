@@ -4,6 +4,8 @@ import { insights } from '../services/prototypeData'
 import { copyInsight } from '../services/prototypeSharing'
 import { createMyQuestion, deleteMyQuestion, getMyProfile, listMyQuestions, saveMyProfile, uploadAvatar, type AccountProfile, type PrivateQuestion } from '../services/accountApi'
 import { supabase } from '../services/supabase'
+import posthog from '../posthog'
+import { posthogLog } from '../posthogLogger'
 import { useMessagingController } from './useMessagingController'
 import { useAppearanceController } from './useAppearanceController'
 
@@ -45,8 +47,10 @@ export function usePrototypeController() {
       const { data: { user }, error } = await supabase.auth.getUser()
       if (version !== loadVersion.current) return
       if (error || !user) { setProfile(null); setQuestions([]); setSaved([]); setAccountError(''); return }
+      posthog.identify(user.id, user.email ? { email: user.email } : undefined)
       const [nextProfile, nextQuestions] = await Promise.all([getMyProfile(), listMyQuestions()])
       if (version !== loadVersion.current) return
+      if (nextProfile.name) posthog.setPersonProperties({ name: nextProfile.name })
       setProfile(nextProfile)
       setQuestions(nextQuestions)
       setAccountError('')
@@ -59,7 +63,7 @@ export function usePrototypeController() {
     void refreshAccount()
     if (!supabase) return
     const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
-      if (event === 'SIGNED_OUT') { ++loadVersion.current; setProfile(null); setQuestions([]); setSaved([]); setDialog(null); setThanked([]); setAccountError(''); setAuthLoading(false); messaging.reset() }
+      if (event === 'SIGNED_OUT') { posthog.reset(); ++loadVersion.current; setProfile(null); setQuestions([]); setSaved([]); setDialog(null); setThanked([]); setAccountError(''); setAuthLoading(false); messaging.reset() }
       if (event === 'SIGNED_IN') window.setTimeout(() => void refreshAccount(), 0)
     })
     return () => subscription.unsubscribe()
@@ -103,6 +107,8 @@ export function usePrototypeController() {
     if (!supabase) throw new Error('Supabase is not configured for this site.')
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw new Error('Unable to sign in. Check your email and password, then try again.')
+    posthog.capture('sign_in_completed')
+    posthogLog.signInCompleted()
     setAuthLoading(true)
     window.location.hash = '#home'
   }
@@ -111,6 +117,7 @@ export function usePrototypeController() {
     const redirectTo = import.meta.env.VITE_AUTH_REDIRECT_URL ?? window.location.origin
     const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } })
     if (error) throw new Error('Unable to create the account. Check your details and try again.')
+    posthog.capture('sign_up_completed', { signed_in: Boolean(data.session) })
     if (data.session) { setAuthLoading(true); window.location.hash = '#home'; return 'signed-in' as const }
     return 'check-email' as const
   }
@@ -135,12 +142,15 @@ export function usePrototypeController() {
   }
   async function updateProfile(details: Pick<AccountProfile, 'name' | 'location' | 'bio'>) {
     const next = await saveMyProfile(details)
+    posthog.capture('profile_updated')
+    posthogLog.profileUpdated()
     setProfile(next)
     setNotice('Profile updated.')
   }
   async function updatePhoto(file: File) {
     if (!profile) throw new Error('Please sign in again.')
     const next = await uploadAvatar(file, profile.id)
+    posthog.capture('profile_photo_uploaded')
     setProfile(next)
     setNotice('Profile photo uploaded.')
   }
@@ -148,41 +158,49 @@ export function usePrototypeController() {
     const title = value.trim().slice(0, 500)
     if (!profile || !title) throw new Error('Please sign in and enter a question.')
     const next = await createMyQuestion(title, crypto.randomUUID())
+    posthog.capture('soul_question_created')
     setQuestions(current => [next, ...current])
     setNotice('Soul Question recorded privately.')
   }
   async function removeQuestion(id: string) {
     await deleteMyQuestion(id)
+    posthog.capture('soul_question_deleted')
     setQuestions(current => current.filter(question => question.id !== id))
     setSaved(current => current.filter(item => item.questionId !== id))
     setNotice('Soul Question removed.')
   }
 
   function toggleLike(id: string) {
+    const selected = !liked.includes(id)
+    posthog.capture('insight_reaction_toggled', { insight_id: id, selected })
     setLiked(current => current.includes(id) ? current.filter(item => item !== id) : [...current, id])
   }
   function addComment(postId: string, value: string) {
     const body = value.trim()
     if (!body) return
+    posthog.capture('comment_created', { insight_id: postId })
     setComments(current => ({ ...current, [postId]: [...(current[postId] ?? []), body.slice(0, 500)] }))
     setNotice('Comment added to this demo.')
   }
   function save(post: Insight, questionId: string) {
     if (!profile || !questions.some(question => question.id === questionId)) return
+    posthog.capture('insight_saved', { insight_id: post.id })
     setSaved(current => addToHelplist(current, post.id, questionId))
     setDialog(null)
     setNotice(`Saved privately. ${post.author.name.split(' ')[0]} is in your Scripture Heroes.`)
   }
   function removeSaved(postId: string) {
+    posthog.capture('insight_removed', { insight_id: postId })
     setSaved(current => current.filter(item => item.postId !== postId))
     setNotice('Insight removed from your helplist.')
   }
   async function share(post: Insight) {
-    try { await copyInsight(post); setNotice('Insight copied. You can paste it into a message.') }
+    try { await copyInsight(post); posthog.capture('insight_shared', { insight_id: post.id }); setNotice('Insight copied. You can paste it into a message.') }
     catch { setDialog({ type: 'share', post }) }
   }
   function sendDemoMessage(person: Person, body: string, anonymous: boolean) {
     if (!messaging.sendThanks(person, body, anonymous)) return false
+    posthog.capture('thanks_sent', { anonymous })
     setThanked(current => current.includes(person.id) ? current : [...current, person.id])
     setDialog(null)
     setNotice('Thank-you note saved in this demo.')
@@ -190,6 +208,7 @@ export function usePrototypeController() {
   }
   function submitDraft(body: string) {
     if (!body.trim()) return
+    posthog.capture('insight_submitted')
     setDrafts(current => [...current, body.trim().slice(0, 1500)])
     setDialog(null)
     setNotice('Insight submitted for review in this demo.')
