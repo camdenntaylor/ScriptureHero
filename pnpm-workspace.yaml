@@ -3,4 +3,6 @@ packages:
   - backend
 
 allowBuilds:
+  # PostHog's polyfill dependency only prints a donation banner during postinstall.
+  core-js: false
   esbuild: true
