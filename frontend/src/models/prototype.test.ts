@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { addToHelplist, getHeroes, publicShareText, screenFromHash, screenForAccount, type Insight } from './prototype'
+import { addToHelplist, getHeroes, publicShareText, resourceIdFromHash, screenFromHash, screenForAccount, type Insight } from './prototype'
 import { appreciations, insights, questions } from '../services/prototypeData'
 
 describe('the prototype help loop', () => {
+  it('restores resource deep links with bounded IDs and preserves top-level navigation', () => {
+    const id = '10000000-0000-4000-8000-000000000001'
+    for (const screen of ['space', 'member', 'insight'] as const) {
+      expect(screenFromHash(`#${screen}/${id}`)).toBe(screen)
+      expect(resourceIdFromHash(`#${screen}/${id}`)).toBe(id)
+    }
+    expect(screenFromHash('#explore')).toBe('explore')
+    expect(resourceIdFromHash('#space/not-an-id')).toBe('')
+    expect(resourceIdFromHash('#space/%3Cscript%3E')).toBe('')
+  })
   it('deduplicates repeated saves without mutating the original collection', () => {
     const original = [{ postId: 'small-kindness', questionId: 'quiet' }]
     expect(addToHelplist(original, 'small-kindness', 'quiet')).toEqual(original)

@@ -31,6 +31,28 @@ function renderAccount(screen: Screen, signedIn: boolean, authLoading = false) {
 beforeEach(() => vi.clearAllMocks())
 
 describe('messaging account access', () => {
+  it('provides Explore navigation and an accessible search form to visitors', () => {
+    const html = renderAccount('explore', false)
+    expect(html).toContain('href="#explore" aria-current="page"')
+    expect(html).toContain('role="search"')
+    expect(html).toContain('Search the community')
+  })
+
+  it('requires an account for Space creation and shows the form after sign-in', () => {
+    expect(renderAccount('create-space', false)).toContain('Welcome back.')
+    const html = renderAccount('create-space', true)
+    expect(html).toContain('Space name')
+    expect(html).toContain('Who can join?')
+    expect(html).toContain('href="#spaces" aria-current="page"')
+    expect(html).not.toContain('href="#profile" aria-current="page"')
+  })
+
+  it('shows a private own-posts section on the account profile', () => {
+    const html = renderAccount('profile', true)
+    expect(html).toContain('aria-label="Your posts"')
+    expect(html).toContain('Unpublished posts are visible only to you.')
+    expect(html).toContain('Loading…')
+  })
   it('hides Messages and the notification bell from signed-out navigation', () => {
     const html = renderAccount('heroes', false)
     expect(html).not.toContain('href="#messages"')

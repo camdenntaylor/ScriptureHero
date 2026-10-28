@@ -1,5 +1,23 @@
 # Monday database contract
 
+## Explore and Spaces extension (October 28)
+
+Apply `20261028000000_explore_spaces.sql` before using Explore, Space creation/membership, or profile posts. It adds discoverable Space descriptions/owners, `space_members`, a security-invoker `visible_posts` view, and guarded atomic RPCs for creating Spaces and changing membership. The application API calls these RPCs using the caller's access token. No service key is required. `private` in API contracts maps to `restricted` in PostgreSQL.
+
+Space names/descriptions are directory information. Private posts require active membership, including on author profiles and direct insight links. Invitations and requests do not grant read access. Membership lists are visible only to the owner; an invitee/requester can read only their own membership. Soul Question policies are unchanged.
+
+New routes under `/api/v1`:
+
+- `GET /explore?q=&kind=all|users|spaces|posts` returns bounded category pages. `kind=all` previews each category; category searches accept `cursor` and `limit` (maximum 50).
+- `GET /spaces?mine=true|false`, `POST /spaces`, and `GET /spaces/:id` serve the directory, own memberships/invitations, creation, and overview.
+- `GET /spaces/:id/posts` and owner-only `GET /spaces/:id/members` use cursor pagination.
+- `POST /spaces/:id/memberships` takes `action` (`join`, `accept`, `invite`, `approve`, `decline`) and optional `userId`. The backend and atomic database function both authorize transitions. Clients reuse a generated Space UUID on creation retries; membership actions are idempotent.
+- `GET /profiles/:id`, `GET /profiles/:id/posts`, `GET /me/posts`, and `GET /insights/:id` expose explicit public/owner contracts. Only `/me/posts` and an owner's direct insight read include unpublished states. All new responses use `Cache-Control: private, no-store`.
+
+Invitations currently target existing Scripture Hero accounts. They appear in the recipient's Spaces list; no email is sent. Deep links use `#space/<uuid>`, `#member/<uuid>`, and `#insight/<uuid>`, with API identifiers independent of browser routing. Shared Zod contracts live in `packages/contracts`; `pnpm install` prepares the package, and recursive builds/typechecks build it before its consumers.
+
+Run `supabase test db` with Docker/local Supabase running to verify `explore_spaces_rls.sql` alongside the original privacy tests. This change does not add Space post creation or a moderation worker. Existing demo compose submissions remain session-only and are labeled separately on the owner's profile; the earlier Global API publishing exception remains as documented below.
+
 The migration in `migrations/` is the source of truth for the October 5 prototype. It assumes a new Supabase project. Do not paste schema changes into the dashboard without also adding a migration.
 
 ## Tables

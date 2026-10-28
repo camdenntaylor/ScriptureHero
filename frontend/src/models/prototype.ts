@@ -6,6 +6,11 @@ export type Screen =
   | "profile"
   | "questions"
   | "spaces"
+  | "explore"
+  | "space"
+  | "create-space"
+  | "member"
+  | "insight"
   | "library"
   | "profile-edit"
   | "settings-privacy"
@@ -104,6 +109,11 @@ const HASH_SCREENS: Record<string, Screen> = {
   "#profile": "profile",
   "#questions": "questions",
   "#spaces": "spaces",
+  "#explore": "explore",
+  "#space": "space",
+  "#create-space": "create-space",
+  "#member": "member",
+  "#insight": "insight",
   "#library": "library",
   "#profile-edit": "profile-edit",
   "#settings-privacy": "settings-privacy",
@@ -126,7 +136,12 @@ const HASH_SCREENS: Record<string, Screen> = {
 }
 
 export function screenFromHash(hash: string): Screen {
-  return HASH_SCREENS[hash] ?? "welcome"
+  return HASH_SCREENS[hash.split('/')[0] ?? hash] ?? "welcome"
+}
+
+export function resourceIdFromHash(hash: string): string {
+  const id = hash.split('/')[1] ?? ''
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : ''
 }
 
 /** Returning members enter the community instead of the visitor welcome page. */

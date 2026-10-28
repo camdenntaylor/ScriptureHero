@@ -209,6 +209,40 @@ h1, h2, h3 { font-weight: 800; }
 .questions-heroes-link { justify-content: space-between; width: 100%; border-top: 1px solid var(--warm-line); padding-top: 12px; margin-top: 12px; font-size: .88rem; }
 .mobile-nav { display: none; }
 
+/* Community discovery, Space management, and profile posts */
+.community-section { margin-block: 28px; }
+.community-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-block: 16px 24px; }
+.community-search input { flex: 1; min-width: 160px; min-height: 48px; width: 100%; padding: 11px 14px; border: 1.5px solid var(--line); border-radius: var(--radius-md); background: var(--surface); color: var(--ink); }
+.community-search .community-toolbar { flex-wrap: nowrap; }
+.community-form > .field-label { margin-top: 20px; }
+.community-form fieldset { margin-block: 24px; }
+.community-tabs { flex-wrap: wrap; }
+.community-tabs > button { min-height: 44px; }
+.community-person { display: flex; min-width: 0; gap: 12px; align-items: center; padding-block: 12px; min-height: 48px; color: var(--ink); }
+.community-person > span:not(.avatar) { display: flex; flex: 1; min-width: 0; flex-direction: column; overflow-wrap: anywhere; }
+.community-person > .avatar { flex-shrink: 0; }
+.community-person > svg { flex-shrink: 0; color: var(--accent); }
+.community-member { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.community-member > .community-person { flex: 1 1 180px; }
+.community-member > .button { min-height: 44px; }
+.community-post { margin-block: 16px; overflow-wrap: anywhere; }
+.community-post-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 16px; font-size: .85rem; color: var(--muted); }
+.community-post-meta > a, .community-post h3 a, .space-card h3 a { color: var(--accent-strong); }
+.community-post h3 { margin-bottom: 12px; font-size: 1.35rem; }
+.community-post-meta > a, .community-post h3 > a, .space-card h3 > a { display: inline-flex; align-items: center; min-height: 44px; }
+.community-post-body, .community-post-preview { white-space: pre-wrap; }
+.community-post-preview { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.community-post .scripture-quote { margin-inline: 0; }
+.community-post cite { font-style: italic; }
+.community-feedback { margin-block: 18px; }
+.space-kind { display: inline-flex; align-items: center; gap: 7px; }
+.space-card h3, .space-card p { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .community-search .community-toolbar { flex-wrap: wrap; }
+  .community-search .community-toolbar > .button { width: 100%; }
+  .community-post-meta { gap: 8px 12px; }
+}
+
 /* Scripture Heroes */
 .heroes-page { max-width: 975px; }
 .heroes-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 28px; }

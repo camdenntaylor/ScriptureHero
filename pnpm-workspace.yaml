@@ -1,6 +1,7 @@
 packages:
   - frontend
   - backend
+  - packages/*
 
 allowBuilds:
   # PostHog's polyfill dependency only prints a donation banner during postinstall.

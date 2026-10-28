@@ -31,6 +31,10 @@ Users can be a member of many different spaces:
 -church congregation
 -global space
 
+Explore searches public profile fields, Space names, and approved posts the viewer may read. Soul Questions and their derived data are never searchable. Public Spaces allow anyone to join and read approved posts. Private Spaces have discoverable names and descriptions, but posts require active membership. A private join request waits for the owner to approve it. Owners may invite existing members of Scripture Hero; recipients see invitations on their Spaces page and choose whether to accept. The owner manages requests and invitations from the Space overview.
+
+Profiles show approved posts visible to the viewer. The account owner's "Your posts" section also shows their own unpublished posts and their review state, without disclosing them to other people. Private Space membership is still required to read a post there.
+
 Spaces are restricted to only show posts to other members in that space, but the global space is unrestricted
 
 **Posts**

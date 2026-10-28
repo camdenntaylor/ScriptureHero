@@ -25,6 +25,11 @@ import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
 import { HeroesPage } from "./HeroesPage";
 import { SpacesPage } from "./SpacesPage";
+import { ExplorePage } from './ExplorePage';
+import { SpaceOverviewPage } from './SpaceOverviewPage';
+import { CreateSpacePage } from './CreateSpacePage';
+import { MemberProfilePage } from './MemberProfilePage';
+import { InsightDetailPage } from './InsightDetailPage';
 import { QuestionsLibraryPage } from "./QuestionsLibraryPage";
 import { PrototypeModal } from "./components/PrototypeModal";
 import { usePrototypeController } from "../controllers/usePrototypeController";
@@ -33,6 +38,7 @@ import { avatarUrl } from "../services/supabase";
 
 const PRIVATE_SCREENS: Screen[] = [
   "profile",
+  "create-space",
   "profile-edit",
   "questions",
   "settings-privacy",
@@ -59,6 +65,7 @@ export function App() {
   const navigation: { screen: Screen; label: string; icon: IconName }[] = [
     ...(!app.profile && !app.authLoading ? [{ screen: "welcome" as const, label: "Welcome", icon: "globe" as const }] : []),
     { screen: "home", label: "Home", icon: "home" },
+    { screen: "explore", label: "Explore", icon: "search" },
     { screen: "spaces", label: "Spaces", icon: "grid" },
     { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
     ...(app.profile
@@ -78,7 +85,9 @@ export function App() {
   ];
   const active = (destination: Screen) =>
     screen === destination ||
-    (destination === "profile" && PRIVATE_SCREENS.includes(screen) && !["messages", "chat", "notifications"].includes(screen)) ||
+    (destination === 'spaces' && ['space', 'create-space'].includes(screen)) ||
+    (destination === 'explore' && ['member', 'insight'].includes(screen)) ||
+    (destination === "profile" && PRIVATE_SCREENS.includes(screen) && !["messages", "chat", "notifications", "create-space"].includes(screen)) ||
     (destination === "messages" && ["chat", "notifications"].includes(screen));
   const initials = app.profile?.name
     .trim()
@@ -184,6 +193,16 @@ export function App() {
               <HomePage app={app} />
             ) : screen === "spaces" ? (
               <SpacesPage app={app} />
+            ) : screen === 'explore' ? (
+              <ExplorePage app={app} />
+            ) : screen === 'space' ? (
+              <SpaceOverviewPage key={`${app.resourceId}:${app.profile?.id ?? 'visitor'}`} id={app.resourceId} app={app} />
+            ) : screen === 'create-space' && app.profile ? (
+              <CreateSpacePage />
+            ) : screen === 'member' ? (
+              <MemberProfilePage key={app.resourceId} id={app.resourceId} app={app} />
+            ) : screen === 'insight' ? (
+              <InsightDetailPage key={app.resourceId} id={app.resourceId} app={app} />
             ) : screen === "heroes" ? (
               <HeroesPage app={app} />
             ) : screen === "library" ? (

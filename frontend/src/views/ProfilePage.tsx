@@ -1,6 +1,7 @@
 import type { PrototypeController } from "../controllers/usePrototypeController";
 import { avatarUrl } from "../services/supabase";
 import { Icon, type IconName } from "./components/Icon";
+import { OwnPosts } from './components/OwnPosts';
 
 export function ProfilePage({ app }: { app: PrototypeController }) {
   const profile = app.profile!;
@@ -108,6 +109,8 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
           </div>
         </section>
       )}
+
+      <OwnPosts app={app} />
 
       <div className="profile-links-grid">
         <section className="profile-card soul-card">

@@ -11,6 +11,7 @@
     "typecheck": "tsc -b --pretty false"
   },
   "dependencies": {
+    "@scripture-hero/contracts": "workspace:*",
     "@supabase/supabase-js": "^2.117.2",
     "@vitejs/plugin-react": "^6.0.1",
     "posthog-js": "^1.407.2",
