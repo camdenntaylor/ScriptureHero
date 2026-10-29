@@ -46,3 +46,5 @@ These are predictions for a later evaluation, not findings.
 | [`e038270` — color switch to blue](https://github.com/camdenntaylor/ScriptureHero/commit/e038270) | [`9d306fb` — meaningful change](https://github.com/camdenntaylor/ScriptureHero/commit/9d306fb) |
 
 The revision fixes a **visual-hierarchy and competing-signals problem**: the earlier screen gave repeated slogans and secondary panels too much weight. The revised screen makes the feed primary and consolidates related private-question information and navigation through **proximity** and **common region**.
+
+For frontend-only deployments, run `pnpm run build` from `frontend/`. This command first builds the shared `@scripture-hero/contracts` workspace package, then typechecks and bundles the frontend into `frontend/dist`. It works without previously generated contract files; generated `dist` folders should remain uncommitted. Run `pnpm build` from the repository root to build every workspace.

@@ -76,7 +76,7 @@ describe("messaging account access", () => {
     const html = renderAccount("explore", false);
     expect(html).toContain('href="#explore" aria-current="page"');
     expect(html).toContain('role="search"');
-    expect(html).toContain("Search the community");
+    expect(html).toContain('aria-label="Search the community"');
   });
 
   it("requires an account for Space creation and shows the form after sign-in", () => {
@@ -156,7 +156,7 @@ describe("messaging account access", () => {
     "shows Home for a signed-in member visiting #%s",
     (screen) => {
       const html = renderAccount(screen, true);
-      expect(html).toContain("Your daily dose of connection");
+      expect(html).toContain('class="composer-prompt"');
       expect(html).not.toContain('href="#welcome"');
       expect(html).toContain('aria-label="Scripture Hero home"');
       expect(html).not.toContain("landing-shell");

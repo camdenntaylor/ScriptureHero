@@ -35,6 +35,7 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
         <div className="community-toolbar">
           <input
             id="explore-search"
+            aria-label="Search the community"
             type="search"
             maxLength={100}
             value={search.term}
