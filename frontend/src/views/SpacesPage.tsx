@@ -12,9 +12,9 @@ export function SpacesPage({ app }: { app: PrototypeController }) {
   );
   return (
     <div className="spaces-page">
-      <header className="page-heading">
+      {/* <header className="page-heading">
         <h1>{mine ? "Your spaces" : "Find your circle"}</h1>
-      </header>
+      </header> */}
       <p className="muted">
         Gather with friends, family, or a congregation. Public Spaces welcome
         everyone. Private Space posts are shared only with members.

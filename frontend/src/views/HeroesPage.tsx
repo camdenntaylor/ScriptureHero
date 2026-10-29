@@ -9,12 +9,13 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
   const [tab, setTab] = useState<"heroes" | "helped">("heroes");
   return (
     <div className="heroes-page">
-      <header className="page-heading heroes-heading">
+      {/* <header className="page-heading heroes-heading">
         <h1>We’re part of each other’s story</h1>
         <Logo className="heroes-watermark" />
-      </header>
+      </header> */}
       <a className="button-link" href={app.profile ? "#messages" : "#login"}>
-        <Icon name="message" size={17} /> {app.profile ? "Open your conversations" : "Log in to message"}
+        <Icon name="message" size={17} />{" "}
+        {app.profile ? "Open your conversations" : "Log in to message"}
       </a>
       <section className="impact-banner" aria-label="Your impact">
         <div className="impact-intro">
@@ -140,7 +141,8 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
           )}
           <p className="hero-privacy">
             <Icon name="lock" size={14} /> Your Soul Questions and saved
-            connections are visible only to you. Choose anonymous thanks or a named chat.
+            connections are visible only to you. Choose anonymous thanks or a
+            named chat.
           </p>
         </section>
       ) : (
@@ -175,9 +177,7 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
                 </p>
                 <button
                   className="button button-outline"
-                  onClick={() =>
-                    app.messaging.startChat(item.person)
-                  }
+                  onClick={() => app.messaging.startChat(item.person)}
                 >
                   <Icon name="message" size={17} /> Send a message
                 </button>

@@ -1,7 +1,7 @@
 import type { PrototypeController } from "../controllers/usePrototypeController";
 import { avatarUrl } from "../services/supabase";
 import { Icon, type IconName } from "./components/Icon";
-import { OwnPosts } from './components/OwnPosts';
+import { OwnPosts } from "./components/OwnPosts";
 
 export function ProfilePage({ app }: { app: PrototypeController }) {
   const profile = app.profile!;
@@ -28,9 +28,9 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
 
   return (
     <div className="profile-page">
-      <header className="page-heading">
+      {/* <header className="page-heading">
         <h1>Your profile</h1>
-      </header>
+      </header> */}
 
       <section className="profile-card" aria-label="Profile summary">
         <div className="photo-row">
@@ -150,7 +150,9 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
             <h2>Appearance</h2>
           </div>
           <p>Choose Day, Evening, or follow your device.</p>
-          <a className="button button-soft" href="#appearance">Open <Icon name="arrow" size={17} /></a>
+          <a className="button button-soft" href="#appearance">
+            Open <Icon name="arrow" size={17} />
+          </a>
         </section>
       </div>
 

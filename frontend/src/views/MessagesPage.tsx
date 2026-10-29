@@ -23,7 +23,7 @@ export function MessagesPage({ app }: { app: PrototypeController }) {
         <p className="eyebrow">
           <Icon name="message" size={16} /> A LITTLE CONNECTION
         </p>
-        <h1>{choosing ? "Start with a hello" : "Your conversations"}</h1>
+        {/* <h1>{choosing ? "Start with a hello" : "Your conversations"}</h1> */}
         <p>
           {choosing
             ? "Choose someone from the fictional community."

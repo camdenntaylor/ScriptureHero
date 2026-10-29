@@ -16,10 +16,10 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
   const count = users.length + spaces.length + posts.length;
   return (
     <div className="explore-page">
-      <header className="page-heading">
+      {/* <header className="page-heading">
         <h1>A world of connection</h1>
-      </header>
-      <p className="muted">Look for people, Spaces, and shared insights.</p>
+      </header> */}
+      {/* <p className="muted">Look for people, Spaces, and shared insights.</p> */}
       <form
         className="community-search"
         role="search"
@@ -29,9 +29,9 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
           search.results.refresh();
         }}
       >
-        <label className="field-label" htmlFor="explore-search">
+        {/* <label className="field-label" htmlFor="explore-search">
           Search the community
-        </label>
+        </label> */}
         <div className="community-toolbar">
           <input
             id="explore-search"

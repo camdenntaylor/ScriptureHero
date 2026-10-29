@@ -87,9 +87,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
             </a>
           </div>
         )}
-        <header className="page-heading">
-          <h1>Your daily dose of connection</h1>
-        </header>
+        <header className="page-heading"></header>
         <button
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
@@ -98,7 +96,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
             {app.profile?.name.slice(0, 2).toUpperCase() ?? "AV"}
           </span>
           <span>
-            What’s on your heart
+            Share an insight
             {app.profile ? `, ${app.profile.name.split(" ")[0]}` : ""}?
           </span>
           <span className="compose-icon">
@@ -107,7 +105,9 @@ export function HomePage({ app }: { app: PrototypeController }) {
         </button>
         {app.lastPostSubmission && (
           <div className="pending-note" role="status">
-            <Icon name="leaf" size={18} /> Your latest insight was submitted to {app.lastPostSubmission.space.name}. <a href="#profile">View your posts</a>
+            <Icon name="leaf" size={18} /> Your latest insight was submitted to{" "}
+            {app.lastPostSubmission.space.name}.{" "}
+            <a href="#profile">View your posts</a>
           </div>
         )}
         <div className="feed-tabs" aria-label="Choose insights">
