@@ -105,11 +105,9 @@ export function HomePage({ app }: { app: PrototypeController }) {
             <Icon name="plus" />
           </span>
         </button>
-        {app.drafts.length > 0 && (
+        {app.lastPostSubmission && (
           <div className="pending-note" role="status">
-            <Icon name="leaf" size={18} /> {app.drafts.length}{" "}
-            {app.drafts.length === 1 ? "insight is" : "insights are"} awaiting
-            review in this demo.
+            <Icon name="leaf" size={18} /> Your latest insight was submitted to {app.lastPostSubmission.space.name}. <a href="#profile">View your posts</a>
           </div>
         )}
         <div className="feed-tabs" aria-label="Choose insights">

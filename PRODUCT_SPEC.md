@@ -41,6 +41,8 @@ Spaces are restricted to only show posts to other members in that space, but the
 
 Posts can be text, image with text, video, or video with text. Deliberately open to allow for as much personal detail & connection as the sharer wants. Posts are immediately analyzed by an agent upon submission to restrict harmful, aggressive, confrontational posts. Only posts that are uplifting and genuine are allowed.
 
+The composer requires one destination: Global or a Space where the author is an active member. It names the selected Space and explains the audience before submission. Opening the composer from a Space preselects that Space; the author can change it. Public Space posts can be read by anyone after approval. Private Space posts can be read only by active members after approval. Submissions are saved as pending moderation and appear privately under the author's posts while awaiting review. Requests and invitations do not grant posting permission, and a failed submission never falls back to another destination.
+
 **Becoming a Scripture Hero**
 
 Become a scripture hero when your post genuinely helps someone else find an answer to a question or benefits them in some other way. This is a big deal, and central to the success of the platform. Rewarding genuine sharing.

@@ -9,6 +9,7 @@ import {
   ResourceState,
 } from "./components/CommunityContent";
 import { Icon } from "./components/Icon";
+import { GLOBAL_SPACE_ID } from '../models/postDestination';
 
 function InviteMembers({
   space,
@@ -188,6 +189,7 @@ export function SpaceOverviewPage({
                 </button>
               )}
               {state.pending && <p role="status">Updating membership…</p>}
+              {app.profile && (space.membership === 'active' || space.id === GLOBAL_SPACE_ID) && <button className="button button-soft" onClick={() => app.setDialog({ type: 'compose', spaceId: space.id })}><Icon name="plus" size={18} />Share an insight in {space.name}</button>}
             </section>
             {state.error && (
               <p className="form-error" role="alert">

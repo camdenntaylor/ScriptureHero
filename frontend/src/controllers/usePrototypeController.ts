@@ -26,12 +26,13 @@ import posthog from "../posthog";
 import { posthogLog } from "../posthogLogger";
 import { useMessagingController } from "./useMessagingController";
 import { useAppearanceController } from "./useAppearanceController";
+import type { PostSubmission } from "@scripture-hero/contracts";
 
 export type PrototypeDialog =
   | { type: "save"; post: Insight }
   | { type: "message"; person: Person; thanks: true }
   | { type: "share"; post: Insight }
-  | { type: "compose" }
+  | { type: "compose"; spaceId?: string }
   | null;
 
 export function usePrototypeController() {
@@ -50,7 +51,9 @@ export function usePrototypeController() {
   const [dialog, setDialog] = useState<PrototypeDialog>(null);
   const [notice, setNotice] = useState("");
   const [thanked, setThanked] = useState<string[]>([]);
-  const [drafts, setDrafts] = useState<string[]>([]);
+  const [postRevision, setPostRevision] = useState(0);
+  const [lastPostSubmission, setLastPostSubmission] =
+    useState<PostSubmission | null>(null);
   const [promptDraft, setPromptDraft] = useState<string | null>(null);
   // Demo-only: not part of the real AccountProfile, never sent to the backend.
   const [favoriteVerse, setFavoriteVerse] = useState("");
@@ -75,6 +78,7 @@ export function usePrototypeController() {
     const version = ++loadVersion.current;
     setAuthLoading(true);
     setProfile(null);
+    setLastPostSubmission(null);
     setQuestions([]);
     try {
       const {
@@ -125,6 +129,8 @@ export function usePrototypeController() {
         setQuestions([]);
         setSaved([]);
         setDialog(null);
+        setLastPostSubmission(null);
+        setPostRevision(0);
         setThanked([]);
         setAccountError("");
         setAuthLoading(false);
@@ -256,7 +262,8 @@ export function usePrototypeController() {
     setSaved([]);
     setFilter("for-you");
     setDialog(null);
-    setDrafts([]);
+    setPostRevision(0);
+    setLastPostSubmission(null);
     setComments({});
     setLiked([]);
     setThanked([]);
@@ -350,12 +357,14 @@ export function usePrototypeController() {
     setNotice("Thank-you note saved in this demo.");
     return true;
   }
-  function submitDraft(body: string) {
-    if (!body.trim()) return;
+  function onPostSubmitted(receipt: PostSubmission) {
     posthog.capture("insight_submitted");
-    setDrafts((current) => [...current, body.trim().slice(0, 1500)]);
+    setPostRevision((current) => current + 1);
+    setLastPostSubmission(receipt);
     setDialog(null);
-    setNotice("Insight submitted for review in this demo.");
+    setNotice(
+      `Insight submitted to ${receipt.space.name}. You can find it under Your posts.`,
+    );
   }
   return {
     screen: currentScreen,
@@ -382,7 +391,8 @@ export function usePrototypeController() {
     notice,
     setNotice,
     thanked,
-    drafts,
+    postRevision,
+    lastPostSubmission,
     heroes,
     visiblePosts,
     toggleLike,
@@ -391,7 +401,7 @@ export function usePrototypeController() {
     removeSaved,
     share,
     sendDemoMessage,
-    submitDraft,
+    onPostSubmitted,
     promptDraft,
     setPromptDraft,
     favoriteVerse,

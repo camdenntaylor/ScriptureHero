@@ -18,6 +18,7 @@ import type { SpaceRepository } from "./modules/spaces/model.js";
 import { InMemoryExploreRepository } from "./modules/explore/in-memory.repository.js";
 import { SupabaseExploreRepository } from "./modules/explore/supabase.repository.js";
 import type { ExploreRepository } from "./modules/explore/model.js";
+import { InMemoryPostSubmissionRepository, SupabasePostSubmissionRepository, type PostSubmissionRepository } from './modules/posts/submission.repository.js';
 
 export interface AppDependencies {
   authenticator: Authenticator;
@@ -26,6 +27,7 @@ export interface AppDependencies {
   heroes: HeroRepository;
   spaces: SpaceRepository;
   explore: ExploreRepository;
+  postSubmissions: PostSubmissionRepository;
 }
 
 export function createInMemoryDependencies(
@@ -39,6 +41,7 @@ export function createInMemoryDependencies(
     heroes: new InMemoryHeroRepository(db),
     spaces: new InMemorySpaceRepository(db),
     explore: new InMemoryExploreRepository(db),
+    postSubmissions: new InMemoryPostSubmissionRepository(db),
   };
 }
 
@@ -69,5 +72,6 @@ export function createSupabaseDependencies(
     heroes: new SupabaseHeroRepository(source),
     spaces: new SupabaseSpaceRepository(source),
     explore: new SupabaseExploreRepository(source),
+    postSubmissions: new SupabasePostSubmissionRepository(source),
   };
 }

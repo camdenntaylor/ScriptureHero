@@ -24,7 +24,7 @@ export class InMemorySpaceRepository implements SpaceRepository {
   }
   async list(
     userId: string | null,
-    query: PageRequest & { q?: string; mine?: boolean },
+    query: PageRequest & { q?: string; mine?: boolean; posting?: boolean },
   ) {
     const rows = await Promise.all(
       [...this.db.spaces.keys()].map((id) => this.find(id, userId)),
@@ -34,7 +34,8 @@ export class InMemorySpaceRepository implements SpaceRepository {
         Boolean(
           s &&
           (!query.q || s.name.toLowerCase().includes(query.q.toLowerCase())) &&
-          (!query.mine || s.membership !== "none" || s.id === GLOBAL_SPACE_ID),
+          (!query.mine || s.membership !== "none" || s.id === GLOBAL_SPACE_ID) &&
+          (!query.posting || s.membership === 'active' || s.id === GLOBAL_SPACE_ID),
         ),
       ),
       (s) => s,

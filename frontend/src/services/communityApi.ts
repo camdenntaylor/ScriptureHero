@@ -13,6 +13,7 @@ import {
   type Page,
 } from "@scripture-hero/contracts";
 import { supabase } from "./supabase";
+import { postSubmissionSchema, type SubmitSpacePost } from '@scripture-hero/contracts';
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "/api";
 export class CommunityApiError extends Error {
@@ -164,6 +165,14 @@ export async function listSpacePosts(
       { signal },
     ),
   );
+}
+export async function listPostingSpaces(cursor?: string, signal?: AbortSignal) {
+  return pageSchema(spaceSchema).parse(await request(`/me/posting-spaces?${query({ cursor })}`, { signal }));
+}
+export async function submitSpacePost(spaceId: string, input: SubmitSpacePost) {
+  return postSubmissionSchema.parse(await request(`/spaces/${encodeURIComponent(spaceId)}/posts`, {
+    method: 'POST', body: JSON.stringify(input),
+  }));
 }
 export const spaceLink = (space: Pick<Space, "id">) =>
   `#space/${encodeURIComponent(space.id)}`;

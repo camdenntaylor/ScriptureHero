@@ -5,7 +5,7 @@ import { PostResult, ResourceState } from "./CommunityContent";
 
 export function OwnPosts({ app }: { app: PrototypeController }) {
   const id = app.profile!.id;
-  const posts = usePagedResource(`my-posts:${id}`, (cursor, signal) =>
+  const posts = usePagedResource(`my-posts:${id}:${app.postRevision}`, (cursor, signal) =>
     listProfilePosts(id, true, cursor, signal),
   );
   return (
@@ -29,22 +29,6 @@ export function OwnPosts({ app }: { app: PrototypeController }) {
           ))}
         </div>
       </ResourceState>
-      {app.drafts.length > 0 && (
-        <div className="community-section">
-          <h3>Submissions from this demo session</h3>
-          <p className="field-hint">
-            These are held in memory and reset when you reload.
-          </p>
-          {app.drafts.map((body, index) => (
-            <article className="profile-card community-post" key={index}>
-              <p className="pending-note">
-                Awaiting review · Only you can see this submission
-              </p>
-              <p className="community-post-body">{body}</p>
-            </article>
-          ))}
-        </div>
-      )}
     </section>
   );
 }

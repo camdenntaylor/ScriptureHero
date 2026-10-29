@@ -9,7 +9,7 @@ import type { PageRequest } from "../../shared/pagination.js";
 export interface SpaceRepository {
   list(
     userId: string | null,
-    query: PageRequest & { q?: string; mine?: boolean },
+    query: PageRequest & { q?: string; mine?: boolean; posting?: boolean },
   ): Promise<Space[]>;
   find(id: string, userId: string | null): Promise<Space | null>;
   create(userId: string, input: CreateSpace): Promise<Space>;

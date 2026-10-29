@@ -13,6 +13,8 @@ import { createRequireUser } from "./shared/auth.js";
 import { registerExploreRoutes } from "./modules/explore/routes.js";
 import { ExploreService } from "./modules/explore/service.js";
 import { SpaceService } from "./modules/spaces/service.js";
+import { registerPostSubmissionRoutes } from './modules/posts/submission.routes.js';
+import { PostSubmissionService } from './modules/posts/submission.service.js';
 
 // Global feed, publishing, saves, Scripture Heroes, and messages. Account routes
 // (`/me`, `/soul-questions`) live in modules/profiles and share this prefix.
@@ -36,6 +38,7 @@ export async function registerApiV1(
   await app.register(
     async (v1) => {
       await registerPostRoutes(v1, posts, requireUser);
+      await registerPostSubmissionRoutes(v1, new PostSubmissionService(dependencies.spaces, dependencies.postSubmissions), requireUser);
       await registerSavedPostRoutes(v1, savedPosts, requireUser);
       await registerHeroRoutes(v1, heroes, requireUser);
       await v1.register(async (community) => {

@@ -69,6 +69,11 @@ export async function registerExploreRoutes(
       ),
     };
   });
+  app.get('/me/posting-spaces', { preHandler: requireUser }, async request => ({
+    data: pageSchema(spaceSchema).parse(await spaces.list(currentUser(request).id, {
+      ...readPage(pageQuerySchema.parse(request.query)), posting: true,
+    })),
+  }));
   app.post("/spaces", { preHandler: requireUser }, async (request, reply) =>
     reply.code(201).send({
       data: spaceSchema.parse(

@@ -82,6 +82,77 @@ afterEach(async () => {
 });
 
 describe("Spaces and Explore", () => {
+  it('offers Global and active memberships as posting destinations, excluding requests and invitations before pagination', async () => {
+    const joined = await create('public')
+    const requested = await create()
+    const invited = await create()
+    await act(joined.id, member, 'join')
+    await act(requested.id, member, 'join')
+    await act(invited.id, owner, 'invite', member)
+    const first = await app.inject({ url: '/api/v1/me/posting-spaces?limit=1', headers: headers(member) })
+    expect(first.statusCode).toBe(200)
+    const second = await app.inject({ url: `/api/v1/me/posting-spaces?limit=1&cursor=${first.json().data.nextCursor}`, headers: headers(member) })
+    expect([...first.json().data.items, ...second.json().data.items].map((s: { id: string }) => s.id).sort()).toEqual([joined.id, GLOBAL_SPACE_ID].sort())
+    expect(second.json().data.nextCursor).toBeNull()
+    expect((await app.inject({ url: '/api/v1/me/posting-spaces' })).statusCode).toBe(401)
+  })
+
+  it('persists Global submissions for moderation and handles simultaneous retry IDs without duplicate posts', async () => {
+    const id = randomUUID()
+    const request = { method: 'POST' as const, url: `/api/v1/spaces/${GLOBAL_SPACE_ID}/posts`, headers: headers(member), payload: { id, body: '  A little encouragement.  ' } }
+    const [first, retry] = await Promise.all([app.inject(request), app.inject(request)])
+    expect(first.statusCode).toBe(201)
+    expect(retry.json()).toEqual(first.json())
+    expect(first.json().data).toEqual({ id, status: 'pending_moderation', space: { id: GLOBAL_SPACE_ID, name: 'Global', visibility: 'public' } })
+    expect(db.posts).toHaveLength(1)
+    expect(db.posts[0]).toMatchObject({ spaceId: GLOBAL_SPACE_ID, authorId: member, body: 'A little encouragement.', status: 'pending_moderation' })
+    expect((await app.inject({ url: '/api/v1/me/posts', headers: headers(member) })).json().data.items[0].id).toBe(id)
+    expect((await app.inject({ url: `/api/v1/insights/${id}`, headers: headers(outsider) })).statusCode).toBe(404)
+    expect((await app.inject({ url: '/api/v1/explore?kind=posts', headers: headers(member) })).json().data.posts.items).toEqual([])
+  })
+
+  it('submits only to the selected Space after membership is active, and checks again on retry after revocation', async () => {
+    const s = await create()
+    const id = randomUUID()
+    const request = { method: 'POST' as const, url: `/api/v1/spaces/${s.id}/posts`, headers: headers(member), payload: { id, body: 'For this little circle.' } }
+    expect((await app.inject(request)).statusCode).toBe(403)
+    await act(s.id, owner, 'invite', member)
+    expect((await app.inject(request)).statusCode).toBe(403)
+    await act(s.id, member, 'accept')
+    const response = await app.inject(request)
+    expect(response.statusCode).toBe(201)
+    expect(response.json().data.space).toMatchObject({ id: s.id, visibility: 'private' })
+    expect(db.posts.map(p => p.spaceId)).toEqual([s.id])
+    expect((await app.inject({ ...request, payload: { ...request.payload, body: 'Changed body' } })).statusCode).toBe(409)
+    expect((await app.inject({ ...request, url: `/api/v1/spaces/${GLOBAL_SPACE_ID}/posts` })).statusCode).toBe(409)
+    expect((await app.inject({ ...request, url: `/api/v1/spaces/${GLOBAL_SPACE_ID}/posts`, headers: headers(outsider) })).statusCode).toBe(409)
+    db.memberships.delete(`${s.id}:${member}`)
+    expect((await app.inject(request)).statusCode).toBe(403)
+    expect(db.posts).toHaveLength(1)
+  })
+
+  it('requires joining public Spaces and never silently falls back to Global', async () => {
+    const s = await create('public')
+    const payload = { id: randomUUID(), body: 'Chosen destination.' }
+    const request = { method: 'POST' as const, url: `/api/v1/spaces/${s.id}/posts`, headers: headers(member), payload }
+    expect((await app.inject(request)).statusCode).toBe(403)
+    await act(s.id, member, 'join')
+    expect((await app.inject(request)).statusCode).toBe(201)
+    expect((await app.inject({ ...request, url: `/api/v1/spaces/${randomUUID()}/posts`, payload: { ...payload, id: randomUUID() } })).statusCode).toBe(404)
+    expect(db.posts.map(p => p.spaceId)).toEqual([s.id])
+  })
+
+  it('rejects forged author/status/destination fields and invalid content on the submission boundary', async () => {
+    const url = `/api/v1/spaces/${GLOBAL_SPACE_ID}/posts`
+    for (const payload of [
+      { id: randomUUID(), body: ' ' }, { id: randomUUID(), body: 'a'.repeat(1501) },
+      { id: randomUUID(), body: 'Hope', authorId: outsider }, { id: randomUUID(), body: 'Hope', status: 'published' },
+      { id: randomUUID(), body: 'Hope', spaceId: randomUUID() },
+    ]) expect((await app.inject({ method: 'POST', url, headers: headers(member), payload })).statusCode).toBe(400)
+    expect((await app.inject({ method: 'POST', url, payload: { id: randomUUID(), body: 'Hope' } })).statusCode).toBe(401)
+    expect(db.posts).toHaveLength(0)
+  })
+
   it("creates atomically and retries the same creation without duplicates or ownership changes", async () => {
     const s = await create();
     expect(s).toMatchObject({ membership: "active", ownerId: owner });

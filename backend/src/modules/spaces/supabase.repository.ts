@@ -61,10 +61,12 @@ export class SupabaseSpaceRepository implements SpaceRepository {
   }
   async list(
     userId: string | null,
-    query: PageRequest & { q?: string; mine?: boolean },
+    query: PageRequest & { q?: string; mine?: boolean; posting?: boolean },
   ) {
     // A computed RPC applies membership filtering before pagination.
-    let request = query.mine
+    let request = query.posting
+      ? this.client.rpc('posting_spaces').select(columns)
+      : query.mine
       ? this.client.rpc("my_spaces").select(columns)
       : this.client.from("spaces").select(columns);
     if (query.q)

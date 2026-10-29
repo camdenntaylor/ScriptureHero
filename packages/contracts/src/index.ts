@@ -75,3 +75,15 @@ export type PublicProfile = z.infer<typeof publicProfileSchema>;
 export type VisiblePost = z.infer<typeof visiblePostSchema>;
 export type SearchResult = z.infer<typeof searchResultSchema>;
 export type Page<T> = { items: T[]; nextCursor: string | null };
+
+export const submitSpacePostSchema = z.object({
+  id: z.uuid(),
+  body: z.string().trim().min(1).max(1500),
+}).strict();
+export const postSubmissionSchema = z.object({
+  id: z.uuid(),
+  status: visiblePostSchema.shape.status,
+  space: visiblePostSchema.shape.space,
+});
+export type SubmitSpacePost = z.infer<typeof submitSpacePostSchema>;
+export type PostSubmission = z.infer<typeof postSubmissionSchema>;

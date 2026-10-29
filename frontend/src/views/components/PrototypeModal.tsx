@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import type { PrototypeController } from '../../controllers/usePrototypeController'
 import { publicShareText } from '../../models/prototype'
 import { Icon } from './Icon'
+import { ComposePostForm } from './ComposePostForm'
 
 export function PrototypeModal({ app }: { app: PrototypeController }) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -10,14 +11,15 @@ export function PrototypeModal({ app }: { app: PrototypeController }) {
   const [body, setBody] = useState(app.dialog?.type === 'message' && app.dialog.thanks ? 'Thank you for sharing your insight. Your words made a difference, and I wanted you to know they mattered.' : '')
   const [anonymous, setAnonymous] = useState(true)
   const [messageError, setMessageError] = useState('')
+  const [composePending, setComposePending] = useState(false)
   useEffect(() => { const dialog = ref.current; dialog?.showModal(); return () => { dialog?.close() } }, [])
   const dialog = app.dialog
   if (!dialog) return null
-  const close = () => app.setDialog(null)
+  const close = () => { if (!composePending) app.setDialog(null) }
   const title = dialog.type === 'save' ? 'Keep a little wisdom close.' : dialog.type === 'message' ? `${dialog.thanks ? 'A little thanks for' : 'Connect with'} ${dialog.person.name.split(' ')[0]}.` : dialog.type === 'share' ? 'Pass a little light along.' : 'Your story could help someone.'
   const duplicate = dialog.type === 'save' && app.saved.some(item => item.postId === dialog.post.id && item.questionId === questionId)
-  return <dialog ref={ref} className="prototype-modal" aria-labelledby={labelId} onCancel={close} onClick={event => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close() } }}>
-    <button className="icon-button modal-close" onClick={close} aria-label="Close dialog"><Icon name="close" /></button><span className="round-icon"><Icon name={dialog.type === 'save' ? 'bookmark' : dialog.type === 'compose' ? 'leaf' : 'heart'} size={25} /></span><h2 id={labelId}>{title}</h2>
+  return <dialog ref={ref} className="prototype-modal" aria-labelledby={labelId} onCancel={event => { event.preventDefault(); close() }} onClick={event => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close() } }}>
+    <button className="icon-button modal-close" onClick={close} disabled={composePending} aria-label="Close dialog"><Icon name="close" /></button><span className="round-icon"><Icon name={dialog.type === 'save' ? 'bookmark' : dialog.type === 'compose' ? 'leaf' : 'heart'} size={25} /></span><h2 id={labelId}>{title}</h2>
     {dialog.type === 'save' && <form onSubmit={event => { event.preventDefault(); app.save(dialog.post, questionId) }}><p className="modal-description">Add “{dialog.post.title}” to a Soul Question helplist.</p>{app.questions.length ? <fieldset className="question-choices"><legend>Which question did this help with?</legend>{app.questions.map(question => <label key={question.id}><input type="radio" name="question" value={question.id} checked={questionId === question.id} onChange={() => setQuestionId(question.id)} /><span>{question.title}</span></label>)}</fieldset> : <p className="modal-description">Record a Soul Question first, then return to save this insight.</p>}<p className="privacy-note"><Icon name="lock" size={16} /> Your question is never shared with the author. Helplist saves on this prototype still reset on reload.</p>{app.questions.length ? <button className="button button-primary full-width" type="submit" disabled={duplicate}><Icon name={duplicate ? 'check' : 'bookmark'} size={18} />{duplicate ? 'Already saved to this question' : 'Add to my helplist'}</button> : <a className="button button-primary full-width" href="#questions" onClick={close}>Record a question</a>}{app.saved.some(item => item.postId === dialog.post.id) && <button className="button-link remove-saved" type="button" onClick={() => { app.removeSaved(dialog.post.id); close() }}>Remove from my helplist</button>}</form>}
     {dialog.type === 'message' && <form onSubmit={event => {
       event.preventDefault()
@@ -38,6 +40,6 @@ export function PrototypeModal({ app }: { app: PrototypeController }) {
       <button className="button button-primary full-width" disabled={!body.trim()}><Icon name="mail" size={18} />{anonymous ? 'Send anonymous thanks' : 'Send thanks in a named chat'}</button>
     </form>}
     {dialog.type === 'share' && <><p className="modal-description">Select and copy this insight to share it. Your Soul Questions and helplist are never included.</p><label className="field-label" htmlFor="share-text">Insight to share</label><textarea id="share-text" rows={9} readOnly value={publicShareText(dialog.post)} onFocus={event => event.currentTarget.select()} /><button className="button button-outline full-width" onClick={close}>Done</button></>}
-    {dialog.type === 'compose' && <form onSubmit={event => { event.preventDefault(); if (body.trim()) app.submitDraft(body) }}><p className="modal-description">Share a small moment, a scripture, or something you’re learning. Someone may need to hear it.</p><label className="field-label" htmlFor="insight-body">Your insight</label><textarea id="insight-body" rows={6} maxLength={1500} value={body} onChange={event => setBody(event.target.value)} placeholder="Lately, I’ve been learning…" required /><p className="field-hint">{body.length}/1500 · Sharing to Global</p><p className="demo-note">All insights are reviewed before appearing in the community. This demo keeps submissions in memory only.</p><button className="button button-primary full-width" disabled={!body.trim()}><Icon name="leaf" size={18} /> Submit for review</button></form>}
+    {dialog.type === 'compose' && <ComposePostForm key={app.profile?.id ?? 'visitor'} app={app} onPendingChange={setComposePending} />}
   </dialog>
 }

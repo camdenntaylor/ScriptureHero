@@ -2,6 +2,12 @@
 
 ## Explore and Spaces extension (October 28)
 
+### Post composer destinations
+
+Also apply `20261028010000_post_destinations.sql` for the saved post composer. `GET /api/v1/me/posting-spaces` returns cursor-paginated Global/active-member destinations (requests and invitations are excluded before pagination). `POST /api/v1/spaces/:id/posts` accepts `{ id, body }` and returns `{ id, status, space: { id, name, visibility } }`. The client reuses its generated ID when retrying the same text/destination; the database rejects reuse with different content, author, or destination. Both backend and atomic database RPC require active membership, with Global available to all signed-in users.
+
+The composer names the selected Space and states its audience, preserves text on failure, and saves submissions as `pending_moderation`. The owner's posts section reads these saved submissions. Opening the composer from a Space preselects it. This path does not publish immediately or create duplicate Global copies. The moderation worker/approval tooling is still separate work; submissions remain pending until approved through privileged moderation. Run `supabase test db` with local Supabase running to verify `post_destinations_rls.sql`.
+
 Apply `20261028000000_explore_spaces.sql` before using Explore, Space creation/membership, or profile posts. It adds discoverable Space descriptions/owners, `space_members`, a security-invoker `visible_posts` view, and guarded atomic RPCs for creating Spaces and changing membership. The application API calls these RPCs using the caller's access token. No service key is required. `private` in API contracts maps to `restricted` in PostgreSQL.
 
 Space names/descriptions are directory information. Private posts require active membership, including on author profiles and direct insight links. Invitations and requests do not grant read access. Membership lists are visible only to the owner; an invitee/requester can read only their own membership. Soul Question policies are unchanged.
@@ -16,7 +22,7 @@ New routes under `/api/v1`:
 
 Invitations currently target existing Scripture Hero accounts. They appear in the recipient's Spaces list; no email is sent. Deep links use `#space/<uuid>`, `#member/<uuid>`, and `#insight/<uuid>`, with API identifiers independent of browser routing. Shared Zod contracts live in `packages/contracts`; `pnpm install` prepares the package, and recursive builds/typechecks build it before its consumers.
 
-Run `supabase test db` with Docker/local Supabase running to verify `explore_spaces_rls.sql` alongside the original privacy tests. This change does not add Space post creation or a moderation worker. Existing demo compose submissions remain session-only and are labeled separately on the owner's profile; the earlier Global API publishing exception remains as documented below.
+Run `supabase test db` with Docker/local Supabase running to verify `explore_spaces_rls.sql` alongside the original privacy tests. The subsequent post-destinations migration adds Space post submission as described above. The earlier Global API publishing exception remains as documented below for legacy callers; the composer uses the moderated Space endpoint.
 
 The migration in `migrations/` is the source of truth for the October 5 prototype. It assumes a new Supabase project. Do not paste schema changes into the dashboard without also adding a migration.
 

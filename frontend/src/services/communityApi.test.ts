@@ -5,6 +5,8 @@ import {
   createSpace,
   getSpace,
   searchCommunity,
+  submitSpacePost,
+  listPostingSpaces,
 } from "./communityApi";
 
 const session = vi.hoisted(() => vi.fn());
@@ -24,6 +26,16 @@ const space = {
   createdAt: "2026-10-28T00:00:00Z",
 };
 describe("community API", () => {
+  it('sends one destination in the route and a stable ID/body to the moderation submission endpoint', async () => {
+    session.mockResolvedValue({ data: { session: { access_token: 'test-token' } }, error: null })
+    const receipt = { id, status: 'pending_moderation', space: { id, name: 'Garden', visibility: 'private' } }
+    const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: receipt })))
+    vi.stubGlobal('fetch', fetcher)
+    await expect(submitSpacePost(id, { id, body: 'A little hope.' })).resolves.toEqual(receipt)
+    expect(fetcher).toHaveBeenCalledWith(`/api/v1/spaces/${id}/posts`, expect.objectContaining({ method: 'POST', body: JSON.stringify({ id, body: 'A little hope.' }), cache: 'no-store', headers: expect.objectContaining({ Authorization: 'Bearer test-token' }) }))
+    fetcher.mockResolvedValue(new Response(JSON.stringify({ data: { items: [space], nextCursor: 'next' } })))
+    await expect(listPostingSpaces()).resolves.toEqual({ items: [space], nextCursor: 'next' })
+  })
   it("sends verified credentials and disables caching, while searches encode punctuation literally", async () => {
     session.mockResolvedValue({
       data: { session: { access_token: "test-token" } },

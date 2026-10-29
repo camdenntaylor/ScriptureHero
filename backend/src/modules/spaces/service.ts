@@ -7,7 +7,7 @@ export class SpaceService {
   constructor(private readonly repository: SpaceRepository) {}
   async list(
     userId: string | null,
-    query: PageRequest & { q?: string; mine?: boolean },
+    query: PageRequest & { q?: string; mine?: boolean; posting?: boolean },
   ) {
     return toPage(
       await this.repository.list(userId, query),
