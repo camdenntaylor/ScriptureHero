@@ -10,6 +10,10 @@ Social media style platform that provides a space for people to share their insi
 
 Scripture Hero is a mobile-first product. The primary long-term experience will be a mobile app designed for phones, with desktop and mobile web experiences also supported. Product flows, navigation, APIs, authentication, media handling, performance, and accessibility should be designed for mobile use first and enhanced for larger screens.
 
+**Guest beta testing**
+
+Visitors without an existing account session automatically enter a temporary guest preview with a fictional profile, private sample Soul Questions, community content, Spaces, and mock conversations. Guests can use the account screens, edit their profile and photo, record questions, save insights, create and join sample Spaces, and submit temporary posts. Each visit is isolated. All guest edits, drafts, photos, preferences, and conversations stay in page memory and clear on refresh or when leaving the page, including back/forward restoration. No guest account, post, media, question, or message is written to Supabase or sent to analytics. Guest post submissions remain pending moderation and never enter public results. Guest messages and invitations are simulated. Existing signed-in accounts retain their normal account flow; guests may open sign-in from Account settings, which discards guest changes.
+
 **Soul Questions**
 
 Each user has the option to privately record soul questions. These can be deeply theological questions, pleas for advice, or anything a user is struggling with and needs help figuring out. Soul questions are never shown on a profile or disclosed to other users. A privileged backend matching service reads them to recommend approved posts that may be helpful. Become someone else's "scripture hero" by contributing insights that help answer soul questions without learning the question, problem, or identity behind the match.

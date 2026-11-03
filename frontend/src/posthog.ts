@@ -1,34 +1,36 @@
-import posthog from 'posthog-js'
+import sdk from 'posthog-js'
+import { guestSession } from './services/guestSession'
 
-const posthogKey = import.meta.env.VITE_POSTHOG_KEY
-const posthogHost = import.meta.env.VITE_POSTHOG_HOST
+let enabled = false
 
-if (!posthogKey) {
-  if (import.meta.env.DEV) {
-    throw new Error(
-      'VITE_POSTHOG_KEY variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_POSTHOG_KEY is configured',
-    )
-  }
-} else if (!posthogHost) {
-  if (import.meta.env.DEV) {
-    throw new Error(
-      'VITE_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_POSTHOG_HOST is configured',
-    )
-  }
-} else {
-  posthog.init(posthogKey, {
-    api_host: posthogHost,
+// Guests never initialize analytics, session recording, or automatic error capture.
+// Only explicit events from a verified account may reach the analytics client.
+export function enableAccountAnalytics() {
+  if (enabled || guestSession()) return
+  const key = import.meta.env.VITE_POSTHOG_KEY
+  const host = import.meta.env.VITE_POSTHOG_HOST
+  if (!key || !host) return
+  sdk.init(key, {
+    api_host: host,
     defaults: '2026-05-30',
-    logs: {
-      serviceName: 'scripture-hero-web',
-      environment: import.meta.env.MODE,
-    },
-    capture_exceptions: {
-      capture_unhandled_errors: true,
-      capture_unhandled_rejections: true,
-      capture_console_errors: false,
-    },
+    persistence: 'memory',
+    autocapture: false,
+    capture_pageview: false,
+    capture_pageleave: false,
+    disable_session_recording: true,
+    capture_exceptions: false,
+    logs: { serviceName: 'scripture-hero-web', environment: import.meta.env.MODE },
   })
+  enabled = true
 }
 
-export default posthog
+const active = () => enabled && !guestSession()
+export default {
+  capture: (...args: Parameters<typeof sdk.capture>) => { if (active()) sdk.capture(...args) },
+  identify: (...args: Parameters<typeof sdk.identify>) => { if (active()) sdk.identify(...args) },
+  setPersonProperties: (...args: Parameters<typeof sdk.setPersonProperties>) => { if (active()) sdk.setPersonProperties(...args) },
+  reset: () => { if (enabled) sdk.reset() },
+  logger: {
+    info: (...args: Parameters<typeof sdk.logger.info>) => { if (active()) sdk.logger.info(...args) },
+  },
+}

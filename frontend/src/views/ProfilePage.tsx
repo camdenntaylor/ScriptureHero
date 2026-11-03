@@ -161,7 +161,7 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
         type="button"
         onClick={() => void app.signOut()}
       >
-        Sign out
+        {app.isGuest ? 'Reset guest session' : 'Sign out'}
       </button>
     </div>
   );

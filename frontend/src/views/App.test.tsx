@@ -23,12 +23,13 @@ vi.mock("../services/supabase", () => ({
   avatarUrl: () => null,
 }));
 
-function renderAccount(screen: Screen, signedIn: boolean, authLoading = false) {
+function renderAccount(screen: Screen, signedIn: boolean, authLoading = false, isGuest = false) {
   const state = createDemoMessaging();
   // Deliberately include fixtures even for signed-out renders: the shell must
   // gate private content regardless of what a controller happens to return.
   vi.mocked(usePrototypeController).mockReturnValue({
     screen,
+    isGuest,
     profile: signedIn
       ? {
           id: "account",
@@ -72,6 +73,20 @@ function renderAccount(screen: Screen, signedIn: boolean, authLoading = false) {
 beforeEach(() => vi.clearAllMocks());
 
 describe("messaging account access", () => {
+  it('gives guests the full account navigation and explains the reset behavior', () => {
+    const html = renderAccount('profile', true, false, true);
+    expect(html).toContain('Guest preview');
+    expect(html).toContain('Your changes clear when you refresh or leave.');
+    expect(html).toContain('Reset guest session');
+    expect(html).toContain('href="#messages"');
+    expect(html).toContain('href="#profile-edit"');
+    expect(html).toContain('aria-label="Your posts"');
+  });
+  it('does not mount API-backed public screens until the guest or account session is resolved', () => {
+    const html = renderAccount('explore', false, true);
+    expect(html).toContain('Loading your account');
+    expect(html).not.toContain('role="search"');
+  });
   it("provides Explore navigation and an accessible search form to visitors", () => {
     const html = renderAccount("explore", false);
     expect(html).toContain('href="#explore" aria-current="page"');

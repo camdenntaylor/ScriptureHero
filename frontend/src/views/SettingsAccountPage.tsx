@@ -20,10 +20,12 @@ export function SettingsAccountPage({ app }: { app: PrototypeController }) {
       </header>
       <section className="profile-card" aria-label="Account settings">
         <h2>Sign-in method</h2>
-        <p className="muted">You're signed in with email and password through Supabase Auth.</p>
+        <p className="muted">{app.isGuest ? 'You’re using a temporary guest profile. No email or password is needed. Refresh or leave to clear your changes.' : "You're signed in with email and password through Supabase Auth."}</p>
+        {app.isGuest ? <button className="button button-primary" type="button" onClick={() => void app.signOut()}>Start a fresh guest session</button> :
         <button className="button button-primary" type="button" onClick={sendReset}>
           <Icon name="mail" size={17} /> {sent ? 'Reset link sent' : 'Send password reset link'}
-        </button>
+        </button>}
+        {app.isGuest && <button className="button-link" type="button" onClick={app.openSignIn}>Sign in or create your own account</button>}
       </section>
     </div>
   )

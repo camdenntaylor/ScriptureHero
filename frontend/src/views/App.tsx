@@ -61,7 +61,8 @@ export function App() {
   const login =
     (screen === "login" && !app.profile) ||
     (privateRoute && !app.profile && !app.authLoading);
-  const loading = (privateRoute || screen === "welcome") && !app.profile && app.authLoading;
+  // Resolve the session before mounting any API-backed screen, including public deep links.
+  const loading = !app.profile && app.authLoading;
   const navigation: { screen: Screen; label: string; icon: IconName }[] = [
     ...(!app.profile && !app.authLoading ? [{ screen: "welcome" as const, label: "Welcome", icon: "globe" as const }] : []),
     { screen: "home", label: "Home", icon: "home" },
@@ -143,7 +144,7 @@ export function App() {
           >
             <div>
               <strong>{app.profile.name}</strong>
-              <span>Your account</span>
+              <span>{app.isGuest ? 'Guest preview' : 'Your account'}</span>
             </div>
             {avatarUrl(app.profile.avatarPath) ? (
               <img
@@ -189,6 +190,11 @@ export function App() {
             </nav>
           </aside>
           <main id="main-content" className="workspace-main" tabIndex={-1}>
+            {app.isGuest && <aside className="guest-preview" aria-label="Guest preview">
+              <Icon name="leaf" size={20} />
+              <p><strong>Make yourself at home.</strong> You’re exploring as a guest. Your changes clear when you refresh or leave.</p>
+              <button className="button button-outline" onClick={() => void app.signOut()}>Start fresh</button>
+            </aside>}
             {screen === "home" ? (
               <HomePage app={app} />
             ) : screen === "spaces" ? (

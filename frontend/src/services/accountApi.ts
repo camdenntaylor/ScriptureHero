@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { guestSession, setGuestPhoto } from './guestSession'
 
 export interface AccountProfile { id: string; name: string; location: string; bio: string; avatarPath: string | null }
 export interface PrivateQuestion { id: string; title: string; createdAt: string }
@@ -6,6 +7,8 @@ export interface PrivateQuestion { id: string; title: string; createdAt: string 
 const apiUrl = import.meta.env.VITE_API_URL ?? '/api'
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const guest = guestSession()
+  if (guest) return guest.request(path, init) as T
   if (!supabase) throw new Error('Supabase is not configured for this site.')
   const { data: { session }, error } = await supabase.auth.getSession()
   if (error || !session) throw new Error('Please sign in again.')
@@ -25,10 +28,11 @@ export const createMyQuestion = (text: string, id: string) => request<PrivateQue
 export const deleteMyQuestion = (id: string) => request<void>(`/soul-questions/${id}`, { method: 'DELETE' })
 
 export async function uploadAvatar(file: File, userId: string): Promise<AccountProfile> {
-  if (!supabase) throw new Error('Supabase is not configured for this site.')
   const extensions: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
   const extension = extensions[file.type]
   if (!extension || file.size > 5 * 1024 * 1024) throw new Error('Choose a JPG, PNG, or WebP image under 5 MB.')
+  if (guestSession()) return setGuestPhoto(file)
+  if (!supabase) throw new Error('Supabase is not configured for this site.')
   const path = `${userId}/${crypto.randomUUID()}.${extension}`
   const { data: signed, error: signError } = await supabase.storage.from('avatars').createSignedUploadUrl(path)
   if (signError || !signed) throw new Error('Unable to start the upload. Try again.')

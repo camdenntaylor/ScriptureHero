@@ -48,3 +48,11 @@ These are predictions for a later evaluation, not findings.
 The revision fixes a **visual-hierarchy and competing-signals problem**: the earlier screen gave repeated slogans and secondary panels too much weight. The revised screen makes the feed primary and consolidates related private-question information and navigation through **proximity** and **common region**.
 
 For frontend-only deployments, run `pnpm run build` from `frontend/`. This command first builds the shared `@scripture-hero/contracts` workspace package, then typechecks and bundles the frontend into `frontend/dist`. It works without previously generated contract files; generated `dist` folders should remain uncommitted. Run `pnpm build` from the repository root to build every workspace.
+
+## Guest beta testing
+
+New visitors automatically enter as **Avery Guest**, with access to the account screens and a separate set of fictional sample data for each visit. No setup, shared password, Supabase guest account, or backend server is needed for the guest preview. Existing authenticated sessions still use the real account APIs.
+
+Guest profile edits, local photo previews, Soul Questions, saves, comments, conversations, Space membership changes, new Spaces, post submissions, and appearance changes live only in page memory. Refresh, leave the page, or choose **Start fresh** to discard them. Back/forward restoration also starts fresh. Moving between screens inside the app keeps the current guest session. Sample links survive refresh; links to visitor-created resources no longer resolve after reset. Closing a tab does not affect another tester or tab.
+
+Guest API calls use a disposable frontend adapter and never fall through to the backend. Submissions remain pending moderation, and messages, notifications, and invitations are simulated. Analytics does not initialize for guests. Verified accounts send explicit analytics events only; automatic content capture, session recording, and automatic exception capture are disabled to protect sensitive input. Guest changes are not migrated into a real account. Use **Profile → Account & Privacy → Account settings** to open sign-in.

@@ -19,11 +19,11 @@ export function DeleteAccountPage({ app }: { app: PrototypeController }) {
         <h1>Delete your account.</h1>
       </header>
       <section className="profile-card" aria-label="Delete account">
-        <h2>This can't be undone</h2>
+        <h2>{app.isGuest ? 'Clear your guest session' : "This can't be undone"}</h2>
         <p>
-          Deleting your account removes your profile, Soul Questions, saved insights, and conversation
+          {app.isGuest ? 'This clears your guest changes and starts again with the sample profile. Your guest posts, questions, and messages are never saved to a real account.' : <>Deleting your account removes your profile, Soul Questions, saved insights, and conversation
           history. Anything you've shared with Global or a Space stays visible, but is no longer attributed
-          to your name.
+          to your name.</>}
         </p>
         {!confirming ? (
           <button className="button button-outline" type="button" onClick={() => setConfirming(true)}>
@@ -32,7 +32,7 @@ export function DeleteAccountPage({ app }: { app: PrototypeController }) {
         ) : (
           <>
             <p className="form-error" role="alert">
-              Are you sure? This is permanent.
+              {app.isGuest ? 'Clear your changes and start fresh?' : 'Are you sure? This is permanent.'}
             </p>
             <button className="button button-primary" type="button" onClick={() => void confirmDelete()}>
               <Icon name="check" size={17} /> Yes, delete my account

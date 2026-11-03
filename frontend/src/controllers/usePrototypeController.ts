@@ -22,7 +22,9 @@ import {
   type PrivateQuestion,
 } from "../services/accountApi";
 import { supabase } from "../services/supabase";
+import { endGuestSession, guestSession, startGuestSession } from '../services/guestSession';
 import posthog from "../posthog";
+import { enableAccountAnalytics } from '../posthog';
 import { posthogLog } from "../posthogLogger";
 import { useMessagingController } from "./useMessagingController";
 import { useAppearanceController } from "./useAppearanceController";
@@ -61,18 +63,34 @@ export function usePrototypeController() {
   const [viewedPostId, setViewedPostId] = useState<string | null>(null);
 
   const [profile, setProfile] = useState<AccountProfile | null>(null);
+  const [isGuest, setIsGuest] = useState(Boolean(guestSession()));
   const messaging = useMessagingController(profile?.id ?? null);
-  const appearance = useAppearanceController();
+  const appearance = useAppearanceController(isGuest);
   const [questions, setQuestions] = useState<PrivateQuestion[]>([]);
-  const [authLoading, setAuthLoading] = useState(Boolean(supabase));
+  const [authLoading, setAuthLoading] = useState(true);
   const [accountError, setAccountError] = useState("");
   const signedIn = Boolean(profile);
   const currentScreen = screenForAccount(screen, signedIn);
   const loadVersion = useRef(0);
 
+  async function enterGuest() {
+    startGuestSession();
+    setIsGuest(true);
+    setProfile(await getMyProfile());
+    setQuestions(await listMyQuestions());
+    setAccountError('');
+    setAuthLoading(false);
+  }
+
   async function refreshAccount() {
-    if (!supabase) {
+    if (guestSession()) {
+      setProfile(await getMyProfile());
+      setQuestions(await listMyQuestions());
       setAuthLoading(false);
+      return;
+    }
+    if (!supabase) {
+      await enterGuest();
       return;
     }
     const version = ++loadVersion.current;
@@ -81,18 +99,22 @@ export function usePrototypeController() {
     setLastPostSubmission(null);
     setQuestions([]);
     try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (version !== loadVersion.current) return;
+      if (sessionError) throw new Error('Unable to verify your account. Please try again.');
+      if (!session) {
+        await enterGuest();
+        return;
+      }
       const {
         data: { user },
         error,
       } = await supabase.auth.getUser();
       if (version !== loadVersion.current) return;
       if (error || !user) {
-        setProfile(null);
-        setQuestions([]);
-        setSaved([]);
-        setAccountError("");
-        return;
+        throw new Error('Unable to verify your account. Please sign in again.');
       }
+      enableAccountAnalytics();
       posthog.identify(user.id, user.email ? { email: user.email } : undefined);
       const [nextProfile, nextQuestions] = await Promise.all([
         getMyProfile(),
@@ -123,6 +145,8 @@ export function usePrototypeController() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
+        endGuestSession();
+        setIsGuest(false);
         posthog.reset();
         ++loadVersion.current;
         setProfile(null);
@@ -137,7 +161,18 @@ export function usePrototypeController() {
         messaging.reset();
       }
       if (event === "SIGNED_IN")
-        window.setTimeout(() => void refreshAccount(), 0);
+        window.setTimeout(() => {
+          endGuestSession();
+          setIsGuest(false);
+          setSaved([]);
+          setComments({});
+          setLiked([]);
+          setThanked([]);
+          setFavoriteVerse('');
+          setPromptDraft(null);
+          setDialog(null);
+          void refreshAccount();
+        }, 0);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -227,6 +262,25 @@ export function usePrototypeController() {
     setAuthLoading(true);
     window.location.hash = "#home";
   }
+  function openSignIn() {
+    ++loadVersion.current;
+    endGuestSession();
+    setIsGuest(false);
+    setProfile(null);
+    setQuestions([]);
+    setSaved([]);
+    setComments({});
+    setLiked([]);
+    setThanked([]);
+    setFavoriteVerse('');
+    setPromptDraft(null);
+    setDialog(null);
+    setLastPostSubmission(null);
+    setPostRevision(0);
+    setAuthLoading(false);
+    messaging.reset();
+    window.location.hash = '#login';
+  }
   async function signUp(email: string, password: string) {
     if (!supabase) throw new Error("Supabase is not configured for this site.");
     const redirectTo =
@@ -249,6 +303,12 @@ export function usePrototypeController() {
     return "check-email" as const;
   }
   async function signOut() {
+    if (isGuest) {
+      // A full reload also discards page-local drafts, preferences, and messages.
+      window.location.replace('#home');
+      window.location.reload();
+      return;
+    }
     if (supabase) {
       const { error } = await supabase.auth.signOut();
       if (error) {
@@ -370,11 +430,13 @@ export function usePrototypeController() {
     screen: currentScreen,
     resourceId,
     profile,
+    isGuest,
     questions,
     authLoading,
     accountError,
     refreshAccount,
     signIn,
+    openSignIn,
     signUp,
     signOut,
     updateProfile,

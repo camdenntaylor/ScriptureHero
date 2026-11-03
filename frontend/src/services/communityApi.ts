@@ -13,6 +13,8 @@ import {
   type Page,
 } from "@scripture-hero/contracts";
 import { supabase } from "./supabase";
+import { guestSession } from './guestSession';
+import { GuestError } from './guestSandbox';
 import { postSubmissionSchema, type SubmitSpacePost } from '@scripture-hero/contracts';
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "/api";
@@ -27,6 +29,8 @@ export class CommunityApiError extends Error {
 }
 async function request(path: string, init: RequestInit = {}): Promise<unknown> {
   try {
+    const guest = guestSession();
+    if (guest) return guest.request(path, init);
     const session = supabase ? await supabase.auth.getSession() : null;
     if (session?.error)
       throw new CommunityApiError(
@@ -56,6 +60,8 @@ async function request(path: string, init: RequestInit = {}): Promise<unknown> {
       );
     return payload.data;
   } catch (error) {
+    if (error instanceof GuestError)
+      throw new CommunityApiError(error.message, error.code, error.status);
     if (
       error instanceof CommunityApiError ||
       (error instanceof Error && error.name === "AbortError")
