@@ -55,11 +55,11 @@ export function SettingsPrivacyPage({ app }: { app: PrototypeController }) {
           ))}
         </fieldset>
 
-        <h2>Spaces</h2>
+        <h2>Circles</h2>
         <fieldset className="question-choices">
           <label>
             <input type="checkbox" checked={spaceVisible} onChange={(event) => { setSpaceVisible(event.target.checked); setSaved(false) }} />
-            <span>Show my activity to space members</span>
+            <span>Show my activity to circle members</span>
           </label>
         </fieldset>
 

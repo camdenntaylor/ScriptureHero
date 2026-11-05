@@ -94,12 +94,12 @@ describe("messaging account access", () => {
     expect(html).toContain('aria-label="Search the community"');
   });
 
-  it("requires an account for Space creation and shows the form after sign-in", () => {
+  it("requires an account for Circle creation and shows the form after sign-in", () => {
     expect(renderAccount("create-space", false)).toContain("Welcome back.");
     const html = renderAccount("create-space", true);
-    expect(html).toContain("Space name");
+    expect(html).toContain("Circle name");
     expect(html).toContain("Who can join?");
-    expect(html).toContain('href="#spaces" aria-current="page"');
+    expect(html).toContain('href="#circles" aria-current="page"');
     expect(html).not.toContain('href="#profile" aria-current="page"');
   });
 
@@ -110,11 +110,33 @@ describe("messaging account access", () => {
     expect(html).toContain("Loading…");
   });
   it("hides Messages and the notification bell from signed-out navigation", () => {
-    const html = renderAccount("heroes", false);
+    const html = renderAccount("home", false);
     expect(html).not.toContain('href="#messages"');
     expect(html).not.toContain('href="#notifications"');
-    expect(html).toContain("Log in to message");
     expect(html).toContain('href="#home"');
+  });
+
+  it.each(['profile', 'heroes'] as const)('combines impact and Scripture Heroes in #%s with Profile navigation', screen => {
+    const html = renderAccount(screen, true);
+    expect(html).toContain('Your words matter.');
+    expect(html).toContain('people you’ve helped');
+    expect(html).toContain('insights you’ve shared');
+    expect(html).toContain('Your Scripture Heroes');
+    expect(html).toContain('aria-label="Your posts"');
+    expect(html).toContain('href="#profile" aria-current="page"');
+    expect(html).not.toContain('Your activity');
+    expect(html).not.toContain('href="#heroes"');
+    expect(html.match(/<h1[ >]/g)).toHaveLength(1);
+  });
+
+  it('requires an account for the former Scripture Heroes route', () => {
+    expect(renderAccount('heroes', false)).toContain('Welcome back.');
+    expect(renderAccount('heroes', false)).not.toContain('Your words matter.');
+    expect(renderAccount('heroes', false, true)).toContain('Loading your account');
+  });
+
+  it.each(['home', 'explore', 'spaces', 'messages', 'welcome'] as const)('omits Scripture Heroes from #%s navigation', screen => {
+    expect(renderAccount(screen, screen !== 'welcome')).not.toContain('href="#heroes"');
   });
 
   it.each(["messages", "chat", "notifications"] as const)(

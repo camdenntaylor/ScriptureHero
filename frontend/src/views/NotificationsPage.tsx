@@ -18,7 +18,7 @@ export function NotificationsPage({ app }: { app: PrototypeController }) {
         </button>
       </li>)}
     </ul>
-    <ul className="notification-list" aria-label="Space activity">
+    <ul className="notification-list" aria-label="Circle activity">
       <li className="notification-item"><span className="round-icon"><Icon name="people" size={18} /></span><p>3 new insights were shared in Oakwood Ward.</p><span className="notification-time">2 days ago</span></li>
       <li className="notification-item"><span className="round-icon"><Icon name="people" size={18} /></span><p>New activity in The Garcia Family.</p><span className="notification-time">5 days ago</span></li>
     </ul>

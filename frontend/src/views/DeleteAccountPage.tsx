@@ -22,7 +22,7 @@ export function DeleteAccountPage({ app }: { app: PrototypeController }) {
         <h2>{app.isGuest ? 'Clear your guest session' : "This can't be undone"}</h2>
         <p>
           {app.isGuest ? 'This clears your guest changes and starts again with the sample profile. Your guest posts, questions, and messages are never saved to a real account.' : <>Deleting your account removes your profile, Soul Questions, saved insights, and conversation
-          history. Anything you've shared with Global or a Space stays visible, but is no longer attributed
+          history. Anything you've shared with Global or a Circle stays visible, but is no longer attributed
           to your name.</>}
         </p>
         {!confirming ? (

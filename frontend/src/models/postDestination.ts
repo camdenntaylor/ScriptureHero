@@ -8,8 +8,8 @@ export function destinationDescription(
   space: Pick<Space, "name" | "visibility">,
 ): string {
   return space.visibility === "private"
-    ? `Your post will go to ${space.name}. Only members of this private Space can read it after approval.`
-    : `Your post will go to ${space.name}. Anyone can read it after approval, including people outside this Space.`;
+    ? `Your post will go to ${space.name}. Only members of this private circle can read it after approval.`
+    : `Your post will go to ${space.name}. Anyone can read it after approval, including people outside this circle.`;
 }
 
 export type SubmissionAttempt = { id: string; spaceId: string; body: string };

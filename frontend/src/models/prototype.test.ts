@@ -1,8 +1,28 @@
 import { describe, expect, it } from 'vitest'
-import { addToHelplist, getHeroes, publicShareText, resourceIdFromHash, screenFromHash, screenForAccount, type Insight } from './prototype'
+import { addToHelplist, getHeroes, publicShareText, resourceIdFromHash, screenFromHash, screenForAccount, screenHash, canonicalCircleHash, type Insight } from './prototype'
 import { appreciations, insights, questions } from '../services/prototypeData'
 
 describe('the prototype help loop', () => {
+  it('uses Circle URLs and resolves legacy bookmarks without changing resource IDs', () => {
+    const id = '10000000-0000-4000-8000-000000000001'
+    for (const [legacy, canonical, screen] of [
+      ['#spaces', '#circles', 'spaces'],
+      [`#space/${id}`, `#circle/${id}`, 'space'],
+      ['#create-space', '#create-circle', 'create-space'],
+    ] as const) {
+      expect(canonicalCircleHash(legacy)).toBe(canonical)
+      expect(canonicalCircleHash(canonical)).toBe(canonical)
+      expect(screenFromHash(legacy)).toBe(screen)
+      expect(screenFromHash(canonical)).toBe(screen)
+    }
+    expect(screenHash('spaces')).toBe('#circles')
+    expect(screenHash('space')).toBe('#circle')
+    expect(screenHash('create-space')).toBe('#create-circle')
+    expect(resourceIdFromHash(`#circle/${id}`)).toBe(id)
+    expect(resourceIdFromHash('#circle/not-an-id')).toBe('')
+    expect(canonicalCircleHash('#spaceship')).toBe('#spaceship')
+    expect(canonicalCircleHash('#main-content')).toBe('#main-content')
+  })
   it('restores resource deep links with bounded IDs and preserves top-level navigation', () => {
     const id = '10000000-0000-4000-8000-000000000001'
     for (const screen of ['space', 'member', 'insight'] as const) {
@@ -50,7 +70,7 @@ describe('the prototype help loop', () => {
     expect(screenFromHash('')).toBe('welcome')
     expect(screenFromHash('#welcome')).toBe('welcome')
     expect(screenFromHash('#home')).toBe('home')
-    expect(screenFromHash('#heroes')).toBe('heroes')
+    expect(screenFromHash('#heroes')).toBe('profile')
     expect(screenFromHash('#messages')).toBe('messages')
     expect(screenFromHash('#chat')).toBe('chat')
     expect(screenFromHash('#appearance')).toBe('appearance')
@@ -70,5 +90,7 @@ describe('the prototype help loop', () => {
     expect(screenForAccount('login', true)).toBe('home')
     expect(screenForAccount('appearance', true)).toBe('appearance')
     expect(screenForAccount('messages', true)).toBe('messages')
+    expect(screenForAccount('heroes', true)).toBe('profile')
+    expect(screenForAccount('heroes', false)).toBe('profile')
   })
 })

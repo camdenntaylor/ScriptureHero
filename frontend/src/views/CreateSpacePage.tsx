@@ -5,8 +5,8 @@ export function CreateSpacePage() {
   const form = useCreateSpaceController();
   return (
     <div className="spaces-page">
-      <a className="button-link topics-back" href="#spaces">
-        <Icon name="chevron" size={16} /> Your Spaces
+      <a className="button-link topics-back" href="#circles">
+        <Icon name="chevron" size={16} /> Your Circles
       </a>
       <header className="page-heading">
         <h1>Make room for connection.</h1>
@@ -19,7 +19,7 @@ export function CreateSpacePage() {
         }}
       >
         <label className="field-label" htmlFor="space-name">
-          Space name
+          Circle name
         </label>
         <input
           id="space-name"
@@ -31,7 +31,7 @@ export function CreateSpacePage() {
           disabled={form.pending}
         />
         <label className="field-label" htmlFor="space-description">
-          A little about this Space
+          A little about this Circle
         </label>
         <textarea
           id="space-description"
@@ -43,7 +43,7 @@ export function CreateSpacePage() {
         />
         <p className="privacy-note">
           <Icon name="globe" size={16} /> The name and description appear in
-          Explore, including for private Spaces. Keep personal details out of
+          Explore, including for private Circles. Keep personal details out of
           them.
         </p>
         <fieldset className="question-choices" disabled={form.pending}>
@@ -82,10 +82,10 @@ export function CreateSpacePage() {
           disabled={form.pending || !form.name.trim()}
         >
           <Icon name="plus" size={18} />{" "}
-          {form.pending ? "Creating…" : "Create Space"}
+          {form.pending ? "Creating…" : "Create Circle"}
         </button>
         <p className="field-hint">
-          Once it’s created, you can invite members from the Space overview.
+          Once it’s created, you can invite members from the Circle overview.
         </p>
       </form>
     </div>

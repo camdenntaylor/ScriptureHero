@@ -5,6 +5,7 @@ import {
   resourceIdFromHash,
   screenFromHash,
   screenForAccount,
+  canonicalCircleHash,
   type FeedFilter,
   type Insight,
   type Person,
@@ -181,12 +182,15 @@ export function usePrototypeController() {
     const navigate = () => {
       // The keyboard skip link moves focus within the current screen.
       if (window.location.hash === "#main-content") return;
+      const canonical = canonicalCircleHash(window.location.hash);
+      if (canonical !== window.location.hash) window.history.replaceState(window.history.state, '', canonical);
       const next = screenFromHash(window.location.hash);
       setScreen(next);
       setResourceId(resourceIdFromHash(window.location.hash));
       setDialog(null);
     };
     window.addEventListener("hashchange", navigate);
+    navigate();
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
 
@@ -198,8 +202,8 @@ export function usePrototypeController() {
   useEffect(() => {
     const titles = {
       explore: "Explore",
-      space: "Space overview",
-      "create-space": "Create a Space",
+      space: "Circle overview",
+      "create-space": "Create a circle",
       member: "Member profile",
       insight: "Insight",
       welcome: "Learn through connection",
@@ -208,7 +212,7 @@ export function usePrototypeController() {
       messages: "Messages",
       chat: "Conversation",
       notifications: "Notifications",
-      spaces: "Spaces",
+      spaces: "Circles",
       library: "Questions library",
       profile: "Your profile",
       "profile-edit": "Edit profile",

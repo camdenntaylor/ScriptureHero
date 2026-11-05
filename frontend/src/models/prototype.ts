@@ -104,14 +104,17 @@ export function publicShareText(post: Insight): string {
 
 const HASH_SCREENS: Record<string, Screen> = {
   "#home": "home",
-  "#heroes": "heroes",
+  "#heroes": "profile",
   "#login": "login",
   "#profile": "profile",
   "#questions": "questions",
   "#spaces": "spaces",
+  "#circles": "spaces",
   "#explore": "explore",
   "#space": "space",
+  "#circle": "space",
   "#create-space": "create-space",
+  "#create-circle": "create-space",
   "#member": "member",
   "#insight": "insight",
   "#library": "library",
@@ -139,6 +142,20 @@ export function screenFromHash(hash: string): Screen {
   return HASH_SCREENS[hash.split('/')[0] ?? hash] ?? "welcome"
 }
 
+/** Public URLs can evolve independently from internal screen/domain names. */
+export function screenHash(screen: Screen): string {
+  if (screen === 'spaces') return '#circles';
+  if (screen === 'space') return '#circle';
+  if (screen === 'create-space') return '#create-circle';
+  return `#${screen}`;
+}
+
+/** Keep old bookmarks working while showing the current Circle terminology. */
+export function canonicalCircleHash(hash: string): string {
+  return hash.replace(/^#(spaces|space|create-space)(?=\/|$)/, (_, legacy: string) =>
+    screenHash(legacy as Screen));
+}
+
 export function resourceIdFromHash(hash: string): string {
   const id = hash.split('/')[1] ?? ''
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : ''
@@ -146,5 +163,7 @@ export function resourceIdFromHash(hash: string): string {
 
 /** Returning members enter the community instead of the visitor welcome page. */
 export function screenForAccount(screen: Screen, signedIn: boolean): Screen {
+  // Legacy Scripture Heroes links open the combined, account-only Profile.
+  if (screen === 'heroes') return 'profile';
   return signedIn && (screen === 'welcome' || screen === 'login') ? 'home' : screen;
 }

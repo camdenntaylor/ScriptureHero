@@ -23,7 +23,6 @@ import { InviteFriendsPage } from "./InviteFriendsPage";
 import { Logo } from "./components/Logo";
 import { Icon, type IconName } from "./components/Icon";
 import { HomePage } from "./HomePage";
-import { HeroesPage } from "./HeroesPage";
 import { SpacesPage } from "./SpacesPage";
 import { ExplorePage } from './ExplorePage';
 import { SpaceOverviewPage } from './SpaceOverviewPage';
@@ -32,8 +31,9 @@ import { MemberProfilePage } from './MemberProfilePage';
 import { InsightDetailPage } from './InsightDetailPage';
 import { QuestionsLibraryPage } from "./QuestionsLibraryPage";
 import { PrototypeModal } from "./components/PrototypeModal";
+import { MobileNavigation } from "./components/MobileNavigation";
 import { usePrototypeController } from "../controllers/usePrototypeController";
-import { screenForAccount, type Screen } from "../models/prototype";
+import { screenForAccount, screenHash, type Screen } from "../models/prototype";
 import { avatarUrl } from "../services/supabase";
 
 const PRIVATE_SCREENS: Screen[] = [
@@ -67,8 +67,7 @@ export function App() {
     ...(!app.profile && !app.authLoading ? [{ screen: "welcome" as const, label: "Welcome", icon: "globe" as const }] : []),
     { screen: "home", label: "Home", icon: "home" },
     { screen: "explore", label: "Explore", icon: "search" },
-    { screen: "spaces", label: "Spaces", icon: "grid" },
-    { screen: "heroes", label: "Scripture Heroes", icon: "heart" },
+    { screen: "spaces", label: "Circles", icon: "crowd" },
     ...(app.profile
       ? [
           {
@@ -79,7 +78,7 @@ export function App() {
           {
             screen: "profile" as const,
             label: "Profile",
-            icon: "people" as const,
+            icon: "person" as const,
           },
         ]
       : []),
@@ -118,7 +117,6 @@ export function App() {
           <>
             <nav className="landing-nav" aria-label="Main navigation">
               <a href="#home">The community</a>
-              <a href="#heroes">Scripture Heroes</a>
             </nav>
             <a
               className="button button-outline"
@@ -175,11 +173,10 @@ export function App() {
       ) : (
         <div className="workspace">
           <aside className="workspace-sidebar">
-            <p className="sidebar-label">YOUR LITTLE CORNER</p>
             <nav className="side-nav" aria-label="Main navigation">
               {navigation.map((item) => (
                 <a
-                  href={`#${item.screen}`}
+                  href={screenHash(item.screen)}
                   key={item.screen}
                   aria-current={active(item.screen) ? "page" : undefined}
                 >
@@ -188,13 +185,26 @@ export function App() {
                 </a>
               ))}
             </nav>
+            <div className="sidebar-compose">
+              <button className="button button-soft" onClick={() => app.setDialog({ type: 'compose' })}>
+                <Icon name="plus" size={18} /> Share an insight
+              </button>
+              <p>A little of your story could bring someone hope.</p>
+            </div>
+            {app.profile && <a className="sidebar-profile" href="#profile">
+              <span className="avatar avatar-sage" aria-hidden="true">{initials}</span>
+              <span><strong>{app.profile.name}</strong><small>{app.isGuest ? 'Guest preview' : 'View your profile'}</small></span>
+              <Icon name="chevron" size={16} />
+            </a>}
           </aside>
           <main id="main-content" className="workspace-main" tabIndex={-1}>
-            {app.isGuest && <aside className="guest-preview" aria-label="Guest preview">
-              <Icon name="leaf" size={20} />
-              <p><strong>Make yourself at home.</strong> You’re exploring as a guest. Your changes clear when you refresh or leave.</p>
-              <button className="button button-outline" onClick={() => void app.signOut()}>Start fresh</button>
-            </aside>}
+            {app.isGuest && <details className="guest-preview">
+              <summary><Icon name="leaf" size={18} /><span>Guest preview. Changes clear on refresh.</span><Icon name="chevron" size={16} /></summary>
+              <div>
+                <p><strong>Make yourself at home.</strong> You’re exploring as a guest. Your changes clear when you refresh or leave.</p>
+                <button className="button button-outline" onClick={() => void app.signOut()}>Start fresh</button>
+              </div>
+            </details>}
             {screen === "home" ? (
               <HomePage app={app} />
             ) : screen === "spaces" ? (
@@ -209,8 +219,6 @@ export function App() {
               <MemberProfilePage key={app.resourceId} id={app.resourceId} app={app} />
             ) : screen === 'insight' ? (
               <InsightDetailPage key={app.resourceId} id={app.resourceId} app={app} />
-            ) : screen === "heroes" ? (
-              <HeroesPage app={app} />
             ) : screen === "library" ? (
               <QuestionsLibraryPage app={app} />
             ) : screen === "questions" && app.profile ? (
@@ -268,21 +276,7 @@ export function App() {
         </div>
       )}
       {!welcome && !login && !loading && (
-        <nav
-          className={`mobile-nav mobile-nav-${navigation.length}`}
-          aria-label="Mobile navigation"
-        >
-          {navigation.map((item) => (
-            <a
-              href={`#${item.screen}`}
-              key={item.screen}
-              aria-current={active(item.screen) ? "page" : undefined}
-            >
-              <Icon name={item.icon} size={21} />
-              <span>{item.screen === "heroes" ? "Heroes" : item.label}</span>
-            </a>
-          ))}
-        </nav>
+        <MobileNavigation navigation={navigation} active={active} />
       )}
       {app.dialog && (app.dialog.type !== 'message' || app.profile) && <PrototypeModal key={app.dialog.type} app={app} />}
       <div className="toast-region" aria-live="polite" aria-atomic="true">

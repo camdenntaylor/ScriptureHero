@@ -17,7 +17,7 @@ export function PostDetailPage({ app }: { app: PrototypeController }) {
         </header>
         <div className="empty-state">
           <Icon name="leaf" size={32} />
-          <h2>This insight may have only been shared in a Space you haven't joined.</h2>
+          <h2>This insight may have only been shared in a Circle you haven't joined.</h2>
         </div>
       </div>
     )
@@ -30,10 +30,10 @@ export function PostDetailPage({ app }: { app: PrototypeController }) {
       </a>
       <header className="page-heading">
         <p className="eyebrow">AN INSIGHT FROM {post.author.name.toUpperCase()}</p>
-        <h1>{post.title}</h1>
+        <h1 id={`title-${post.id}`}>{post.title}</h1>
       </header>
       <div className="insight-list">
-        <InsightCard post={post} app={app} />
+        <InsightCard post={post} app={app} detail />
       </div>
       <a className="button-link" href="#report" onClick={() => app.setViewedPostId(post.id)}>
         <Icon name="flag" size={16} /> Report this post

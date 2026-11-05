@@ -32,7 +32,7 @@ beforeEach(() => {
   } as unknown as ReturnType<typeof usePostComposerController>);
 });
 describe("post composer audience", () => {
-  it("names the selected Space in the picker, privacy summary, and submission button", () => {
+  it("names the selected Circle in the picker, privacy summary, and submission button", () => {
     const html = renderToStaticMarkup(<ComposePostForm app={app} />);
     expect(html).toContain("Post to");
     expect(html).toContain("Family circle · Private");

@@ -1,127 +1,163 @@
-# Scripture Hero Design System: Golden hour
+# Scripture Hero — Gather-inspired design system
 
-Read this before you design or style any screen. All tokens and component classes live in `frontend/src/views/styles.css`. Pages compose those classes. New colors, radii, or shadows become tokens there first.
+Status: authoritative frontend design system. Implemented in `frontend/src/views/styles.css`; original visual references are in `redesign-system/references/`. Based on the original cream-and-forest Gather mockups, adapted to Scripture Hero's existing React/Vite frontend and product rules. Color values are deliberate implementation choices, not pixel samples from the generated images.
 
-## Feel
+## 1. Design intent
 
-Peaceful, warm, and inviting, like late afternoon sun on a garden table. The design should feel like a quiet conversation with a friend, not a social feed competing for attention.
+A quiet, editorial space for scriptural insights, testimonies of Jesus, and uplifting connection. Warm ivory, deep forest green, refined serif headings, clean readable interface text, natural photography, and small botanical accents. The interface should feel personal and spacious rather than decorative or competitive.
 
-- Day uses warm cream paper and deep brown ink. Evening uses neutral gray surfaces and off-white text. Avoid brown-tinted dark surfaces and pure white or black page backgrounds.
-- One calm primary color, olive green, for actions and "where you are."
-- One warm secondary color, honey, for anything reflective or private: scripture, Soul Questions, privacy notes, encouragement.
-- Soft, rounded shapes. Pill controls, 18–20px cards, low warm shadows by day and neutral shadows by evening.
-- Generous whitespace. One heading per page and one filled primary button per view.
+Keep the Scripture Hero name, existing logo, product vocabulary, and behavior. Gather is a visual reference, not a rebrand. People of all religions remain welcome.
 
-## Color tokens
+Priority order: readable content, clear audience and privacy, useful actions, then decoration.
 
-Always use `var(--token)`. Do not write hex values in components.
+## 2. What changes from Golden hour
 
-| Token | Day | Evening | Use |
+| Existing direction | New direction |
+| --- | --- |
+| Nunito everywhere | Georgia for editorial headings; retain Nunito for interface and body |
+| Brown ink and olive accents | Forest ink and deeper forest action green |
+| Honey as the dominant reflective color | Restrained pale honey for scripture and private areas; clay for decorative warmth |
+| Rounded, shadowed cards | 16px cards with fine warm borders and almost no shadow |
+| Consistently soft rounded typography | Strong contrast between literary headings and practical interface text |
+| Dense supporting modules | A clear feed, fewer supporting cards, more breathing room |
+
+The serif/sans pairing is essential to matching the reference. Georgia is a practical starting choice with no added font request. Do not describe the generated mockup's font as a known exact font.
+
+## 3. Color foundations
+
+Map these roles onto existing custom-property names in `frontend/src/views/styles.css`; never scatter colors through view components. Evening mode uses neutral charcoal surfaces with lighter green and honey accents.
+
+| Token | Day | Evening | Purpose |
 | --- | --- | --- | --- |
-| `--paper` | `#FBF6EC` | `#1E1F1F` | Page background, dialogs, comment panels |
-| `--surface` | `#FFFDF8` | `#272828` | Cards, header, inputs |
-| `--raised` | `#F5ECDC` | `#303131` | Hover fills, neutral pills, segmented tracks |
-| `--ink` | `#3B2A1E` | `#EEEDE8` | Headings and primary text |
-| `--muted` | `#75604D` | `#B9BAB4` | Body copy, meta text, inactive nav |
-| `--line` | `#ECE2D0` | `#303131` | Borders and dividers |
-| `--accent` | `#5B6741` | `#B4BE8C` | Primary buttons, links, active icons, focus ring |
-| `--accent-strong` | `#46512F` | `#CBD3A6` | Primary hover, text on `--accent-soft` |
-| `--accent-fill` | `#DCE3C4` | `#3A3F27` | Count pills, selection, liked-heart fill |
-| `--accent-soft` | `#EFF0E2` | `#303131` | Active nav/tab, soft buttons, impact banner |
-| `--accent-line` | `#DCE0C6` | `#414242` | Borders on accent-soft areas, soft hover |
-| `--on-accent` | `#FBF8EE` | `#1E1F1F` | Text and icons on `--accent` |
-| `--warm` | `#9A5C14` | `#E3AE5C` | Scripture text, private and reflective text |
-| `--warm-strong` | `#7A4610` | `#F2C67F` | Headings inside warm panels |
-| `--warm-soft` | `#FBF0DA` | `#303131` | Scripture quotes, Soul Questions, encouragement panels |
-| `--warm-line` | `#EFDBB2` | `#454643` | Dividers inside warm panels |
+| `--paper` | #FAF7F0 | #1E1F1F | Page canvas |
+| `--surface` | #FFFCF7 | #272828 | Cards, inputs, dialogs |
+| `--raised` | #F0EBE1 | #333535 | Hover surfaces and neutral chips |
+| `--ink` | #233522 | #F2EFE7 | Headings, post text |
+| `--muted` | #62675C | #BEC2B8 | Secondary text and metadata |
+| `--line` | #DDD8CD | #494D48 | Decorative dividers and card outlines |
+| `--accent` | #315334 | #BDD0A9 | Primary action and active state |
+| `--accent-strong` | #243F28 | #D5E3C7 | Hover and emphasis |
+| `--accent-soft` | #E8EBD9 | #343E31 | Selected navigation, soft buttons |
+| `--accent-fill` | #D6DDBD | #43523A | Selection and subtle badges |
+| `--accent-line` | #ADB89B | #829575 | Accent control boundaries |
+| `--on-accent` | #FFFCF7 | #1E271B | Text on primary buttons |
+| `--warm` | #87501A | #E8BB78 | Scripture references and private notes |
+| `--warm-strong` | #693D16 | #F5D5A2 | Reflective headings |
+| `--warm-soft` | #F8EEDC | #38332B | Scripture and Soul Question panels |
+| `--warm-line` | #DDC8A5 | #897653 | Reflective panel separators |
+| `--clay` (new) | #A24E30 | #ECB195 | Decorative warm labels and botanical details |
+| `--control-line` (new) | #7B8174 | #9EA797 | Input boundaries when needed for identification |
+| `--danger` (new) | #A12E35 | #FFB4B9 | Errors, destructive actions |
+| `--danger-soft` (new) | #FBEAEB | #452D31 | Error backgrounds |
 
-Avatar pairs are `--av-clay`, `--av-sage`, `--av-gold` and `--av-lilac`, each with a matching `-ink` token. Use them through the `.avatar-*` classes.
+Primary button: on-accent over accent. Standard reading: ink or muted over paper/surface. Reflective reading: warm over warm-soft. Selected navigation: accent-strong over accent-soft. Decorative line is not a sufficient input boundary by itself. Use control-line for fields, or another accessible identifying treatment.
 
-Media uses `--media-bg` as a fallback, `--on-media` for text over photos or video, `--media-overlay` and `--overlay` for image shading, and `--media-text-shadow` for readable video text. Dialog backdrops use `--backdrop`.
+Green means action or location. Honey means scripture or private reflection. Privacy also requires a lock and explicit text; color alone never communicates privacy. Clay is decorative, never the only error or selection indicator. Keep existing avatar and media tokens unless a specific asset needs adjustment. Never invert photographs in evening mode.
 
-### Role rules
+## 4. Typography
 
-- **Green (`--accent`)** means "do this" or "you are here." Use it for buttons, links, the active nav item and active tabs. Use at most one solid-green button per view.
-- **Honey (`--warm`)** means "this is sacred or private." Use it for scripture, Soul Questions, the lock or privacy notes, items saved to your helplist, and "keep sharing" prompts. Never use honey for a primary action.
-- Body text is `--muted` on `--surface` or `--paper`. Headings are `--ink`.
-- Text must reach 4.5:1 contrast. Every token pair above (ink/muted on paper/surface, accent-strong on accent-soft, warm on warm-soft, on-accent on accent) passes in both modes.
+| Role | Family | Mobile / desktop size | Weight / line height |
+| --- | --- | --- | --- |
+| Page h1 | Georgia, serif | 30 / 40px | 700 / 1.16 |
+| Welcome display | Georgia, serif | 36 / 52px | 700 / 1.1 |
+| Section h2 | Georgia, serif | 24 / 28px | 700 / 1.2 |
+| Card heading h3 | Georgia, serif | 21 / 24px | 700 / 1.25 |
+| Post and body | Nunito, sans-serif | 16 / 16px | 400–500 / 1.65 |
+| Scripture | Georgia, serif, italic | 17 / 18px | 400 / 1.6 |
+| Navigation and buttons | Nunito, sans-serif | 15 / 16px | 700 / 1.3 |
+| Metadata | Nunito, sans-serif | 14 / 14px | 400–600 / 1.45 |
+| Small labels | Nunito, sans-serif | 12 / 12px | 800 / 1.4 |
 
-### Evening mode
+Use relative units during implementation; sizes above are at the default browser scale. Introduce `--font-display` and `--font-body`, keeping `--font-family` as a body alias while migrating. Preserve scripture italics and use a separate regular-style reference beneath the verse. Normal post prose stays sans-serif. Allow all headings to wrap; do not shrink them to fit fixed-height containers. Reading paragraphs should generally stay within 60–70 characters per line.
 
-Evening mode follows the OS setting by default. Its page, card, and border colors are neutral gray; olive and honey keep their action and reflective roles. To force a mode, set `<html data-theme="day">` or `<html data-theme="evening">`. Because every component uses tokens, nothing else needs to change. Check new screens in both modes.
+## 5. Spacing, shape, and elevation
 
-## Typography
+Spacing scale, in px: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64. Introduce named spacing tokens and use them consistently. Typical card padding: 16 mobile, 24 desktop. Feed gap: 20 mobile, 24 desktop. Heading-to-content: 24–32.
 
-**Nunito** is the only typeface, loaded in `styles.css`. Its rounded ends give the softer voice. Do not add a second family.
+Retain existing radius names: sm 8px, md 12px, lg 16px, xl 20px, pill 999px. Standard cards use lg; dialogs use xl; topic chips and buttons use pill. Navigation uses md for the broad softly rounded selected row in the reference.
 
-| Role | Size / weight | Notes |
-| --- | --- | --- |
-| Display (Welcome h1) | `clamp(3.5rem, 6.1vw, 5.5rem)` / 800 | `letter-spacing: -.035em`, line-height 1.06 |
-| Page heading (`.page-heading h1`) | `clamp(1.9rem, 2.9vw, 2.6rem)` / 800 | One per page |
-| Post / card title | 1.4–1.5rem / 800 | `text-wrap: pretty` |
-| Section heading | 1.1–1.4rem / 800 | |
-| Body | 1rem / 400, line-height 1.8 | `--muted` |
-| Scripture | 1rem / 500 *italic* | Always italic, always `--warm` on `--warm-soft` |
-| Label / button | .88–.95rem / 700 | |
-| Meta | .8rem / 400 | `--muted` |
-| Eyebrow | .75rem / 800, `letter-spacing: .14em`, uppercase | `.eyebrow`, `.sidebar-label` |
+Cards: 1px line border and no visible lift by default. Set the shared card shadow to none or a barely perceptible 0 1px 3px at 4% opacity. Elevated menus: 0 8px 24px at 12%; dialogs: 0 24px 64px at 20%. Define these centrally with neutral shadows in evening mode. Avoid colored left-border decorations on cards.
 
-Minimum text size is .75rem (12px), used only for eyebrows and counts.
+## 6. Responsive composition
 
-## Shape and elevation
+Build at 375px first; verify 320px and 200% text scaling. Content height is always flexible.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--radius-sm` | 10px | Small inner elements |
-| `--radius-md` | 14px | Scripture quotes, inputs, choice rows, notes |
-| `--radius-lg` | 18px | Composer, floating cards |
-| `--radius-xl` | 20px | Cards, panels, dialogs |
-| `--radius-pill` | 999px | Every button, tab, nav item, badge, toast |
-| `--shadow` | soft warm | Cards and composer |
-| `--shadow-lg` | deep warm | Dialogs and toasts only |
+| Width | Layout |
+| --- | --- |
+| Below 760px | Single column; 16px page gutters; existing mobile navigation; no persistent sidebar or rail |
+| 760–1099px | 200px sidebar, flexible main; 24px gutters; supporting rail becomes normal-flow content |
+| 1100–1399px | 216px sidebar, flexible feed, 280px right rail; 24px gaps |
+| 1400px+ | Centered shell capped at 1520px; 232px sidebar, flexible feed, 320px rail; 32px gaps |
 
-Cards use a 1px `--line` border plus `--shadow`. Do not add colored left-border accents.
+The feed must be allowed to shrink without horizontal overflow. At the narrow end of a breakpoint, reduce columns before reducing readable text. The reference's three columns are a desktop enhancement.
 
-## Components (class reference)
+Desktop navigation: Scripture Hero logo, existing destinations, one clear Share an insight action. Keep existing route names and destination access rules. Mobile: preserve current destination availability and accessible overflow if needed; never squeeze all links into tiny targets. Bottom navigation and dialogs account for device safe areas and the on-screen keyboard.
 
-| Component | Classes | Notes |
-| --- | --- | --- |
-| Primary button | `.button .button-primary` | Solid green. One per view. |
-| Soft button | `.button .button-soft` | Secondary actions such as "Send a little thanks" |
-| Outline button | `.button .button-outline` | Tertiary actions, "done" states |
-| Text link | `.button-link` | Inline navigation ("Meet your Scripture Heroes →") |
-| Icon button | `.icon-button` | 44×44 target, round |
-| Avatar | `.avatar .avatar-{clay,sage,gold,lilac}` (+ `.avatar-large`) | Initials, weight 800 |
-| Side nav | `.side-nav a[aria-current]` | Pill; active uses accent-soft |
-| Mobile nav | `.mobile-nav` | Bottom bar under 760px; translucent surface |
-| Tabs | `.feed-tabs` / `.heroes-tabs` with `button.active` and `.count-pill` | Pill tabs; no underline |
-| Composer | `.composer-prompt` + `.compose-icon` | Round green plus |
-| Insight card | `.insight-card` → `.post-header`, `.post-copy`, `.scripture-quote` or `.reflection-video`, `.post-actions` | |
-| Scripture quote | `.scripture-quote` (book icon, `<p>` verse, `<cite>` ref) | Honey panel, italic |
-| Post actions | `.post-action`, `.save-action`, `.is-liked`, `.is-saved` | Saved state turns honey |
-| Comments | `.comments-panel`, `.comment`, `.comment-form` | Pill input |
-| Soul Questions | `.questions-card`, `.aside-heading`, `.question-dot`, `.privacy-note` | Honey panel. Always shows a lock. |
-| Impact banner | `.impact-banner`, `.impact-stats` | Green-soft panel, large green numbers |
-| Person card | `.hero-person-card`, `.hero-badge`, `.opted-in-label`, `.saved-post-summary` | |
-| Encouragement | `.keep-sharing` | Honey panel with one primary button |
-| Empty state | `.empty-state` | Dashed `--line` border, icon, h2, one soft/primary button |
-| Dialog | `.prototype-modal`, `.question-choices`, `.field-label`, `textarea`, `.field-hint` | Native `<dialog>`; checked choice turns green |
-| Toast | `.toast-region` › `.toast` | Ink pill with paper text, dismiss button |
-| Pending note | `.pending-note` | Green-soft status line |
+Home order on a phone: heading, optional daily prompt, composer, existing filters, feed, then useful supporting discovery content. A Soul Question reminder may link to its private screen; never put raw question text into a public/discoverable card or search preview.
 
-Icons come from `views/components/Icon.tsx` (24px grid, 1.65 stroke, round caps). Add new icons there in the same outlined style. Do not use emoji or filled icon sets. The logo is `views/components/Logo.tsx` and is always tinted with `--accent`.
+## 7. Component specifications
 
-## Building a new page
+| Component / existing location | Visual and behavioral specification |
+| --- | --- |
+| Shell / `App.tsx`, `.side-nav`, `.mobile-nav` | Airy ivory canvas; forest logo and icons; selected row uses accent-soft plus aria-current; footer profile stays secondary |
+| `.page-heading` | One visible serif h1, one short sans-serif supporting sentence. Suggested Home text: “A little connection. A deeper meaning.” |
+| `.composer-prompt` | One warm compose card: profile photo or initials, smaller regular-weight Nunito “Share an insight, [first name]?” prompt, and green plus action. Uses warm-soft, warm-line, warm/strong text, and the existing keyboard-accessible compose button; no separate daily-question panel |
+| `.feed-tabs` | Retain For you, Your helplist, Topics and existing filtering. Pill controls; selected state in green, with programmatic state. Wrap or horizontally scroll without hiding the current selection |
+| `InsightCard.tsx`, `.insight-card` | Header with avatar, author, time, and Circle; body in ink; optional scripture or media; quiet action row. 16/24px inner padding. Separate metadata from body with 12px space |
+| `.scripture-quote` | Pale honey inset; italic serif verse, reference underneath; book icon if useful. Avoid decorative quotation marks that dominate the content |
+| Post actions | Preserve helpful, comment, save, report and existing semantics. Do not rename helpful to Resonate merely to match the concept. Selected state uses text plus icon/state; saving uses warm tone |
+| `.questions-card`, `SoulQuestionsPage.tsx` | Lock and “Just for you. Always private.” Honey inset; no share control, audience selector, public reply, or social preview. Never confuse private questions with publishable reflections |
+| `SpacesPage.tsx` | Circles discovery follows the reference: search, interest search shortcuts, a community banner, photo cards, and a “Your circles” membership/invitation rail. Explicit Public/Private labels, membership status and correct join/request actions remain visible |
+| `SpaceOverviewPage.tsx` | Cover image, serif title, audience/access explanation, members and existing approved content. Private content remains gated; requested membership is not access |
+| `ComposePostForm.tsx` | Required single destination, visible audience explanation, attachments and submission state. Preserve moderation: submission is pending, never an instant public post |
+| `ProfilePage.tsx`, `components/ScriptureHeroes.tsx` | Profile owns the “Your words matter” dashboard and Scripture Heroes activity. Personal gratitude and meaningful impact; no competitive leaderboards. Anonymous aggregate helpful confirmations only; no recipient identity or Soul Question match detail |
+| `ProfilePage.tsx`, public profiles | Serif name and quiet section headings; existing audience and post-visibility rules. Owner-only review states remain owner-only |
+| Search and forms | Visible labels, control-line boundary, at least 44px target height; focus, error, hint and disabled states. Placeholders supplement labels |
+| Dialog / `.prototype-modal` | Surface, 20px radius, restrained shadow; title and explicit close; focus management and keyboard dismissal; mobile fits visible viewport |
+| Toast / `.toast` | Brief confirmation, accessible status announcement, dismiss control. Error messages stay near the affected action as well |
 
-1. Start inside the existing shell (`App.tsx`): the header, the `.workspace` sidebar, and `.mobile-nav`. Add the page to the `navigation` array only if it is a top-level destination.
-2. Design at 375px width first, then widen. The sidebar disappears below 760px and the bottom nav takes over.
-3. Give the page exactly one `.page-heading h1` in warm, plain language ("We’re part of each other’s story.").
-4. Put content in `--surface` cards on `--paper`. Use a honey (`--warm-soft`) panel for anything private or devotional, and a green-soft (`--accent-soft`) panel for impact or status.
-5. Give the view one `.button-primary`. Everything else is soft, outline, or a link.
-6. Every async view needs loading, empty (`.empty-state`), error, and success states.
-7. Add new reusable styles to `styles.css` under a commented section, using tokens only. Prefer extending an existing class over creating a near-duplicate.
-8. Check day and evening modes, keyboard focus (green ring), 44px touch targets, and reduced motion.
+Buttons: one visually dominant primary action per local workflow; use soft/outline treatment for secondary actions. Preserve the repository's one-filled-primary-per-view convention. Minimum target 44×44px, including small-looking icon actions. Button labels are sans-serif, 15–16px, 700. Provide default, hover, focus, pressed, busy and disabled states. Busy actions preserve width, show readable progress, and prevent duplicate submission.
 
-## Voice
+## 8. Imagery and icons
 
-Gentle, personal, and short. Speak like a kind friend: "What’s on your heart, Avery?", "Take a little light with you.", "Just for you. Always private." Avoid hype, metrics language, and exclamation marks. Never frame Soul Questions as shareable.
+Natural daylight, candid people, mountain paths, gentle landscape photography, and restrained watercolor foliage. Photography supports actual content; it does not replace scripture or a useful post. Use a 16:9 feed-media container with an option to view the full asset when cropping would hide content. Circle covers can use a shallow 3:1 crop.
+
+Use small botanical artwork in empty corners or a single daily-prompt banner, never behind reading text or on every card. Two small decorative accents per screen are usually enough. Keep the existing Scripture Hero logo; do not copy Gather's leaf logo. Use the existing outlined icons from `Icon.tsx` at their 24px grid and 1.65 stroke.
+
+The enclosed generated images are design references, not finished image assets, actual member photographs, or accessible layouts. Do not crop their avatars or words into production components. Source or create production assets separately and provide appropriate alt text; purely decorative art has empty alt text.
+
+## 9. Interaction, content, and accessibility
+
+Warm, short, sincere language. Examples: “What’s on your heart?”, “Share an insight”, “This helped me”, “Saved to your helplist”, “Your insight is awaiting review.” Use a real Circle/audience name in composer guidance. No growth slogans, urgency counters, or pressure to share private experiences.
+
+Every asynchronous view needs loading, empty, error, and success states. Skeletons mirror the final card structure without flashing. Empty feeds offer one useful next action. Errors preserve drafts and explain retry. Submitted posts show the existing pending-review state.
+
+Use semantic landmarks, ordered headings, visible labels, native controls, an accessible skip link, and meaningful focus order. Focus ring: 3px accent, 3px offset; ensure it remains visible on both selected and normal surfaces. Do not use hue alone to distinguish selection, errors, saved state, or privacy. Support reduced motion; any small feedback transition should be 120–180ms and nonessential. Do not animate large backgrounds or auto-play media.
+
+Validate text pairs to at least 4.5:1 and identifying controls/focus to at least 3:1 in both modes. These are palette requirements; actual overlays, opacity, photographs and component combinations must also be checked. Day/evening choice continues to use the existing appearance service and html data-theme mechanism.
+
+## 10. Product mapping: reference versus repository
+
+| Gather reference | Scripture Hero adaptation |
+| --- | --- |
+| Gather branding | Scripture Hero branding |
+| Circles | Circles in the UI; existing `Space` domain and API names remain stable |
+| Generic reflections | Scriptural insights / testimonies using existing posts |
+| Resonate reaction | Existing helpful confirmation |
+| Journal with a share selector | Do not apply to Soul Questions; private questions remain private |
+| Upcoming gatherings | Omit unless an existing supported feature supplies it; use recommended Circles instead |
+| Following / Discover / My circles | Existing For you / Your helplist / Topics workflows |
+
+No new routes, gathering service, journaling feature, following model, or data schema is implied by this redesign.
+
+## 11. Implementation sequence
+
+1. Update the visual section of root `AGENTS.md` alongside the new design guide so it no longer requires Golden hour, only Nunito, or pills for every navigation item. Keep all product, mobile, privacy and architecture requirements.
+2. Migrate tokens and typography centrally in `frontend/src/views/styles.css`, including explicit evening and system-preference blocks. Keep current aliases until their consumers are migrated.
+3. Restyle shared shell, navigation, buttons, fields, cards, icons and scripture blocks. Retain existing component boundaries and controllers.
+4. Restyle Home and `InsightCard` first; check mobile and desktop before extending the language to Circles and private screens.
+5. Apply the same tokens to details, profiles, heroes, messages, authentication, settings, legal and moderation states. Avoid leaving old-themed pages behind.
+6. Replace any temporary imagery with appropriate production assets; review image loading and small-screen performance.
+7. Run existing typecheck, test and build checks, then visual checks at 375, 768, 1280 and 1440px in both modes. Also inspect 320px, 200% text, keyboard navigation, reduced motion and a slow/loading state.
+
+Acceptance: the home screen reads as the original Gather direction at a glance—ivory canvas, forest headings/actions, editorial serif hierarchy, lightly bordered cards, calm photography—while every existing Scripture Hero flow still works.

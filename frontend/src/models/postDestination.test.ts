@@ -20,12 +20,12 @@ describe("post destination and retries", () => {
   it("makes public and private audiences explicit without claiming immediate publication", () => {
     expect(destinationDescription(space)).toContain("Family circle");
     expect(destinationDescription(space)).toContain(
-      "Only members of this private Space can read it after approval.",
+      "Only members of this private circle can read it after approval.",
     );
     expect(
       destinationDescription({ name: "Global", visibility: "public" }),
     ).toContain(
-      "Anyone can read it after approval, including people outside this Space.",
+      "Anyone can read it after approval, including people outside this circle.",
     );
   });
   it("allows Global and active members, never requests or invitations", () => {

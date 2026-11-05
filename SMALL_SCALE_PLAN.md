@@ -30,7 +30,7 @@ Agree on the smallest shared profile and post shapes before building in parallel
 - Soul Questions need create, read, and edit for their owner. Matching and recommendations can wait.
 - A private saved list and basic one-to-one message threads are enough. No search, attachments, group chat, or message notifications.
 - Reuse the existing layout and classes in `DESIGN_SYSTEM.md`. Check a narrow phone screen and desktop in Day and Evening modes.
-- Defer private Spaces, media uploads, comments, notifications, automated matching, moderation, and a native app.
+- Defer private Circles, media uploads, comments, notifications, automated matching, moderation, and a native app.
 
 ## Monday acceptance check
 

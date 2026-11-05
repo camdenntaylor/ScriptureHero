@@ -18,9 +18,9 @@ const faqs: { question: string; answer: string }[] = [
       'Never. Soul Questions are only visible to you, in your own private space. They are never shown on your profile, in the feed, or to anyone you message.',
   },
   {
-    question: 'How do Spaces work?',
+    question: 'How do Circles work?',
     answer:
-      'A Space is a smaller circle within Scripture Hero — a congregation, a family, a group of friends. Posts shared in a Space are only visible to that Space\'s members, unlike the Global feed.',
+      'A Circle is a smaller circle within Scripture Hero — a congregation, a family, a group of friends. Posts shared in a Circle are only visible to that Circle\'s members, unlike the Global feed.',
   },
   {
     question: "I don't know what to write about. Where do I start?",
