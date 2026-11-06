@@ -91,7 +91,7 @@ Build at 375px first; verify 320px and 200% text scaling. Content height is alwa
 
 The feed must be allowed to shrink without horizontal overflow. At the narrow end of a breakpoint, reduce columns before reducing readable text. The reference's three columns are a desktop enhancement.
 
-Desktop navigation: Scripture Hero logo, existing destinations, one clear Share an insight action. Keep existing route names and destination access rules. Mobile: preserve current destination availability and accessible overflow if needed; never squeeze all links into tiny targets. Bottom navigation and dialogs account for device safe areas and the on-screen keyboard.
+Desktop navigation: Scripture Hero logo, existing destinations, one clear Share an insight action. Keep existing route names and destination access rules. Mobile: show Home, Explore, Circles, Messages, and Profile directly in one bottom bar with at least 44px targets and wrapping labels for enlarged text. Preserve destination access rules. Bottom navigation and dialogs account for device safe areas and the on-screen keyboard.
 
 Home order on a phone: heading, optional daily prompt, composer, existing filters, feed, then useful supporting discovery content. A Soul Question reminder may link to its private screen; never put raw question text into a public/discoverable card or search preview.
 
@@ -106,7 +106,8 @@ Home order on a phone: heading, optional daily prompt, composer, existing filter
 | `InsightCard.tsx`, `.insight-card` | Header with avatar, author, time, and Circle; body in ink; optional scripture or media; quiet action row. 16/24px inner padding. Separate metadata from body with 12px space |
 | `.scripture-quote` | Pale honey inset; italic serif verse, reference underneath; book icon if useful. Avoid decorative quotation marks that dominate the content |
 | Post actions | Preserve helpful, comment, save, report and existing semantics. Do not rename helpful to Resonate merely to match the concept. Selected state uses text plus icon/state; saving uses warm tone |
-| `.questions-card`, `SoulQuestionsPage.tsx` | Lock and “Just for you. Always private.” Honey inset; no share control, audience selector, public reply, or social preview. Never confuse private questions with publishable reflections |
+| `.questions-card` | First card in Home’s supporting rail; match the other rail cards with a surface background, fine line border, ink serif heading, and muted body. Keep the lock and “Just for you. Always private.” reminder; never display raw questions here |
+| `SoulQuestionsPage.tsx` | Honey inset; lock and “Just for you. Always private.” No share control, audience selector, public reply, or social preview. Never confuse private questions with publishable reflections |
 | `SpacesPage.tsx` | Circles discovery follows the reference: search, interest search shortcuts, a community banner, photo cards, and a “Your circles” membership/invitation rail. Explicit Public/Private labels, membership status and correct join/request actions remain visible |
 | `SpaceOverviewPage.tsx` | Cover image, serif title, audience/access explanation, members and existing approved content. Private content remains gated; requested membership is not access |
 | `ComposePostForm.tsx` | Required single destination, visible audience explanation, attachments and submission state. Preserve moderation: submission is pending, never an instant public post |

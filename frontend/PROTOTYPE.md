@@ -34,7 +34,7 @@ The feed, likes, comments, saved-post helplist, Heroes, messages, and drafted po
 - Theme: ivory and forest (see `../DESIGN_SYSTEM.md` and `../redesign-system/references/`). Day uses ivory paper and forest ink; Evening uses charcoal surfaces with lighter green actions. Honey marks scripture and private reflection in both modes. Cards have light borders and no default shadow.
 - Fonts: Georgia for editorial headings and italic scripture; Nunito for interface and body copy. Nunito is the only external font request; photo and video are served locally.
 - `src/views/components/LandscapeArt.tsx`: original decorative SVG covers using the shared day/evening tokens. Reference mockup images are never shipped as UI assets.
-- Navigation: phones show Home, Explore, Circles, and a native More disclosure for remaining destinations. Escape closes More. Tablets add the sidebar at 760px; Home adds a supporting rail at 1100px. The shell is capped at 1520px.
+- Navigation: phones show Home, Explore, Circles, Messages, and Profile directly in a single bottom bar, with at least 44px touch targets. Visitors receive only their available destinations. Tablets add the sidebar at 760px; Home adds a supporting rail at 1100px, led by the neutral “Your soul questions” reminder card. The shell is capped at 1520px.
 - Logo and interface icons: repository-native outlined SVG. The logo depicts two people reaching toward one another with a shared heart shape.
 
 ### ImageGen prompt

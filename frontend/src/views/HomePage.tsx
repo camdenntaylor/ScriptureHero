@@ -102,13 +102,24 @@ export function HomePage({ app }: { app: PrototypeController }) {
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
         >
-          {photoUrl ? <img className="header-photo composer-avatar" src={photoUrl} alt="" /> : (
-            <span className="avatar avatar-gold composer-avatar" aria-hidden="true">
-              {app.profile?.name.trim().slice(0, 2).toUpperCase() ?? 'AV'}
+          {photoUrl ? (
+            <img
+              className="header-photo composer-avatar"
+              src={photoUrl}
+              alt=""
+            />
+          ) : (
+            <span
+              className="avatar avatar-gold composer-avatar"
+              aria-hidden="true"
+            >
+              {app.profile?.name.trim().slice(0, 2).toUpperCase() ?? "AV"}
             </span>
           )}
           <span className="composer-prompt-copy">
-            <span className="composer-prompt-title">Share an insight{firstName ? `, ${firstName}` : ''}?</span>
+            <span className="composer-prompt-title">
+              Share an insight{firstName ? `, ${firstName}` : ""}?
+            </span>
           </span>
           <span className="compose-icon">
             <Icon name="plus" />
@@ -188,6 +199,36 @@ export function HomePage({ app }: { app: PrototypeController }) {
         )}
       </div>
       <aside className="feed-aside" aria-label="Reflection and community">
+        <section
+          className="questions-card"
+          aria-labelledby="home-questions-title"
+        >
+          <div className="aside-heading">
+            <h2 id="home-questions-title">Your soul questions</h2>
+            <Icon name="lock" size={14} />
+          </div>
+          <p className="aside-description">
+            Your feed is tailored to help you find answers.
+          </p>
+          <p className="aside-description">
+            {app.profile
+              ? "Open your profile to record or revisit a question."
+              : "Log in to open your private space."}
+          </p>
+          <p className="privacy-note">
+            <Icon name="lock" size={13} /> Just for you. Always private.
+          </p>
+          <a
+            className="button-link questions-heroes-link"
+            href={app.profile ? "#questions" : "#login"}
+          >
+            {app.profile ? "Open your private questions" : "Log in"}{" "}
+            <Icon name="arrow" size={17} />
+          </a>
+          <a className="button-link questions-heroes-link" href="#library">
+            Not sure where to start? <Icon name="arrow" size={17} />
+          </a>
+        </section>
         <section className="reflection-card" aria-labelledby="reflection-title">
           <p className="eyebrow">A LITTLE STILLNESS</p>
           <LandscapeArt />
@@ -216,34 +257,6 @@ export function HomePage({ app }: { app: PrototypeController }) {
           <p>Small circles. Shared faith. Meaningful conversations.</p>
           <a className="button-link" href="#circles">
             Discover Circles <Icon name="arrow" size={17} />
-          </a>
-        </section>
-        <section className="questions-card">
-          <div className="aside-heading">
-            <Icon name="book" size={20} />
-            <h2>Your soul questions</h2>
-            <Icon name="lock" size={14} />
-          </div>
-          <p className="aside-description">
-            The things you’re holding in your heart.
-          </p>
-          <p className="aside-description">
-            {app.profile
-              ? "Open your private space to record or revisit a question."
-              : "Log in to open your private space."}
-          </p>
-          <p className="privacy-note">
-            <Icon name="lock" size={13} /> Just for you. Always private.
-          </p>
-          <a
-            className="button-link questions-heroes-link"
-            href={app.profile ? "#questions" : "#login"}
-          >
-            {app.profile ? "Open your private questions" : "Log in"}{" "}
-            <Icon name="arrow" size={17} />
-          </a>
-          <a className="button-link questions-heroes-link" href="#library">
-            Not sure where to start? <Icon name="arrow" size={17} />
           </a>
         </section>
       </aside>

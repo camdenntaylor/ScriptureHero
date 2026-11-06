@@ -63,9 +63,8 @@
   --sidebar-width: 200px;
   --rail-width: 280px;
   --shell-width: 1520px;
-  --nav-gutter: 8px;
-  --nav-gap: 4px;
-  --nav-label-padding: 2px;
+  --nav-gutter: 4px;
+  --nav-gap: 0;
   /* Legacy aliases — keep until no component references them. */
   --white: var(--surface);
   --accent-dark: var(--accent-strong);
@@ -1263,10 +1262,10 @@ textarea::placeholder {
 }
 .questions-card {
   padding: 22px 22px 18px;
-  border: 1px solid var(--warm-line);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--warm-soft);
-  color: var(--warm);
+  background: var(--surface);
+  color: var(--ink);
 }
 .aside-heading {
   display: flex;
@@ -1334,7 +1333,7 @@ textarea::placeholder {
   margin-top: 2px;
 }
 .questions-card > .privacy-note {
-  border-top: 1px solid var(--warm-line);
+  border-top: 1px solid var(--line);
   padding-top: 14px;
 }
 .round-icon {
@@ -1349,7 +1348,7 @@ textarea::placeholder {
 .questions-heroes-link {
   justify-content: space-between;
   width: 100%;
-  border-top: 1px solid var(--warm-line);
+  border-top: 1px solid var(--line);
   padding-top: 12px;
   margin-top: 12px;
   font-size: 0.88rem;
@@ -3005,8 +3004,11 @@ button, .button, .button-link { overflow-wrap: anywhere; }
 .aside-heading { flex-wrap: wrap; }
 .aside-heading h2 { font-size: 1.3125rem; }
 .questions-card { padding: var(--card-padding); }
+.questions-card .aside-heading { color: var(--accent); }
+.questions-card .aside-heading h2 { color: var(--ink); font-size: 1.5rem; }
+.questions-card .aside-description { color: var(--muted); font-size: 1rem; margin-top: var(--space-3); }
 .questions-card .privacy-note { margin-top: var(--space-4); }
-.questions-heroes-link { color: var(--warm-strong); }
+.questions-heroes-link { color: var(--accent); }
 .questions-page .eyebrow { color: var(--warm); }
 .profile-grid { grid-template-columns: minmax(0, 1fr); }
 .profile-links-grid { grid-template-columns: minmax(0, 1fr); }
@@ -3082,7 +3084,8 @@ input::placeholder, textarea::placeholder, .topics-search input::placeholder, .c
 @media (max-width: 759px) {
   .mobile-nav {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
     gap: var(--nav-gap);
     position: fixed;
     inset: auto 0 0;
@@ -3091,7 +3094,7 @@ input::placeholder, textarea::placeholder, .topics-search input::placeholder, .c
     background: var(--surface);
     z-index: 10;
   }
-  .mobile-nav > a, .mobile-more > summary {
+  .mobile-nav > a {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3099,32 +3102,16 @@ input::placeholder, textarea::placeholder, .topics-search input::placeholder, .c
     gap: var(--space-1);
     min-width: 44px;
     min-height: 52px;
-    padding: var(--space-1) var(--nav-label-padding);
+    padding: var(--space-1) 0;
     color: var(--muted);
     border-radius: var(--radius-md);
     font-size: 0.75rem;
     font-weight: 700;
     overflow-wrap: anywhere;
+    text-align: center;
     cursor: pointer;
   }
-  .mobile-more > summary { list-style: none; }
-  .mobile-more > summary::-webkit-details-marker { display: none; }
-  .mobile-nav [aria-current="page"], .mobile-more[open] > summary { background: var(--accent-soft); color: var(--accent-strong); }
-  .mobile-more-links {
-    position: absolute;
-    bottom: calc(100% + var(--space-2));
-    right: var(--space-4);
-    left: var(--space-4);
-    max-height: 60dvh;
-    overflow-y: auto;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: var(--space-2);
-    box-shadow: var(--shadow-menu);
-  }
-  .mobile-more-links a { display: flex; align-items: center; gap: var(--space-3); min-height: 48px; padding: var(--space-3); border-radius: var(--radius-md); }
-  .mobile-more-links a:hover { background: var(--raised); }
+  .mobile-nav [aria-current="page"] { background: var(--accent-soft); color: var(--accent-strong); }
   .workspace { padding-inline: max(var(--page-gutter), env(safe-area-inset-left)) max(var(--page-gutter), env(safe-area-inset-right)); padding-bottom: calc(8rem + env(safe-area-inset-bottom)); }
   .toast-region { bottom: calc(8rem + env(safe-area-inset-bottom)); }
   .header-actions { gap: var(--space-1); }
