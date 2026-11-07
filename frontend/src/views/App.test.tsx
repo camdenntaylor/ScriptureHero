@@ -161,6 +161,24 @@ describe("messaging account access", () => {
     expect(html).toContain("A dedicated platform for");
   });
 
+  it('shows Welcome with a Continue link after the guest session is ready', () => {
+    const html = renderAccount('welcome', true, false, true);
+    expect(html).toContain('landing-shell');
+    expect(html).toContain('A dedicated platform for');
+    expect(html).toContain('class="button button-primary landing-cta" href="#home">Continue');
+    expect(html).not.toContain('class="composer-prompt"');
+    expect(html).not.toContain('Welcome back.');
+  });
+
+  it('shows Home with the guest account after continuing from Welcome', () => {
+    const html = renderAccount('home', true, false, true);
+    expect(html).toContain('class="composer-prompt"');
+    expect(html).toContain('Guest preview');
+    expect(html).toContain('href="#profile"');
+    expect(html).not.toContain('landing-shell');
+    expect(html).not.toContain('Welcome back.');
+  });
+
   it("does not flash Welcome while an existing account is being verified", () => {
     const html = renderAccount("welcome", false, true);
     expect(html).toContain("Loading your account");

@@ -144,7 +144,7 @@ export function resourceIdFromHash(hash: string): string {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : ''
 }
 
-/** Returning members enter the community instead of the visitor welcome page. */
-export function screenForAccount(screen: Screen, signedIn: boolean): Screen {
-  return signedIn && (screen === 'welcome' || screen === 'login') ? 'home' : screen;
+/** Guest profiles can see Welcome; returning account holders enter the community. */
+export function screenForAccount(screen: Screen, signedIn: boolean, isGuest = false): Screen {
+  return signedIn && (screen === 'login' || (screen === 'welcome' && !isGuest)) ? 'home' : screen;
 }

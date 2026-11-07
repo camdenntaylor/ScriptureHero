@@ -70,7 +70,7 @@ export function usePrototypeController() {
   const [authLoading, setAuthLoading] = useState(true);
   const [accountError, setAccountError] = useState("");
   const signedIn = Boolean(profile);
-  const currentScreen = screenForAccount(screen, signedIn);
+  const currentScreen = screenForAccount(screen, signedIn, isGuest);
   const loadVersion = useRef(0);
 
   async function enterGuest() {
@@ -191,9 +191,9 @@ export function usePrototypeController() {
   }, []);
 
   useEffect(() => {
-    if (profile && screenForAccount(screen, true) !== screen)
+    if (profile && screenForAccount(screen, true, isGuest) !== screen)
       window.location.replace("#home");
-  }, [profile, screen]);
+  }, [profile, screen, isGuest]);
 
   useEffect(() => {
     const titles = {

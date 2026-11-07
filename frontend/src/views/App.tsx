@@ -55,7 +55,7 @@ const PRIVATE_SCREENS: Screen[] = [
 
 export function App() {
   const app = usePrototypeController();
-  const screen = screenForAccount(app.screen, Boolean(app.profile));
+  const screen = screenForAccount(app.screen, Boolean(app.profile), app.isGuest);
   const welcome = screen === "welcome" && !app.authLoading;
   const privateRoute = PRIVATE_SCREENS.includes(screen);
   const login =
