@@ -6,34 +6,34 @@ import { Icon } from "./Icon";
 
 export function ImpactDashboard({ app }: { app: PrototypeController }) {
   return (
-      <section className="impact-banner" aria-label="Your impact">
-        <div className="impact-intro">
-          <span className="round-icon">
-            <Icon name="heart" size={26} />
+    <section className="impact-banner" aria-label="Your impact">
+      <div className="impact-intro">
+        <span className="round-icon">
+          <Icon name="heart" size={26} />
+        </span>
+        <div>
+          <h2>Your words matter.</h2>
+          <p>Look at the good you’ve put into the world.</p>
+        </div>
+      </div>
+      <div className="impact-stats">
+        <div>
+          <strong>{impact.peopleHelped}</strong>
+          <span>people you’ve helped</span>
+        </div>
+        <div>
+          <strong>{impact.insightsShared}</strong>
+          <span>insights you’ve shared</span>
+        </div>
+        <div>
+          <strong>{app.heroes.length}</strong>
+          <span>
+            {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}{" "}
+            for you
           </span>
-          <div>
-            <h2>Your words matter.</h2>
-            <p>Look at the good you’ve put into the world.</p>
-          </div>
         </div>
-        <div className="impact-stats">
-          <div>
-            <strong>{impact.peopleHelped}</strong>
-            <span>people you’ve helped</span>
-          </div>
-          <div>
-            <strong>{impact.insightsShared}</strong>
-            <span>insights you’ve shared</span>
-          </div>
-          <div>
-            <strong>{app.heroes.length}</strong>
-            <span>
-              {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}{" "}
-              for you
-            </span>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
   );
 }
 
@@ -43,12 +43,15 @@ export function ScriptureHeroes({ app }: { app: PrototypeController }) {
     <section className="profile-heroes" aria-labelledby="profile-heroes-title">
       <div className="section-intro">
         <h2 id="profile-heroes-title">Scripture Heroes</h2>
-        <p>A little gratitude for the words that helped along the way.</p>
+        <p>People who have helped you with your soul questions.</p>
       </div>
       <a className="button-link" href="#messages">
         <Icon name="message" size={17} /> Open your conversations
       </a>
-      <div className="heroes-tabs" aria-label="Choose Scripture Heroes activity">
+      <div
+        className="heroes-tabs"
+        aria-label="Choose Scripture Heroes activity"
+      >
         <button
           className={tab === "heroes" ? "active" : ""}
           aria-pressed={tab === "heroes"}

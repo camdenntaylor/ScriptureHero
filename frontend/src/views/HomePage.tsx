@@ -230,7 +230,7 @@ export function HomePage({ app }: { app: PrototypeController }) {
           </a>
         </section>
         <section className="reflection-card" aria-labelledby="reflection-title">
-          <p className="eyebrow">A LITTLE STILLNESS</p>
+          <p className="eyebrow">FEATURED POST</p>
           <LandscapeArt />
           <h2 id="reflection-title">Room to grow.</h2>
           <p>
