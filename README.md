@@ -49,6 +49,8 @@ The revision fixes a **visual-hierarchy and competing-signals problem**: the ear
 
 For frontend-only deployments, run `pnpm run build` from `frontend/`. This command first builds the shared `@scripture-hero/contracts` workspace package, then typechecks and bundles the frontend into `frontend/dist`. It works without previously generated contract files; generated `dist` folders should remain uncommitted. Run `pnpm build` from the repository root to build every workspace.
 
+For backend-only deployments, run `pnpm run build` from `backend/`. This command first builds `@scripture-hero/contracts`, then compiles the API into `backend/dist`. The deployment must include the workspace root and `packages/contracts/` so the shared package can be installed and built. Generated contract files are not committed, so a backend build must create them even on a fresh checkout.
+
 ## Guest beta testing
 
 New visitors automatically enter as **Avery Guest**, with access to the account screens and a separate set of fictional sample data for each visit. No setup, shared password, Supabase guest account, or backend server is needed for the guest preview. Existing authenticated sessions still use the real account APIs.
