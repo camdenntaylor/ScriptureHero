@@ -93,4 +93,14 @@ describe('the prototype help loop', () => {
     expect(screenForAccount('heroes', true)).toBe('profile')
     expect(screenForAccount('heroes', false)).toBe('profile')
   })
+
+  it('keeps Welcome after the guest profile loads and allows continuing into the community', () => {
+    expect(screenForAccount(screenFromHash(''), true, true)).toBe('welcome')
+    expect(screenForAccount(screenFromHash('#welcome'), true, true)).toBe('welcome')
+    expect(screenForAccount('home', true, true)).toBe('home')
+    expect(screenForAccount('login', true, true)).toBe('home')
+    expect(screenForAccount('questions', true, true)).toBe('questions')
+    expect(screenForAccount('insight', true, true)).toBe('insight')
+    expect(screenForAccount('heroes', true, true)).toBe('profile')
+  })
 })

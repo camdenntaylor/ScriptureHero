@@ -14,7 +14,7 @@ export function LandingPage() {
             Grow closer to Jesus, and to each other.
           </p>
           <a className="button button-primary landing-cta" href="#home">
-            Find your community <Icon name="arrow" />
+            Continue <Icon name="arrow" />
           </a>
           <p className="welcome-note">
             <Icon name="globe" size={16} /> Every background. Every stage of
