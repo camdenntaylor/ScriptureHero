@@ -62,7 +62,7 @@ function ReflectionVideo({ post }: { post: Insight }) {
   )
 }
 
-export function InsightCard({ post, app }: { post: Insight; app: PrototypeController }) {
+export function InsightCard({ post, app, detail = false }: { post: Insight; app: PrototypeController; detail?: boolean }) {
   const [showComments, setShowComments] = useState(false)
   const [comment, setComment] = useState('')
   const liked = app.liked.includes(post.id)
@@ -90,11 +90,11 @@ export function InsightCard({ post, app }: { post: Insight; app: PrototypeContro
         </span>
       </header>
       <div className="post-copy">
-        <h2 id={`title-${post.id}`}>
+        {!detail && <h2 id={`title-${post.id}`}>
           <a className="post-title-link" href="#post" onClick={() => app.setViewedPostId(post.id)}>
             {post.title}
           </a>
-        </h2>
+        </h2>}
         <p className="post-body">{post.body}</p>
       </div>
       {post.video ? (

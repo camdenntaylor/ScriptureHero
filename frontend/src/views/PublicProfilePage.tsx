@@ -20,7 +20,7 @@ export function PublicProfilePage({ app }: { app: PrototypeController }) {
         <div className="empty-state">
           <Icon name="people" size={32} />
           <h2>We couldn't find this profile.</h2>
-          <p>They may have only shared insights in a Space you haven't joined.</p>
+          <p>They may have only shared insights in a Circle you haven't joined.</p>
         </div>
       </div>
     )

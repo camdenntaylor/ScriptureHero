@@ -15,7 +15,7 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 | Entry screen signifies overarching capability | 40 | ✅ Done | Welcome's "Learn through connection" headline + single `button-primary` CTA leads with capability over feature detail. |
 | Conventions, attention, grouping, usability principles | 40 | ✅ Done | Audited every screen against `DESIGN_SYSTEM.md`'s own rules. Found and fixed: missing page headings on Home, Profile, and Public Profile; zero hex colors, inline styles, or emoji anywhere in the app. |
 | Design library and component reuse | 40 | ✅ Done | Found and fixed a double-primary-button state on Heroes (empty state + "Share an insight" both showing at once). Every new screen reuses existing classes (`profile-card`, `question-choices`, `space-card`, etc.) instead of inventing near-duplicates. |
-| Fully functional, non-linear, goal-driven | 40 | ✅ Done | Goal stated in Welcome copy. Screen count well above the floor (see below). Welcome/Home/Heroes/Spaces/Library/Public Profile/About/Help/Terms/Privacy are all reachable with no sign-in required. |
+| Fully functional, non-linear, goal-driven | 40 | ✅ Done | Goal stated in Welcome copy. Screen count well above the floor (see below). Welcome/Home/Heroes/Circles/Library/Public Profile/About/Help/Terms/Privacy are all reachable with no sign-in required. |
 
 ## Full page inventory
 
@@ -25,7 +25,7 @@ This checks the app against the actual grading rubric, not `SMALL_SCALE_PLAN.md`
 | --- | --- | --- | --- | --- | --- |
 | 1 | `#welcome` | Welcome | Public visitor view | Entry point / visitor logo; signed-in members go Home | — |
 | 2 | `#home` | Home / Global feed | Public | Main nav | For you · Saved · Topics (browse) · Topics (results) — 4 |
-| 3 | `#spaces` | Spaces directory | Public | Main nav | Directory · a Space's feed — 2 |
+| 3 | `#circles` | Circles directory | Public | Main nav | Directory · a Circle's feed — 2 |
 | 4 | `#heroes` | Scripture Heroes | Public | Main nav | Your Heroes · People you've helped — 2 |
 | 5 | `#library` | Soul Questions Library (public FAQ/prompt directory) | Public | Soul Questions page, Home's aside card | — |
 | 6 | `#login` | Login | Public | Header "Log in" | Sign in · Sign up · Check your email — 3 |
@@ -58,7 +58,7 @@ Dropped along the way: a "most commonly asked questions" trending panel was cons
 
 1. **Early-stage notice + goal** — two quiet lines in Welcome's copy (replaced an earlier modal version that didn't match the app's calm feel).
 2. **Design-system audit #1** — fixed missing page headings on Home and Profile, and a double-primary-button state on Heroes.
-3. **Topics** (route 2's third tab) **+ Spaces** (routes 3) — search/browse insights by topic; a directory of simulated groups (a congregation, a family, friends, a city community), each with its own feed.
+3. **Topics** (route 2's third tab) **+ Circles** (routes 3) — search/browse insights by topic; a directory of simulated groups (a congregation, a family, friends, a city community), each with its own feed.
 4. **Soul Questions Library** (route 5) — a searchable public library of common prompts; picking one prefills the private Soul Questions form.
 5. **Profile split + Settings + Notifications** (routes 7–12) — Profile Overview (stats, badges) separated from Edit Profile (adds a favorite-verse field), plus Account & Privacy Settings, Notifications Center, and Notification Preferences. Added a header bell icon since Notifications isn't in the main nav.
 6. **Design-system audit #2** — re-verified all of the above against `DESIGN_SYSTEM.md`; everything passed.
@@ -69,7 +69,7 @@ Dropped along the way: a "most commonly asked questions" trending panel was cons
 ## Also worth doing before submission
 
 - A final team walkthrough confirming nothing forces a visitor into one linear path.
-- A visual spot-check of Evening/dark mode on the newest screens (Spaces, Library, Profile, Settings, Public Profile) — the code is 100% token-driven with zero hardcoded colors, so it should render correctly, but no one has eyeballed it yet.
+- A visual spot-check of Evening/dark mode on the newest screens (Circles, Library, Profile, Settings, Public Profile) — the code is 100% token-driven with zero hardcoded colors, so it should render correctly, but no one has eyeballed it yet.
 
 ## Submission note (paste alongside the public link)
 

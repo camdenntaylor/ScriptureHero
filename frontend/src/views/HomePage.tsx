@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { PrototypeController } from "../controllers/usePrototypeController";
 import { insights } from "../services/prototypeData";
+import { avatarUrl } from "../services/supabase";
 import { Icon } from "./components/Icon";
 import { InsightCard } from "./components/InsightCard";
+import { LandscapeArt } from "./components/LandscapeArt";
 
 function TopicsBrowser({ app }: { app: PrototypeController }) {
   const [query, setQuery] = useState("");
@@ -71,6 +73,8 @@ function TopicsBrowser({ app }: { app: PrototypeController }) {
 }
 
 export function HomePage({ app }: { app: PrototypeController }) {
+  const firstName = app.profile?.name.trim().split(/\s+/)[0];
+  const photoUrl = avatarUrl(app.profile?.avatarPath ?? null);
   return (
     <div className="home-columns">
       <div className="feed-column">
@@ -87,17 +91,35 @@ export function HomePage({ app }: { app: PrototypeController }) {
             </a>
           </div>
         )}
-        <header className="page-heading"></header>
+        <header className="page-heading home-heading">
+          <h1>
+            A little connection.
+            <br />A deeper meaning.
+          </h1>
+          <p>A space to share scripture, find hope, and belong.</p>
+        </header>
         <button
           className="composer-prompt"
           onClick={() => app.setDialog({ type: "compose" })}
         >
-          <span className="avatar avatar-gold" aria-hidden="true">
-            {app.profile?.name.slice(0, 2).toUpperCase() ?? "AV"}
-          </span>
-          <span>
-            Share an insight
-            {app.profile ? `, ${app.profile.name.split(" ")[0]}` : ""}?
+          {photoUrl ? (
+            <img
+              className="header-photo composer-avatar"
+              src={photoUrl}
+              alt=""
+            />
+          ) : (
+            <span
+              className="avatar avatar-gold composer-avatar"
+              aria-hidden="true"
+            >
+              {app.profile?.name.trim().slice(0, 2).toUpperCase() ?? "AV"}
+            </span>
+          )}
+          <span className="composer-prompt-copy">
+            <span className="composer-prompt-title">
+              Share an insight{firstName ? `, ${firstName}` : ""}?
+            </span>
           </span>
           <span className="compose-icon">
             <Icon name="plus" />
@@ -176,19 +198,21 @@ export function HomePage({ app }: { app: PrototypeController }) {
           </>
         )}
       </div>
-      <aside className="feed-aside" aria-label="Your private reflections">
-        <section className="questions-card">
+      <aside className="feed-aside" aria-label="Reflection and community">
+        <section
+          className="questions-card"
+          aria-labelledby="home-questions-title"
+        >
           <div className="aside-heading">
-            <Icon name="book" size={20} />
-            <h2>Your soul questions</h2>
+            <h2 id="home-questions-title">Your soul questions</h2>
             <Icon name="lock" size={14} />
           </div>
           <p className="aside-description">
-            The things you’re holding in your heart.
+            Your feed is tailored to help you find answers.
           </p>
           <p className="aside-description">
             {app.profile
-              ? "Open your private space to record or revisit a question."
+              ? "Open your profile to record or revisit a question."
               : "Log in to open your private space."}
           </p>
           <p className="privacy-note">
@@ -203,6 +227,36 @@ export function HomePage({ app }: { app: PrototypeController }) {
           </a>
           <a className="button-link questions-heroes-link" href="#library">
             Not sure where to start? <Icon name="arrow" size={17} />
+          </a>
+        </section>
+        <section className="reflection-card" aria-labelledby="reflection-title">
+          <p className="eyebrow">FEATURED POST</p>
+          <LandscapeArt />
+          <h2 id="reflection-title">Room to grow.</h2>
+          <p>
+            Sometimes a small pause helps us notice what God is doing in the
+            ordinary.
+          </p>
+          <a
+            className="button button-soft"
+            href="#post"
+            onClick={() => app.setViewedPostId("quiet-growth")}
+          >
+            Read the insight <Icon name="arrow" size={17} />
+          </a>
+        </section>
+        <section className="discovery-card" aria-labelledby="discovery-title">
+          <img
+            src="/images/community.webp"
+            alt=""
+            width="480"
+            height="160"
+            loading="lazy"
+          />
+          <h2 id="discovery-title">Find your people.</h2>
+          <p>Small circles. Shared faith. Meaningful conversations.</p>
+          <a className="button-link" href="#circles">
+            Discover Circles <Icon name="arrow" size={17} />
           </a>
         </section>
       </aside>

@@ -1,51 +1,57 @@
 import { useState } from "react";
-import type { PrototypeController } from "../controllers/usePrototypeController";
-import { appreciations, impact, insights } from "../services/prototypeData";
-import { Avatar } from "./components/Avatar";
-import { Icon } from "./components/Icon";
-import { Logo } from "./components/Logo";
+import type { PrototypeController } from "../../controllers/usePrototypeController";
+import { appreciations, impact, insights } from "../../services/prototypeData";
+import { Avatar } from "./Avatar";
+import { Icon } from "./Icon";
 
-export function HeroesPage({ app }: { app: PrototypeController }) {
+export function ImpactDashboard({ app }: { app: PrototypeController }) {
+  return (
+    <section className="impact-banner" aria-label="Your impact">
+      <div className="impact-intro">
+        <span className="round-icon">
+          <Icon name="heart" size={26} />
+        </span>
+        <div>
+          <h2>Your words matter.</h2>
+          <p>Look at the good you’ve put into the world.</p>
+        </div>
+      </div>
+      <div className="impact-stats">
+        <div>
+          <strong>{impact.peopleHelped}</strong>
+          <span>people you’ve helped</span>
+        </div>
+        <div>
+          <strong>{impact.insightsShared}</strong>
+          <span>insights you’ve shared</span>
+        </div>
+        <div>
+          <strong>{app.heroes.length}</strong>
+          <span>
+            {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}{" "}
+            for you
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function ScriptureHeroes({ app }: { app: PrototypeController }) {
   const [tab, setTab] = useState<"heroes" | "helped">("heroes");
   return (
-    <div className="heroes-page">
-      {/* <header className="page-heading heroes-heading">
-        <h1>We’re part of each other’s story</h1>
-        <Logo className="heroes-watermark" />
-      </header> */}
-      <a className="button-link" href={app.profile ? "#messages" : "#login"}>
-        <Icon name="message" size={17} />{" "}
-        {app.profile ? "Open your conversations" : "Log in to message"}
+    <section className="profile-heroes" aria-labelledby="profile-heroes-title">
+      <div className="section-intro">
+        <h2 id="profile-heroes-title">Scripture Heroes</h2>
+        <p>People who have helped you with your soul questions.</p>
+      </div>
+      <a className="button-link" href="#messages">
+        <Icon name="message" size={17} /> Open your conversations
       </a>
-      <section className="impact-banner" aria-label="Your impact">
-        <div className="impact-intro">
-          <span className="round-icon">
-            <Icon name="heart" size={26} />
-          </span>
-          <div>
-            <h2>Your words matter.</h2>
-            <p>Look at the good you’ve put into the world.</p>
-          </div>
-        </div>
-        <div className="impact-stats">
-          <div>
-            <strong>{impact.peopleHelped}</strong>
-            <span>people you’ve helped</span>
-          </div>
-          <div>
-            <strong>{impact.insightsShared}</strong>
-            <span>insights you’ve shared</span>
-          </div>
-          <div>
-            <strong>{app.heroes.length}</strong>
-            <span>
-              {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}{" "}
-              for you
-            </span>
-          </div>
-        </div>
-      </section>
-      <div className="heroes-tabs">
+      <div
+        className="heroes-tabs"
+        aria-label="Choose Scripture Heroes activity"
+      >
         <button
           className={tab === "heroes" ? "active" : ""}
           aria-pressed={tab === "heroes"}
@@ -205,6 +211,6 @@ export function HeroesPage({ app }: { app: PrototypeController }) {
           Share an insight <Icon name="plus" size={18} />
         </button>
       </section>
-    </div>
+    </section>
   );
 }

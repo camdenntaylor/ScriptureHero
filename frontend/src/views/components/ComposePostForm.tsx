@@ -25,7 +25,7 @@ export function ComposePostForm({
     return (
       <>
         <p className="modal-description">
-          Log in to choose a Space and share your insight.
+          Log in to choose a Circle and share your insight.
         </p>
         <a className="button button-primary full-width" href="#login">
           Log in to share
@@ -55,7 +55,7 @@ export function ComposePostForm({
         onChange={(e) => form.setSpaceId(e.target.value)}
       >
         <option value="" disabled>
-          Choose a Space
+          Choose a Circle
         </option>
         {form.choices.map((space) => (
           <option key={space.id} value={space.id}>
@@ -80,11 +80,11 @@ export function ComposePostForm({
         <span>
           {form.selected
             ? destinationDescription(form.selected)
-            : "Choose where this post will go. Each post belongs to one Space."}
+            : "Choose where this post will go. Each post belongs to one Circle."}
         </span>
       </p>
       {(form.spaces.loading || form.context.loading) && (
-        <p role="status">Loading your Spaces…</p>
+        <p role="status">Loading your Circles…</p>
       )}
       {form.spaces.error && (
         <div>
@@ -99,13 +99,13 @@ export function ComposePostForm({
               form.spaces.items.length ? form.spaces.more : form.spaces.refresh
             }
           >
-            Try loading Spaces again
+            Try loading Circles again
           </button>
         </div>
       )}
       {form.context.error && !form.selected && (
         <p className="form-error" role="alert">
-          Unable to load the original Space. Choose another destination, or
+          Unable to load the original Circle. Choose another destination, or
           close this dialog and try again.
         </p>
       )}
@@ -113,8 +113,8 @@ export function ComposePostForm({
         form.context.value &&
         !form.choices.some((s) => s.id === initialSpaceId) && (
           <p className="privacy-note">
-            <Icon name="lock" size={16} /> Join this Space before posting here.
-            You can choose another Space below.
+            <Icon name="lock" size={16} /> Join this Circle before posting here.
+            You can choose another Circle below.
           </p>
         )}
       {form.spaces.nextCursor && (
@@ -124,12 +124,12 @@ export function ComposePostForm({
           disabled={form.spaces.loading || form.pending}
           onClick={form.spaces.more}
         >
-          Load more Spaces
+          Load more Circles
         </button>
       )}
       {!form.spaces.loading && !form.spaces.error && !form.choices.length && (
         <p className="muted">
-          No posting destinations are available right now. Join a Space or try
+          No posting destinations are available right now. Join a Circle or try
           again.
         </p>
       )}
@@ -148,7 +148,7 @@ export function ComposePostForm({
       />
       <p className="field-hint">{form.body.length}/1500</p>
       <p className="field-hint">
-        Your insight will be saved for review. It won’t appear in the Space
+        Your insight will be saved for review. It won’t appear in the Circle
         until approved.
       </p>
       {form.error && (
@@ -168,7 +168,7 @@ export function ComposePostForm({
           ? "Submitting…"
           : form.selected
             ? `Submit to ${form.selected.name} for review`
-            : "Choose a Space to continue"}
+            : "Choose a Circle to continue"}
       </button>
     </form>
   );

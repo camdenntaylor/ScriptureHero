@@ -4,7 +4,7 @@ import { Icon } from './components/Icon'
 
 const modes = [
   { value: 'system', label: 'System', description: 'Follow your device’s light or dark setting.' },
-  { value: 'day', label: 'Day', description: 'Warm cream surfaces and olive accents.' },
+  { value: 'day', label: 'Day', description: 'Warm ivory surfaces and forest-green accents.' },
   { value: 'evening', label: 'Evening', description: 'Soft gray surfaces for quieter light.' },
 ] as const
 

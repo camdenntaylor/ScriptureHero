@@ -2,6 +2,7 @@ import type { PrototypeController } from "../controllers/usePrototypeController"
 import { avatarUrl } from "../services/supabase";
 import { Icon, type IconName } from "./components/Icon";
 import { OwnPosts } from "./components/OwnPosts";
+import { ImpactDashboard, ScriptureHeroes } from "./components/ScriptureHeroes";
 
 export function ProfilePage({ app }: { app: PrototypeController }) {
   const profile = app.profile!;
@@ -28,9 +29,10 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
 
   return (
     <div className="profile-page">
-      {/* <header className="page-heading">
-        <h1>Your profile</h1>
-      </header> */}
+      <header className="page-heading">
+        <h1>Your little corner.</h1>
+        <p>Your story, the words you keep, and the good you share.</p>
+      </header>
 
       <section className="profile-card" aria-label="Profile summary">
         <div className="photo-row">
@@ -67,33 +69,8 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
         </a>
       </section>
 
-      <section className="impact-banner" aria-label="Your activity">
-        <div className="impact-intro">
-          <span className="round-icon">
-            <Icon name="heart" size={24} />
-          </span>
-          <div>
-            <h2>Your activity</h2>
-            <p>A quick look at your little corner.</p>
-          </div>
-        </div>
-        <div className="impact-stats">
-          <div>
-            <strong>{savedCount}</strong>
-            <span>insights saved</span>
-          </div>
-          <div>
-            <strong>{app.questions.length}</strong>
-            <span>Soul Questions</span>
-          </div>
-          <div>
-            <strong>{app.heroes.length}</strong>
-            <span>
-              {app.heroes.length === 1 ? "Scripture Hero" : "Scripture Heroes"}
-            </span>
-          </div>
-        </div>
-      </section>
+      <ImpactDashboard app={app} />
+      <ScriptureHeroes app={app} />
 
       {badges.length > 0 && (
         <section aria-label="Badges">
@@ -129,7 +106,7 @@ export function ProfilePage({ app }: { app: PrototypeController }) {
             <Icon name="lock" size={20} />
             <h2>Account & Privacy</h2>
           </div>
-          <p>Control anonymous posting, messages, and space visibility.</p>
+          <p>Control anonymous posting, messages, and circle visibility.</p>
           <a className="button button-soft" href="#settings-privacy">
             Open <Icon name="arrow" size={17} />
           </a>

@@ -89,8 +89,8 @@ The planned initial relational model includes:
 
 Important invariants:
 
-- A post belongs to exactly one Space.
-- Global is a public Space, not a separate post type.
+- A post belongs to exactly one Circle.
+- Global is a public Circle, not a separate post type.
 - Only approved posts may appear in feeds or matching results.
 - A user may mark a post helpful only once.
 - Scripture Hero recognition is derived from helpful confirmations, not an editable counter.
@@ -104,8 +104,8 @@ All schema changes must be migrations committed to the repository. Add indexes f
 Soul Questions are always private. They are sensitive personal data, not social content.
 
 - Only the question owner and privileged backend matching services may read raw question content.
-- Soul Questions must never appear on profiles, in Spaces, feeds, search results, public APIs, analytics payloads, or author notifications.
-- There is no public, friends, or Space visibility option for a Soul Question.
+- Soul Questions must never appear on profiles, in Circles, feeds, search results, public APIs, analytics payloads, or author notifications.
+- There is no public, friends, or Circle visibility option for a Soul Question.
 - Embeddings, inferred topics, match scores, and `post_question_matches` are private because they can reveal the question.
 - Recommendations produced from a question are visible only to its owner.
 - Post authors may learn only that their post helped someone and may see an anonymous aggregate count.
@@ -116,10 +116,10 @@ Soul Questions are always private. They are sensitive personal data, not social 
 
 Enforce these rules in API authorization and PostgreSQL Row Level Security. UI hiding alone is not a security boundary. Supabase service credentials must never be sent to the browser.
 
-## Spaces and authorization
+## Circles and authorization
 
 - Global posts are publicly readable only after approval.
-- Restricted Space content is readable only by active members of that Space.
+- Restricted Circle content is readable only by active members of that Circle.
 - Users can manage their own drafts but cannot bypass moderation when publishing or materially editing a published post.
 - Authorization checks belong close to the data boundary and must be enforced server-side even when the UI also restricts an action.
 - RLS is defense in depth, not a replacement for application-level authorization tests.
@@ -163,11 +163,14 @@ published -> hidden
 
 ## Visual design system
 
-All UI must follow `DESIGN_SYSTEM.md` (Golden hour theme). Read it before creating or restyling any screen.
+All UI must follow `DESIGN_SYSTEM.md` (Gather-inspired ivory and forest theme). Read it before creating or restyling any screen. Original visual references live in `redesign-system/references/`.
+
+User-facing terminology is Circle/Circles. Browser URLs use `#circles`, `#circle/<uuid>`, and `#create-circle`. Existing `Space` domain names, contracts, database tables, backend API paths, and internal screen identifiers remain stable; apply their authorization and privacy rules to Circles.
 
 - Use only the CSS custom properties and component classes in `frontend/src/views/styles.css`. Do not hard-code colors, radii, or shadows in components. Add a token first.
-- Olive green (`--accent`) is for actions and active state. Honey (`--warm`) is for scripture, Soul Questions, and anything private or reflective.
-- Nunito is the only typeface. Scripture is always italic.
+- Forest green (`--accent`) is for actions and active state. Honey (`--warm`) is for scripture, Soul Questions, and anything private or reflective.
+- Georgia (`--font-display`) is for editorial headings and italic scripture. Nunito (`--font-body`) is for body copy, navigation, and controls.
+- Use lightly bordered cards with restrained elevation, rounded rectangular navigation, and pill buttons. Keep the phone layout primary; desktop adds a sidebar and supporting rail.
 - Every screen must work in both day and evening modes (`prefers-color-scheme` or `<html data-theme>`).
 
 ## Frontend conventions

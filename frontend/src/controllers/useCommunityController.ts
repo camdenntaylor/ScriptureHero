@@ -7,6 +7,7 @@ import {
   listMembers,
   listSpacePosts,
   searchCommunity,
+  spaceLink,
   type SearchKind,
 } from "../services/communityApi";
 
@@ -149,14 +150,14 @@ export function useSpaceController(id: string, accountId: string | null) {
       const updated = await changeMembership(id, action, userId);
       setNotice(
         action === "invite"
-          ? "Invitation sent. They can accept it from their Spaces page."
+          ? "Invitation sent. They can accept it from their Circles page."
           : action === "approve"
             ? "Request approved."
             : action === "decline"
               ? "Invitation or request dismissed."
               : updated.membership === "requested"
-                ? "Your request was sent to the Space owner."
-                : "You’re a member of this Space.",
+                ? "Your request was sent to the circle owner."
+                : "You’re a member of this circle.",
       );
       space.refresh();
       members.refresh();
@@ -191,7 +192,7 @@ export function useCreateSpaceController() {
         description: description.trim(),
         visibility,
       });
-      window.location.hash = `#space/${space.id}`;
+      window.location.hash = spaceLink(space);
     } catch (err) {
       setError(message(err));
     } finally {

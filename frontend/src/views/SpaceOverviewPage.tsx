@@ -9,6 +9,7 @@ import {
   ResourceState,
 } from "./components/CommunityContent";
 import { Icon } from "./components/Icon";
+import { CircleCover } from "./components/CircleCover";
 import { GLOBAL_SPACE_ID } from '../models/postDestination';
 
 function InviteMembers({
@@ -53,7 +54,7 @@ function InviteMembers({
         </div>
       </form>
       <p className="field-hint">
-        Invitations appear on their Spaces page. They choose whether to join.
+        Invitations appear on their Circles page. They choose whether to join.
       </p>
       {search.submitted !== null && (
         <ResourceState
@@ -100,16 +101,17 @@ export function SpaceOverviewPage({
   const state = useSpaceController(id, app.profile?.id ?? null);
   const space = state.space.value;
   return (
-    <div className="spaces-page">
-      <a className="button-link topics-back" href="#spaces">
-        <Icon name="chevron" size={16} /> Spaces
+    <div className="spaces-page space-overview">
+      <a className="button-link topics-back" href="#circles">
+        <Icon name="chevron" size={16} /> Circles
       </a>
+      {space && <div className="circle-overview-cover"><CircleCover circle={space} /></div>}
       <header className="page-heading">
         <h1>{space?.name ?? "A place to connect."}</h1>
       </header>
       <ResourceState
         resource={state.space}
-        empty="This Space could not be found."
+        empty="This Circle could not be found."
       >
         {space && (
           <>
@@ -120,8 +122,8 @@ export function SpaceOverviewPage({
                   size={17}
                 />{" "}
                 {space.visibility === "private"
-                  ? "Private Space"
-                  : "Public Space"}
+                  ? "Private Circle"
+                  : "Public Circle"}
               </p>
               <p>
                 {space.description ||
@@ -134,7 +136,7 @@ export function SpaceOverviewPage({
               >
                 {space.visibility === "private"
                   ? "Only members can read posts. The owner reviews requests to join."
-                  : "Anyone can read approved posts and join this Space."}
+                  : "Anyone can read approved posts and join this Circle."}
               </p>
               {!app.profile ? (
                 <a className="button button-primary" href="#login">
@@ -143,7 +145,7 @@ export function SpaceOverviewPage({
               ) : space.membership === "active" ? (
                 <p className="pending-note">
                   <Icon name="check" size={17} />{" "}
-                  {state.owner ? "You own this Space." : "You’re a member."}
+                  {state.owner ? "You own this Circle." : "You’re a member."}
                 </p>
               ) : space.membership === "requested" ? (
                 <div className="community-toolbar">
@@ -185,7 +187,7 @@ export function SpaceOverviewPage({
                     ? "Sending…"
                     : space.visibility === "private"
                       ? "Request to join"
-                      : "Join Space"}
+                      : "Join Circle"}
                 </button>
               )}
               {state.pending && <p role="status">Updating membership…</p>}
@@ -254,9 +256,9 @@ export function SpaceOverviewPage({
               </>
             )}
             {state.canRead && (
-              <section className="community-section" aria-label="Space posts">
+              <section className="community-section" aria-label="Circle posts">
                 <div className="section-intro">
-                  <h2>Shared in this Space</h2>
+                  <h2>Shared in this Circle</h2>
                 </div>
                 <ResourceState
                   resource={state.posts}

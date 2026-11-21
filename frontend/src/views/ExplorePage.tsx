@@ -16,10 +16,10 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
   const count = users.length + spaces.length + posts.length;
   return (
     <div className="explore-page">
-      {/* <header className="page-heading">
-        <h1>A world of connection</h1>
-      </header> */}
-      {/* <p className="muted">Look for people, Spaces, and shared insights.</p> */}
+      <header className="page-heading">
+        <h1>A world of connection.</h1>
+        <p>Find people, Circles, and a little encouragement.</p>
+      </header>
       <form
         className="community-search"
         role="search"
@@ -29,9 +29,9 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
           search.results.refresh();
         }}
       >
-        {/* <label className="field-label" htmlFor="explore-search">
+        <label className="field-label" htmlFor="explore-search">
           Search the community
-        </label> */}
+        </label>
         <div className="community-toolbar">
           <input
             id="explore-search"
@@ -40,7 +40,7 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
             maxLength={100}
             value={search.term}
             onChange={(e) => search.setTerm(e.target.value)}
-            placeholder="A name, Space, or word of encouragement"
+            placeholder="A name, Circle, or word of encouragement"
           />
           <button className="button button-primary" type="submit">
             <Icon name="search" size={18} /> Search
@@ -57,7 +57,7 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
             onClick={() => search.setKind(kind)}
           >
             {
-              { all: "All", users: "People", spaces: "Spaces", posts: "Posts" }[
+              { all: "All", users: "People", spaces: "Circles", posts: "Posts" }[
                 kind
               ]
             }
@@ -102,15 +102,15 @@ export function ExplorePage({ app }: { app: PrototypeController }) {
             </section>
           )}
           {spaces.length > 0 && (
-            <section className="community-section" aria-label="Spaces">
+            <section className="community-section" aria-label="Circles">
               <div className="section-intro">
-                <h2>Spaces</h2>
+                <h2>Circles</h2>
                 {search.kind === "all" && (
                   <button
                     className="button-link"
                     onClick={() => search.setKind("spaces")}
                   >
-                    See more Spaces
+                    See more Circles
                   </button>
                 )}
               </div>

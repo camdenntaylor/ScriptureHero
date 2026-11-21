@@ -24,7 +24,7 @@ export class CommunityApiError extends Error {
     readonly code: string,
     readonly status: number,
   ) {
-    super(message);
+    super(message.replace(/\bSpaces\b/g, 'Circles').replace(/\bSpace\b/g, 'Circle'));
   }
 }
 async function request(path: string, init: RequestInit = {}): Promise<unknown> {
@@ -181,7 +181,7 @@ export async function submitSpacePost(spaceId: string, input: SubmitSpacePost) {
   }));
 }
 export const spaceLink = (space: Pick<Space, "id">) =>
-  `#space/${encodeURIComponent(space.id)}`;
+  `#circle/${encodeURIComponent(space.id)}`;
 export const profileLink = (profile: Pick<PublicProfile, "id">) =>
   `#member/${encodeURIComponent(profile.id)}`;
 export const insightLink = (post: Pick<VisiblePost, "id">) =>

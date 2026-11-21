@@ -24,7 +24,7 @@ export function SoulQuestionsPage({ app }: { app: PrototypeController }) {
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to remove your question.') }
   }
   return <div className="questions-page">
-    <header className="page-heading"><p className="eyebrow"><Icon name="lock" size={16} /> PRIVATE SPACE</p><h1>Your Soul Questions.</h1><p>Bring what you’re carrying. You can change your mind later.</p></header>
+    <header className="page-heading"><p className="eyebrow"><Icon name="lock" size={16} /> JUST FOR YOU. ALWAYS PRIVATE.</p><h1>Your Soul Questions.</h1><p>Bring what you’re carrying. There is room for your questions here.</p></header>
     <section className="profile-card soul-card" aria-label="Your private Soul Questions">
       <p className="privacy-note"><Icon name="lock" size={16} /> Only you can see these questions. They are never shared with post authors or displayed on your profile.</p>
       <form onSubmit={event => void record(event)}>

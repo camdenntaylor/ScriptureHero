@@ -55,7 +55,7 @@ export function MemberProfilePage({
             <h2>Shared insights</h2>
           </div>
           <p className="muted">
-            Approved posts from public Spaces and private Spaces you belong to.
+            Approved posts from public Circles and private Circles you belong to.
           </p>
           <ResourceState resource={posts} empty="No insights to show yet.">
             <div className="insight-list">

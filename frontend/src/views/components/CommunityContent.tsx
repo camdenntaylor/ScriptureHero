@@ -12,6 +12,7 @@ import {
 } from "../../services/communityApi";
 import { avatarUrl } from "../../services/supabase";
 import { Icon } from "./Icon";
+import { CircleCover } from "./CircleCover";
 
 export function PersonResult({ person }: { person: PublicProfile }) {
   const url = avatarUrl(person.avatarPath);
@@ -40,13 +41,14 @@ export function PersonResult({ person }: { person: PublicProfile }) {
 export function SpaceResult({ space }: { space: Space }) {
   return (
     <article className="space-card">
+      <CircleCover circle={space} />
       <div className="space-card-top">
         <span className="space-kind">
           <Icon
             name={space.visibility === "private" ? "lock" : "globe"}
             size={16}
           />{" "}
-          {space.visibility === "private" ? "Private Space" : "Public Space"}
+          {space.visibility === "private" ? "Private circle" : "Public circle"}
         </span>
       </div>
       <h3>
@@ -65,7 +67,7 @@ export function SpaceResult({ space }: { space: Space }) {
         </p>
       )}
       <a className="button button-soft" href={spaceLink(space)}>
-        View Space <Icon name="arrow" size={17} />
+        {space.membership === 'active' ? 'View circle' : space.membership === 'invited' ? 'Review invitation' : space.membership === 'requested' ? 'View request' : space.visibility === 'private' ? 'Request to join' : 'Join circle'} <Icon name="arrow" size={17} />
       </a>
     </article>
   );
@@ -102,9 +104,9 @@ export function PostResult({
           · Only you can see this post
         </p>
       )}
-      {post.title && (
+      {post.title && !detail && (
         <h3>
-          {detail ? post.title : <a href={insightLink(post)}>{post.title}</a>}
+          <a href={insightLink(post)}>{post.title}</a>
         </h3>
       )}
       <p className={detail ? "community-post-body" : "community-post-preview"}>
@@ -141,7 +143,10 @@ export function ResourceState({
   return (
     <>
       {children}
-      {resource.loading && <p role="status">Loading…</p>}
+      {resource.loading && <div className="resource-loading" role="status">
+        <p>Loading…</p>
+        <div className="loading-card" aria-hidden="true"><span /><span /><span /></div>
+      </div>}
       {resource.error && (
         <div className="community-feedback">
           <p className="form-error" role="alert">
